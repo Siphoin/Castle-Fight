@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using CastleFight.Networking.Models;
 using UniRx;
 using Unity.Netcode;
@@ -65,6 +66,18 @@ namespace CastleFight.Networking.Handlers
                     Debug.Log($"Player updated: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
             }
+
+#if UNITY_EDITOR
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Players list:\n");
+
+            foreach (var player in Players)
+            {
+                sb.AppendLine(player.NickName.ToString());
+            }
+
+            Debug.Log(sb.ToString());
+#endif
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -81,27 +94,26 @@ namespace CastleFight.Networking.Handlers
         {
             if (IsServer)
             {
-                /*
-                var player = _players.FirstOrDefault(p => p.ClientId == clientId);
-                if (!player.Equals(default(NetworkPlayer)))
+
+                foreach (NetworkPlayer player in _players)
                 {
-                    _players.Remove(player);
+                    if (clientId == player.ClientId)
+                    {
+                        _players.Remove(player);
+                    }
                 }
 
-                */
+                
             }
         }
 
         public override void OnNetworkSpawn()
         {
-            if (IsClient && !IsServer)
-            {
-                var localPlayer = new NetworkPlayer(
-                    NetworkManager.Singleton.LocalClientId,
-                    $"Player_{NetworkManager.Singleton.LocalClientId}"
-                );
-                AddPlayerServerRpc(localPlayer);
-            }
+            var localPlayer = new NetworkPlayer(
+                NetworkManager.Singleton.LocalClientId,
+                $"Player_{NetworkManager.Singleton.LocalClientId}"
+            );
+            AddPlayerServerRpc(localPlayer);
         }
 
         public override void OnNetworkDespawn()

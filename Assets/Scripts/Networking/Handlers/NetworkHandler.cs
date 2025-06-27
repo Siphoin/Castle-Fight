@@ -6,6 +6,7 @@ using UniRx;
 using CastleFight.Networking.Configs;
 using System;
 using Sirenix.OdinInspector;
+using CastleFight.Networking.Models;
 
 namespace CastleFight.Networking.Handlers
 {
@@ -136,7 +137,7 @@ namespace CastleFight.Networking.Handlers
             _objectSpawnHandler = go.GetComponent<NetworkObjectSpawnHandler>();
         }
 
-        private void CreateOtherHandlers ()
+        private void CreateOtherHandlers()
         {
             foreach (var item in _config.HandlersPrefabs)
             {
@@ -145,12 +146,20 @@ namespace CastleFight.Networking.Handlers
 
                 if (netObj == null)
                 {
-                    Destroy(go); ;
+                    Destroy(go);
+                    continue;
                 }
 
                 netObj.SpawnWithOwnership(0);
+
+                // Если это PlayerListHandler, добавляем хост в список
+                if (go.TryGetComponent(out PlayerListHandler playerList))
+                {
+                    _playerListHandler = playerList;
+                }
             }
         }
+
 
         private void HandleClientDisconnected(ulong clientId)
         {
