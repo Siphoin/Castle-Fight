@@ -283,7 +283,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 15
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -540,7 +540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 11.355713, y: -6.881897}
+  m_AnchoredPosition: {x: 11.355713, y: -6.881836}
   m_SizeDelta: {x: 59.8723, y: 41.2917}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &176940391
@@ -1313,7 +1313,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2519,7 +2519,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.2649536, y: -0.17004395}
+  m_AnchoredPosition: {x: 4.2648926, y: -0.17004395}
   m_SizeDelta: {x: 11.869922, y: 3.2400794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2139922780

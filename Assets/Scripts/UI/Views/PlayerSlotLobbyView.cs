@@ -13,7 +13,7 @@ namespace CastleFight.UI.Views
         [SerializeField] private TextMeshProUGUI _textNickName;
         [Inject] private TeamColorPaletteConfig _paletteConfig;
 
-        public ulong PlayerId {  get; private set; }
+        public ulong PlayerId { get; private set; }
 
         public void Hide()
         {
