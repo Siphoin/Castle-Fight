@@ -43,10 +43,7 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
 
         private void Awake()
         {
-            _players.OnListChanged += HandlePlayersListChanged;
-
-            // Подписываемся на события подключения/отключения
-        //    NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+            _players.OnListChanged += HandlePlayersListChanged;;
             NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnected;
 
             
@@ -59,10 +56,8 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
             base.OnDestroy();
             _players.OnListChanged -= HandlePlayersListChanged;
 
-            // Отписываемся от событий
             if (NetworkManager.Singleton != null)
             {
-              //  NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
                 NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
             }
         }
@@ -89,12 +84,10 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         {
             if (IsServer)
             {
-                // Сервер немедленно удаляет отключившегося игрока
                 RemovePlayerDirect(clientId);
             }
             else if (clientId == NetworkManager.Singleton.LocalClientId)
             {
-                // Клиент пытается уведомить сервер перед отключением
                 RemovePlayerServerRpc(clientId);
             }
         }
