@@ -12,7 +12,7 @@ namespace CastleFight.Main
     /// <typeparam name="T">Тип префаба, который будет использоваться</typeparam>
     /// 
 
-    public class PoolMono<T> where T : MonoBehaviour
+    public class PoolMono<T> where T : MonoBehaviour, IEnumerable<T>
     {
         /// <summary>
         /// Коллекция пулла, в котором находятся объекты для вытаскивания, может расширяться, если включен флаг AutoExpand
@@ -24,8 +24,6 @@ namespace CastleFight.Main
         /// Какой префаб создавать или включать/отключать
         /// </summary>
         public T Prefab { get; private set; }
-
-        public IEnumerable<T> Elements => _pool;
 
 
         /// <summary>
