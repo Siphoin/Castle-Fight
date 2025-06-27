@@ -16,6 +16,11 @@ namespace CastleFight.UI.Observers
             {
                 _screenHandler.SetScreen(ScreenType.LobbyScreen);
             }).AddTo(this);
+
+            _network.OnDisconnected.Subscribe(_ =>
+            {
+                _screenHandler.SetScreen(ScreenType.ConnectionScreen);
+            }).AddTo(this);
         }
     }
 }
