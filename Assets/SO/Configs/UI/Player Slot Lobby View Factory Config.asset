@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba8c3a9630fa2cc4f8a8cbe03745d94f, type: 3}
+  m_Name: Player Slot Lobby View Factory Config
+  m_EditorClassIdentifier: 
+  _guidObject: b8008466-2a5c-437a-b15a-e5dde556c017
+  _prefab: {fileID: 6528934998925886012, guid: fe3db79e01c09da4986c00d908b75d50, type: 3}
+  _startCount: 12

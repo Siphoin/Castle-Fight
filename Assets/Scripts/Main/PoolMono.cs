@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using Zenject;
+using System.Collections;
 
 namespace CastleFight.Main
 {
@@ -12,7 +13,7 @@ namespace CastleFight.Main
     /// <typeparam name="T">Тип префаба, который будет использоваться</typeparam>
     /// 
 
-    public class PoolMono<T> where T : MonoBehaviour, IEnumerable<T>
+    public class PoolMono<T> : IEnumerable<T> where T : MonoBehaviour 
     {
         /// <summary>
         /// Коллекция пулла, в котором находятся объекты для вытаскивания, может расширяться, если включен флаг AutoExpand
@@ -276,7 +277,14 @@ namespace CastleFight.Main
             element.gameObject.SetActive(false);
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _pool.GetEnumerator();
+        }
 
-
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

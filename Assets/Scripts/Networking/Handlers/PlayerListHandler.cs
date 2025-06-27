@@ -16,6 +16,8 @@ namespace CastleFight.Networking.Handlers
         private readonly Subject<NetworkPlayer> _onPlayerAdded = new();
         private readonly Subject<NetworkPlayer> _onPlayerRemoved = new();
 
+        
+
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -34,18 +36,74 @@ namespace CastleFight.Networking.Handlers
 
                 return list;
             }
-        }
-        public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
+}
+
+public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         public IObservable<NetworkPlayer> OnPlayerRemoved => _onPlayerRemoved;
 
         private void Awake()
         {
             _players.OnListChanged += HandlePlayersListChanged;
+
+            // Подписываемся на события подключения/отключения
+        //    NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnected;
+
+            
         }
+
+        
+
         public override void OnDestroy()
         {
             base.OnDestroy();
             _players.OnListChanged -= HandlePlayersListChanged;
+
+            // Отписываемся от событий
+            if (NetworkManager.Singleton != null)
+            {
+              //  NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+                NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
+            }
+        }
+
+        private void HandleClientConnected(ulong clientId)
+        {
+            if (IsSpawned)
+            {
+                var isHost = clientId == NetworkManager.ServerClientId;
+                var nickName = string.IsNullOrEmpty(NetworkHandler.SetedNickName)
+                    ? $"Player_{clientId}"
+                    : NetworkHandler.SetedNickName;
+
+                var player = new NetworkPlayer(
+                    clientId,
+                    new FixedString32Bytes(nickName)
+                );
+
+                AddPlayerServerRpc(player);
+            }
+        }
+
+        private void HandleClientDisconnected(ulong clientId)
+        {
+            if (IsServer)
+            {
+                // Сервер немедленно удаляет отключившегося игрока
+                RemovePlayerDirect(clientId);
+            }
+            else if (clientId == NetworkManager.Singleton.LocalClientId)
+            {
+                // Клиент пытается уведомить сервер перед отключением
+                RemovePlayerServerRpc(clientId);
+            }
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            HandleClientConnected(NetworkManager.Singleton.LocalClientId);
+           
         }
 
         private void HandlePlayersListChanged(NetworkListEvent<NetworkPlayer> changeEvent)
@@ -63,20 +121,23 @@ namespace CastleFight.Networking.Handlers
                     break;
 
                 case NetworkListEvent<NetworkPlayer>.EventType.Value:
-                    // Обработка изменения значений существующего игрока
                     Debug.Log($"Player updated: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
+             
+                    break;
+
+                case NetworkListEvent<NetworkPlayer>.EventType.RemoveAt:
+                    _onPlayerRemoved.OnNext(changeEvent.Value);
+                    Debug.Log($"Player removed: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
             }
 
 #if UNITY_EDITOR
             StringBuilder sb = new StringBuilder();
             sb.Append("Players list:\n");
-
             foreach (var player in Players)
             {
                 sb.AppendLine(player.NickName.ToString());
             }
-
             Debug.Log(sb.ToString());
 #endif
         }
@@ -84,44 +145,41 @@ namespace CastleFight.Networking.Handlers
         [ServerRpc(RequireOwnership = false)]
         public void AddPlayerServerRpc(NetworkPlayer player)
         {
-            if (IsServer)
-            {
-                _players.Add(player);
-            }
+            if (IsServer) _players.Add(player);
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void RemovePlayerServerRpc(ulong clientId)
         {
-            if (IsServer)
+            RemovePlayerDirect(clientId);
+        }
+
+        private void RemovePlayerDirect(ulong clientId)
+        {
+            for (int i = _players.Count - 1; i >= 0; i--)
             {
-
-                foreach (NetworkPlayer player in _players)
+                if (_players[i].ClientId == clientId)
                 {
-                    if (clientId == player.ClientId)
-                    {
-                        _players.Remove(player);
-                    }
+                    _onPlayerRemoved.OnNext(_players[i]);
+                    _players.RemoveAt(i);
+                    break;
                 }
-
-                
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void SetNickNameServerRpc(ulong clientId, FixedString32Bytes newNickName)
         {
-            if (IsServer)
+            if (!IsServer) return;
+
+            for (int i = 0; i < _players.Count; i++)
             {
-                for (int i = 0; i < _players.Count; i++)
+                if (_players[i].ClientId == clientId)
                 {
-                    if (_players[i].ClientId == clientId)
-                    {
-                        NetworkPlayer modifiedPlayer = _players[i];
-                        modifiedPlayer.NickName = newNickName;
-                        _players[i] = modifiedPlayer;
-                        break;
-                    }
+                    NetworkPlayer modifiedPlayer = _players[i];
+                    modifiedPlayer.NickName = newNickName;
+                    _players[i] = modifiedPlayer;
+                    break;
                 }
             }
         }
@@ -131,36 +189,7 @@ namespace CastleFight.Networking.Handlers
             SetNickNameServerRpc(clientId, new FixedString32Bytes(newNickName));
         }
 
-        public override void OnNetworkSpawn()
-        {
-            var defaultNickName = string.IsNullOrEmpty(NetworkHandler.SetedNickName)
-                ? $"Player_{NetworkManager.Singleton.LocalClientId}"
-                : NetworkHandler.SetedNickName;
-
-            var localPlayer = new NetworkPlayer(
-                NetworkManager.Singleton.LocalClientId,
-                new FixedString32Bytes(defaultNickName)
-            );
-
-            AddPlayerServerRpc(localPlayer);
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            if (IsClient && !IsServer)
-            {
-                RemovePlayerServerRpc(NetworkManager.Singleton.LocalClientId);
-            }
-        }
-
-        public IEnumerator<NetworkPlayer> GetEnumerator()
-        {
-            return Players.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        public IEnumerator<NetworkPlayer> GetEnumerator() => Players.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
