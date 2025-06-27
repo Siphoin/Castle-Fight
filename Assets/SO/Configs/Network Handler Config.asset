@@ -15,3 +15,7 @@ MonoBehaviour:
   _guidObject: b5491cb2-ed39-4d6d-a495-fd507c77548e
   _defaultIP: 127.0.0.1
   _port: 7777
+  _logLevel: 0
+  _spawnHandlerPrefab: {fileID: 5492582969168663058, guid: 01b3e6b55dae65e4e946122bd89159ef, type: 3}
+  _handlersPrefabs:
+  - {fileID: 5409089998874704153, guid: 1653d2dc44ef37140a75f7cae7170c0d, type: 3}

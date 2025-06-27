@@ -15,6 +15,8 @@ namespace CastleFight.Networking.Handlers
     {
         [Inject] private NetworkHandlerConfig _config;
         [SerializeField, ReadOnly] private NetworkManager _networkManager;
+        [SerializeField, ReadOnly] private PlayerListHandler _playerListHandler;
+        [SerializeField, ReadOnly] private NetworkObjectSpawnHandler _objectSpawnHandler;
 
         private readonly Subject<Unit> _onConnected = new Subject<Unit>();
         private readonly Subject<Unit> _onDisconnected = new Subject<Unit>();
@@ -25,12 +27,44 @@ namespace CastleFight.Networking.Handlers
         public bool IsConnected => _networkManager != null &&
                                  _networkManager.IsListening;
 
+        public bool IsHost => _networkManager != null && _networkManager.IsHost;
+
+        public ulong LocalClientId => _networkManager.LocalClientId;
+        public NetworkClient LocalClient => _networkManager.LocalClient;
+
+        public IPlayerListHandler Players
+        {
+            get
+            {
+                if (_playerListHandler is null)
+                {
+                    _playerListHandler = FindAnyObjectByType<PlayerListHandler>();
+                }
+
+                return _playerListHandler;
+            }
+        }
+
+       private INetworkObjectSpawnHandler ObjectSpawner
+        {
+            get
+            {
+                if (_objectSpawnHandler is null)
+                {
+                    _objectSpawnHandler = FindAnyObjectByType<NetworkObjectSpawnHandler>();
+                }
+                
+                return _objectSpawnHandler;
+            }
+        }
+
         private void Start()
         {
             _networkManager.OnClientConnectedCallback += HandleClientConnected;
             _networkManager.OnClientDisconnectCallback += HandleClientDisconnected;
             _networkManager.OnServerStarted += HandleServerStarted;
             _networkManager.OnServerStopped += HandleServerStopped;
+            _networkManager.LogLevel = _config.LogLevel;
         }
 
         private void OnEnable()
@@ -78,6 +112,43 @@ namespace CastleFight.Networking.Handlers
             {
                 _onConnected.OnNext(Unit.Default);
                 Debug.Log("Client connected");
+
+                if (IsHost && _objectSpawnHandler is null)
+                {
+                    CreateSpawnHandler();
+                    CreateOtherHandlers();
+                }
+            }
+        }
+
+        private void CreateSpawnHandler()
+        {
+            var go = Instantiate(_config.SpawnHandlerPrefab);
+            var netObj = go.GetComponent<NetworkObject>();
+
+            if (netObj == null)
+            {
+                Destroy(go);;
+            }
+
+                netObj.SpawnWithOwnership(0);
+
+            _objectSpawnHandler = go.GetComponent<NetworkObjectSpawnHandler>();
+        }
+
+        private void CreateOtherHandlers ()
+        {
+            foreach (var item in _config.HandlersPrefabs)
+            {
+                var go = Instantiate(item);
+                var netObj = go.GetComponent<NetworkObject>();
+
+                if (netObj == null)
+                {
+                    Destroy(go); ;
+                }
+
+                netObj.SpawnWithOwnership(0);
             }
         }
 
@@ -141,6 +212,25 @@ namespace CastleFight.Networking.Handlers
                 _networkManager = GetComponent<NetworkManager>();
             }
 
+        }
+
+        public GameObject SpawnNetworkObject(GameObject prefab,
+                                    Action<GameObject> callback,
+
+                                    bool spawnWithOwnership = true,
+                                    ulong ownerClientId = 0,
+                                     Vector3 position = default,
+                                    Quaternion rotation = default)
+        {
+
+            return ObjectSpawner.SpawnNetworkObject(
+                prefab,
+                callback,
+                spawnWithOwnership,
+                ownerClientId,
+                position,
+                rotation
+            );
         }
     }
 }
