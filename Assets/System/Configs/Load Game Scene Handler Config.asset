@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Load Game Scene Handler Config
   m_EditorClassIdentifier: 
   _guidObject: a42cd634-8f98-4e39-8f02-ed017618a779
-  _sceneName: Game
+  _sceneName: Connection
