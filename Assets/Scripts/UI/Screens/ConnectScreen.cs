@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
-using System;
 using Zenject;
 using CastleFight.Networking.Handlers;
 namespace CastleFight.UI.Screens
@@ -13,6 +11,7 @@ namespace CastleFight.UI.Screens
         [SerializeField] private Button _buttonStartHost;
 
         [SerializeField] private UIInput _inputAddress;
+        [SerializeField] private UIInput _inputName;
 
         [Inject] private INetworkHandler _networkHandler;
 
@@ -33,12 +32,12 @@ namespace CastleFight.UI.Screens
 
         private void Connect()
         {
-            _networkHandler.StartClient(_inputAddress.Text);
+            _networkHandler.StartClient(_inputAddress.Text, _inputName.Text);
         }
 
         private void StartHost()
         {
-            _networkHandler.StartServer();
+            _networkHandler.StartServer(_inputName.Text);
         }
     }
 }

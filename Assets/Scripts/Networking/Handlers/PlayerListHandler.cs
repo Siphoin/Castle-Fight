@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using CastleFight.Networking.Models;
 using UniRx;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -107,12 +108,40 @@ namespace CastleFight.Networking.Handlers
             }
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void SetNickNameServerRpc(ulong clientId, FixedString32Bytes newNickName)
+        {
+            if (IsServer)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    if (_players[i].ClientId == clientId)
+                    {
+                        NetworkPlayer modifiedPlayer = _players[i];
+                        modifiedPlayer.NickName = newNickName;
+                        _players[i] = modifiedPlayer;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void SetNickName(ulong clientId, string newNickName)
+        {
+            SetNickNameServerRpc(clientId, new FixedString32Bytes(newNickName));
+        }
+
         public override void OnNetworkSpawn()
         {
+            var defaultNickName = string.IsNullOrEmpty(NetworkHandler.SetedNickName)
+                ? $"Player_{NetworkManager.Singleton.LocalClientId}"
+                : NetworkHandler.SetedNickName;
+
             var localPlayer = new NetworkPlayer(
                 NetworkManager.Singleton.LocalClientId,
-                $"Player_{NetworkManager.Singleton.LocalClientId}"
+                new FixedString32Bytes(defaultNickName)
             );
+
             AddPlayerServerRpc(localPlayer);
         }
 

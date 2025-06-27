@@ -33,6 +33,8 @@ namespace CastleFight.Networking.Handlers
         public ulong LocalClientId => _networkManager.LocalClientId;
         public NetworkClient LocalClient => _networkManager.LocalClient;
 
+        public static string SetedNickName {  get; private set; } = string.Empty;
+
         public IPlayerListHandler Players
         {
             get
@@ -170,19 +172,19 @@ namespace CastleFight.Networking.Handlers
             }
         }
 
-        public void StartServer()
+        public void StartServer(string nickName = null)
         {
             if (IsConnected)
             {
                 Debug.Log("Already hosting or connected!");
                 return;
             }
-
+            SetedNickName = nickName;
             _networkManager.StartHost();
             Debug.Log($"P2P Host started on {_config.DefaultIP}:{_config.Port}");
         }
 
-        public void StartClient(string targetIP)
+        public void StartClient(string targetIP, string nickName = null)
         {
             if (IsConnected)
             {
@@ -191,6 +193,7 @@ namespace CastleFight.Networking.Handlers
             }
 
             string ip = string.IsNullOrEmpty(targetIP) ? _config.DefaultIP : targetIP;
+            SetedNickName = nickName;
 
             var transport = GetComponent<UnityTransport>();
             if (transport != null)
@@ -211,6 +214,7 @@ namespace CastleFight.Networking.Handlers
             }
 
             _networkManager.Shutdown();
+            SetedNickName = string.Empty;
             Debug.Log("Disconnected from the network.");
         }
 
