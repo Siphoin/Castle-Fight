@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System;
@@ -11,21 +10,15 @@ namespace CastleFight.Networking.Handlers
 {
     public class PingHandler : NetworkBehaviour
     {
-        private UnityTransport _transport;
-        private NetworkManager _networkManager;
-
         private readonly Subject<int> _onPingChanged = new Subject<int>();
         public IObservable<int> OnPingChanged => _onPingChanged;
 
         [SerializeField] private float _pingCheckInterval = 1.0f;
         private Stopwatch _pingStopwatch = new Stopwatch();
         private bool _rpcReceived;
-        private int _lastPing = -1;
 
         private void Awake()
         {
-            _networkManager = NetworkManager.Singleton;
-            _transport = FindAnyObjectByType<UnityTransport>();
             CheckPingLoop().Forget();
         }
 
@@ -50,7 +43,6 @@ namespace CastleFight.Networking.Handlers
 
             try
             {
-                // Ожидаем получения Pong с таймаутом 5 секунд
                 await UniTask.WaitUntil(() => _rpcReceived)
                     .Timeout(TimeSpan.FromSeconds(5));
 
