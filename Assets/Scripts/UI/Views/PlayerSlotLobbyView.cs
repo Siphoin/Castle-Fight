@@ -24,7 +24,7 @@ namespace CastleFight.UI.Views
 
         public void Hide()
         {
-            _compositeDisposable?.Dispose();
+            _compositeDisposable?.Clear();
             PlayerId = 0;
             transform.SetParent(null);
             gameObject.SetActive(false);
@@ -33,6 +33,7 @@ namespace CastleFight.UI.Views
 
         public void SetPlayer(NetworkPlayer player)
         {
+            _compositeDisposable?.Clear();
             _compositeDisposable = new();
             _colorImage.color = _paletteConfig.GetColor(player.ColorType);
             _textNickName.text = player.NickName.ToString();
@@ -65,7 +66,7 @@ namespace CastleFight.UI.Views
 
         private void OnDisable()
         {
-            _compositeDisposable?.Dispose();
+            _compositeDisposable?.Clear();
         }
     }
 }
