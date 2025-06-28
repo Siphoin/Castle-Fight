@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CastleFight.Networking.Models;
 using UniRx;
@@ -15,8 +16,8 @@ namespace CastleFight.Networking.Handlers
         private readonly NetworkList<NetworkPlayer> _players = new();
         private readonly Subject<NetworkPlayer> _onPlayerAdded = new();
         private readonly Subject<NetworkPlayer> _onPlayerRemoved = new();
+        private readonly Subject<NetworkPlayer> _onPlayerUpdated = new();
 
-        
 
         private void Start()
         {
@@ -40,6 +41,10 @@ namespace CastleFight.Networking.Handlers
 
 public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         public IObservable<NetworkPlayer> OnPlayerRemoved => _onPlayerRemoved;
+
+        public NetworkPlayer LocalPlayer => Players.FirstOrDefault(x => x.ClientId == NetworkManager.LocalClient.ClientId);
+
+        public IObservable<NetworkPlayer> OnPlayerUpdated => _onPlayerUpdated;
 
         private void Awake()
         {
@@ -114,6 +119,7 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
                     break;
 
                 case NetworkListEvent<NetworkPlayer>.EventType.Value:
+                    _onPlayerUpdated.OnNext(changeEvent.Value);
                     Debug.Log($"Player updated: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
              
                     break;
@@ -180,6 +186,70 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         public void SetNickName(ulong clientId, string newNickName)
         {
             SetNickNameServerRpc(clientId, new FixedString32Bytes(newNickName));
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetPlayerTeamServerRpc(ulong clientId, ushort team)
+        {
+            if (!IsServer) return;
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i].ClientId == clientId)
+                {
+                    NetworkPlayer modifiedPlayer = _players[i];
+                    modifiedPlayer.Team = team;
+                    _players[i] = modifiedPlayer;
+                    break;
+                }
+            }
+        }
+
+        public void SetPlayerTeam(ulong clientId, ushort team)
+        {
+            SetPlayerTeamServerRpc(clientId, team);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetPlayerGoldServerRpc(ulong clientId, uint gold)
+        {
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i].ClientId == clientId)
+                {
+                    NetworkPlayer modifiedPlayer = _players[i];
+                    modifiedPlayer.Gold = gold;
+                    _players[i] = modifiedPlayer;
+                    break;
+                }
+            }
+        }
+
+        public void SetPlayerGold(ulong clientId, uint gold)
+        {
+            SetPlayerGoldServerRpc(clientId, gold);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetPlayerReadyStatusServerRpc(ulong clientId, bool status)
+        {
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i].ClientId == clientId)
+                {
+                    NetworkPlayer modifiedPlayer = _players[i];
+                    modifiedPlayer.IsReady = status;
+                    _players[i] = modifiedPlayer;
+                    break;
+                }
+            }
+        }
+
+        public void SetPlayerReadyStatus(ulong clientId, bool status)
+        {
+            SetPlayerReadyStatusServerRpc(clientId, status);
         }
 
         public IEnumerator<NetworkPlayer> GetEnumerator() => Players.GetEnumerator();

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using CastleFight.Core.Configs;
+using CastleFight.Networking.Handlers;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using Unity.Netcode;
@@ -13,11 +15,28 @@ namespace CastleFight.Core.Handlers
         private bool _isRunning = false;
 
         private Subject<ushort> _onTick = new();
+        private Subject<Unit> _onEndTick = new();
         [SerializeField] private LobbyHandlerConfig _config;
+        private IPlayerListHandler _playerListHandler;
 
         public IObservable<ushort> OnTick => _onTick;
 
         public bool IsStarted => _isStarted.Value;
+
+        public bool AllPlayersIsReady
+        {
+            get
+            {
+                return _playerListHandler.All(x => x.IsReady);
+            }
+        }
+
+        public IObservable<Unit> OnEndTick => _onEndTick;
+
+        private void Awake()
+        {
+            _playerListHandler = FindAnyObjectByType<PlayerListHandler>();
+        }
 
         private void Start()
         {
@@ -31,6 +50,12 @@ namespace CastleFight.Core.Handlers
         private void OnTickChanged(ushort previousValue, ushort newValue)
         {
             _onTick.OnNext(newValue);
+            if (newValue == 0)
+            {
+                _onEndTick.OnNext(Unit.Default);
+            }
+
+
         }
 
         public void Turn ()
@@ -53,7 +78,9 @@ namespace CastleFight.Core.Handlers
                 _onTick.OnNext(_currentTicks.Value);
             }
 
-            
+            _onEndTick.OnNext(Unit.Default);
+
+
         }
 
         private void OnDisable()

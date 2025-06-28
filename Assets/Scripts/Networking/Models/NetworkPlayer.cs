@@ -11,6 +11,7 @@ namespace CastleFight.Networking.Models
         public FixedString32Bytes NickName;
         public int ColorType;
         public bool IsReady;
+        public ushort Team;
 
         internal NetworkPlayer(ulong clientId, FixedString32Bytes nickName)
         {
@@ -19,6 +20,7 @@ namespace CastleFight.Networking.Models
             Gold = 0;
             ColorType = (int)clientId;
             IsReady = false;
+            Team = 0;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -28,6 +30,7 @@ namespace CastleFight.Networking.Models
             serializer.SerializeValue(ref NickName);
             serializer.SerializeValue(ref ColorType);
             serializer.SerializeValue(ref IsReady);
+            serializer.SerializeValue(ref Team);
         }
 
         public bool Equals(NetworkPlayer other)

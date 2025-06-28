@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 
 namespace CastleFight.Core.Handlers
 {
@@ -6,5 +7,7 @@ namespace CastleFight.Core.Handlers
     {
         bool IsStarted { get; }
         IObservable<ushort> OnTick { get; }
+        IObservable<Unit> OnEndTick { get; }
+        bool AllPlayersIsReady { get; }
     }
 }
