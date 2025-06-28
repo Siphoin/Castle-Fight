@@ -13,5 +13,6 @@ namespace CastleFight.Networking.Handlers
         void SetPlayerTeam(ulong clientId, ushort team);
         void SetPlayerGold(ulong clientId, uint gold);
         void SetPlayerReadyStatus(ulong clientId, bool status);
+        NetworkPlayer GetPlayerById(ulong id);
     }
 }

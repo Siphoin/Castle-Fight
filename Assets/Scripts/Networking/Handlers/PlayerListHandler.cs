@@ -19,11 +19,6 @@ namespace CastleFight.Networking.Handlers
         private readonly Subject<NetworkPlayer> _onPlayerUpdated = new();
 
 
-        private void Start()
-        {
-           // DontDestroyOnLoad(gameObject);
-        }
-
         private IEnumerable<NetworkPlayer> Players
         {
             get
@@ -39,7 +34,7 @@ namespace CastleFight.Networking.Handlers
             }
 }
 
-public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
+        public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         public IObservable<NetworkPlayer> OnPlayerRemoved => _onPlayerRemoved;
 
         public NetworkPlayer LocalPlayer => Players.FirstOrDefault(x => x.ClientId == NetworkManager.LocalClient.ClientId);
@@ -250,6 +245,11 @@ public IObservable<NetworkPlayer> OnPlayerAdded => _onPlayerAdded;
         public void SetPlayerReadyStatus(ulong clientId, bool status)
         {
             SetPlayerReadyStatusServerRpc(clientId, status);
+        }
+
+        public NetworkPlayer GetPlayerById (ulong id)
+        {
+            return Players.FirstOrDefault(x => x.ClientId == id);
         }
 
         public IEnumerator<NetworkPlayer> GetEnumerator() => Players.GetEnumerator();
