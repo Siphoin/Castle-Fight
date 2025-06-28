@@ -13,11 +13,13 @@ namespace CastleFight.Core.UnitsSystem
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(UnitNavMesh))]
     [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(UnitAnimatorHandler))]
     public class UnitInstance : NetworkBehaviour, IUnitInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField, ReadOnly] private UnitNavMesh _navMesh;
         [SerializeField, ReadOnly] private NetworkHandler _network;
+        [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
         private NetworkHandler Network
         {
             get
@@ -40,6 +42,8 @@ namespace CastleFight.Core.UnitsSystem
 
         IUnitNavMesh IUnitInstance.NavMesh => _navMesh;
 
+        public IUnitAnimatorHandler AnimatorHandler => _unitAnimatorHandler;
+
         private void OnValidate()
         {
             if (!_healthComponent)
@@ -50,6 +54,11 @@ namespace CastleFight.Core.UnitsSystem
             if (!_navMesh)
             {
                 _navMesh = GetComponent<UnitNavMesh>();
+            }
+
+            if (!_unitAnimatorHandler)
+            {
+                _unitAnimatorHandler = GetComponentInChildren<UnitAnimatorHandler>();
             }
 
 

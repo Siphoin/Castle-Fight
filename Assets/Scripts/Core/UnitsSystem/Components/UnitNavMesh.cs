@@ -43,6 +43,19 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        public float SpeedMovement
+        {
+            get
+            {
+                return (float)_agentGraph.BlackboardReference.Blackboard.Variables[4].ObjectValue;
+            }
+
+            private set
+            {
+                _agentGraph.BlackboardReference.Blackboard.Variables[4].ObjectValue = value;
+            }
+        }
+
         private void Start()
         {
             // test
@@ -52,6 +65,8 @@ namespace CastleFight.Core.UnitsSystem.Components
                 var building = FindAnyObjectByType<BuildingInstance>();
 
                 SetTarget(building.HealthComponent as HealthComponent);
+
+                SpeedMovement = _agent.speed;
             }
         }
 
