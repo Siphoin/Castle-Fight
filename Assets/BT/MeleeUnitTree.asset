@@ -131,7 +131,7 @@ MonoBehaviour:
   - rid: 2015280113993122348
   - rid: 2015280113993122545
   - rid: 2015280113993122644
-  m_VersionTimestamp: 638867245633314797
+  m_VersionTimestamp: 638867250356629127
   m_DebugInfo: {fileID: -5341157097377507649}
   m_RuntimeGraph: {fileID: 5145225470287250892}
   AssetID:
@@ -2146,7 +2146,7 @@ MonoBehaviour:
     - rid: 2015280113993122545
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: 590.12775, y: 374.70648}
+        Position: {x: 590.92773, y: 374.70648}
         ID:
           m_Value0: 2691772942143419904
           m_Value1: 15579293292054402748
@@ -2191,7 +2191,7 @@ MonoBehaviour:
         LocalValue:
           rid: 2015280113993122549
         LinkedVariable:
-          rid: 2015280113993122609
+          rid: 2015280113993122721
     - rid: 2015280113993122549
       type: {class: 'BlackboardVariable`1[[CastleFight.Core.UnitsSystem.UnitInstance, Core]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2199,16 +2199,6 @@ MonoBehaviour:
           m_Value0: 0
           m_Value1: 0
         Name: 
-        m_Value: {fileID: 0}
-    - rid: 2015280113993122609
-      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
-      data:
-        ID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        IsExposed: 1
-        m_IsShared: 0
         m_Value: {fileID: 0}
     - rid: 2015280113993122644
       type: {class: SequenceNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2243,6 +2233,16 @@ MonoBehaviour:
         m_NodeModel:
           rid: 2015280113993122644
         m_Connections: []
+    - rid: 2015280113993122721
+      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
 --- !u!114 &5046223132891721602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2560,7 +2560,7 @@ MonoBehaviour:
         AuthoringAssetID:
           m_Value0: 14164660223786286294
           m_Value1: 9098684856273481992
-        m_DebugInfo: {fileID: 0}
+        m_DebugInfo: {fileID: -5341157097377507649}
         BlackboardReference:
           rid: 2015280113993122685
         BlackboardGroupReferences: []
@@ -2572,7 +2572,7 @@ MonoBehaviour:
           rid: 2015280113993122687
         m_EndedNodes:
           rid: 2015280113993122688
-        m_VersionTimestamp: 638867245633314797
+        m_VersionTimestamp: 638867250356629127
     - rid: 2015280113993122685
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
