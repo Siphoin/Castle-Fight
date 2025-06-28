@@ -13,7 +13,6 @@ namespace CastleFight.Core.UnitsSystem
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(UnitNavMesh))]
     [RequireComponent(typeof(NetworkTransform))]
-    [RequireComponent(typeof(UnitAnimatorHandler))]
     public class UnitInstance : NetworkBehaviour, IUnitInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;

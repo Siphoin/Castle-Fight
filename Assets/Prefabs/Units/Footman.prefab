@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 7703044810191803342}
   - component: {fileID: 6128061866669626964}
   - component: {fileID: 1870696030691366369}
+  - component: {fileID: 6521969962128777208}
   m_Layer: 0
   m_Name: Footman
   m_TagString: Untagged
@@ -281,7 +282,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 6128061866669626964}
-  _networkAnimator: {fileID: 0}
+--- !u!114 &6521969962128777208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 5518429903789887938}
 --- !u!1001 &5518429903799379106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -350,7 +365,7 @@ PrefabInstance:
       addedObject: {fileID: 3142889737174012793}
     - targetCorrespondingSourceObject: {fileID: 100050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8297727699795146229}
+      addedObject: {fileID: 9179724425130600143}
   m_SourcePrefab: {fileID: 100100000, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
 --- !u!95 &5518429903789887938 stripped
 Animator:
@@ -375,7 +390,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 5518429903789887938}
-  _networkAnimator: {fileID: 8297727699795146229}
 --- !u!114 &3142889737174012793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitInstance: {fileID: 5915806101338030891}
---- !u!114 &8297727699795146229
+--- !u!114 &9179724425130600143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

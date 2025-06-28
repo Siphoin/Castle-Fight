@@ -9,7 +9,7 @@ namespace CastleFight.Core.UnitsSystem.Factories
         [Inject] private INetworkHandler _network;
         public IUnitInstance Create(UnitInstance prefab, Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            var newUnit = _network.SpawnNetworkObject(prefab.gameObject, null, true, _network.LocalClientId, position, rotation);
+            var newUnit = _network.SpawnNetworkObject(prefab.gameObject, null, true, 0, position, rotation);
 
             if (newUnit != null)
             {
