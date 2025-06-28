@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.HealthSystem;
 using Sirenix.OdinInspector;
@@ -29,6 +30,19 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        public UnitStateType CurrentState
+        {
+            get
+            {
+                return (UnitStateType)_agentGraph.BlackboardReference.Blackboard.Variables[2].ObjectValue;
+            }
+
+            private set
+            {
+                _agentGraph.BlackboardReference.Blackboard.Variables[2].ObjectValue = value;
+            }
+        }
+
         private void Start()
         {
             // test
@@ -44,6 +58,13 @@ namespace CastleFight.Core.UnitsSystem.Components
         public void SetTarget(HealthComponent healthComponent)
         {
             CurrentTarget = healthComponent;
+            CurrentState = UnitStateType.MoveToTarget;
+        }
+
+        public void SetIdle ()
+        {
+            CurrentTarget = null;
+            CurrentState = UnitStateType.Idle;
         }
 
         private void OnValidate()
