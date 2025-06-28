@@ -11,7 +11,6 @@ namespace CastleFight.Networking.Spawners
     {
         [Inject] private INetworkHandler _network;
         [SerializeField] private T _prefab;
-        [SerializeField] private bool _destroyAfterSpawn = true;
         private Subject<T> _onSpawn = new();
 
         public IObservable<T> OnSpawn => _onSpawn;
@@ -28,11 +27,6 @@ namespace CastleFight.Networking.Spawners
         {
             T component = result.GetComponent<T>();
             _onSpawn.OnNext(component);
-
-            if (_destroyAfterSpawn)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 }

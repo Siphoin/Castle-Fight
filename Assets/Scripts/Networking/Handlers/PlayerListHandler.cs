@@ -21,7 +21,7 @@ namespace CastleFight.Networking.Handlers
 
         private void Start()
         {
-            DontDestroyOnLoad(gameObject);
+           // DontDestroyOnLoad(gameObject);
         }
 
         private IEnumerable<NetworkPlayer> Players

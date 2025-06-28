@@ -20,3 +20,4 @@ MonoBehaviour:
   _handlersPrefabs:
   - {fileID: 5409089998874704153, guid: 1653d2dc44ef37140a75f7cae7170c0d, type: 3}
   - {fileID: 4617653210904256864, guid: 2d662dfc343da55479d7a849f1919842, type: 3}
+  - {fileID: -1348749585732139450, guid: 77fa0b8479b0e074ba56ba7e63414e6b, type: 3}

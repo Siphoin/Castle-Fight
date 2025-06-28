@@ -152,7 +152,7 @@ namespace CastleFight.Networking.Handlers
                     continue;
                 }
 
-                netObj.SpawnWithOwnership(0);
+                netObj.SpawnWithOwnership(0, false);
 
                 // Если это PlayerListHandler, добавляем хост в список
                 if (go.TryGetComponent(out PlayerListHandler playerList))

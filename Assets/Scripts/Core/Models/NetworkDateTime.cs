@@ -5,41 +5,28 @@ namespace CastleFight.Core.Models
 {
     public struct NetworkDateTime : INetworkSerializable, IEquatable<NetworkDateTime>
     {
-        private byte[] _data;
+        private long _ticks;
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
 
         public NetworkDateTime(DateTime dateTime)
         {
-            _data = ConvertToBytes(dateTime);
+            _ticks = dateTime.ToUniversalTime().Ticks - Epoch.Ticks;
         }
-
 
         public DateTime DateTime
         {
-            get => ConvertFromBytes(_data);
-            set => _data = ConvertToBytes(value);
+            get => new DateTime(Epoch.Ticks + _ticks, DateTimeKind.Utc).ToLocalTime();
+            set => _ticks = value.ToUniversalTime().Ticks - Epoch.Ticks;
         }
 
         public bool Equals(NetworkDateTime other)
         {
-            if (_data == null || other._data == null)
-                return false;
-
-            if (_data.Length != other._data.Length)
-                return false;
-
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data[i] != other._data[i])
-                    return false;
-            }
-            return true;
+            return _ticks == other._ticks;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref _data);
+            serializer.SerializeValue(ref _ticks);
         }
 
         public override bool Equals(object obj)
@@ -49,7 +36,7 @@ namespace CastleFight.Core.Models
 
         public override int GetHashCode()
         {
-            return _data != null ? BitConverter.ToInt32(_data, 0) : 0;
+            return _ticks.GetHashCode();
         }
 
         public static bool operator ==(NetworkDateTime left, NetworkDateTime right)
@@ -64,37 +51,37 @@ namespace CastleFight.Core.Models
 
         public void Add(TimeSpan timeSpan)
         {
-            DateTime = DateTime.Add(timeSpan);
+            _ticks += timeSpan.Ticks;
         }
 
         public void AddDays(double value)
         {
-            DateTime = DateTime.AddDays(value);
+            _ticks += (long)(TimeSpan.TicksPerDay * value);
         }
 
         public void AddHours(double value)
         {
-            DateTime = DateTime.AddHours(value);
+            _ticks += (long)(TimeSpan.TicksPerHour * value);
         }
 
         public void AddMinutes(double value)
         {
-            DateTime = DateTime.AddMinutes(value);
+            _ticks += (long)(TimeSpan.TicksPerMinute * value);
         }
 
         public void AddSeconds(double value)
         {
-            DateTime = DateTime.AddSeconds(value);
+            _ticks += (long)(TimeSpan.TicksPerSecond * value);
         }
 
         public void AddMilliseconds(double value)
         {
-            DateTime = DateTime.AddMilliseconds(value);
+            _ticks += (long)(TimeSpan.TicksPerMillisecond * value);
         }
 
         public void AddTicks(long value)
         {
-            DateTime = DateTime.AddTicks(value);
+            _ticks += value;
         }
 
         public void AddYears(int value)
@@ -105,22 +92,6 @@ namespace CastleFight.Core.Models
         public void AddMonths(int value)
         {
             DateTime = DateTime.AddMonths(value);
-        }
-
-        private static byte[] ConvertToBytes(DateTime dateTime)
-        {
-            TimeSpan ts = dateTime.ToUniversalTime() - Epoch;
-            int secondsSinceEpoch = (int)ts.TotalSeconds;
-            return BitConverter.GetBytes(secondsSinceEpoch);
-        }
-
-        private static DateTime ConvertFromBytes(byte[] bytes)
-        {
-            if (bytes == null || bytes.Length < 4)
-                return DateTime.MinValue;
-
-            int secondsSinceEpoch = BitConverter.ToInt32(bytes, 0);
-            return Epoch.AddSeconds(secondsSinceEpoch).ToLocalTime();
         }
 
         public override string ToString()

@@ -8,9 +8,10 @@ using CastleFight.Networking.Models;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 namespace CastleFight.UI.Views
 {
-    public class LobbyVew : MonoBehaviour
+    public class LobbyView : MonoBehaviour
     {
         private List<IPlayerSlotLobbyView> _views = new();
         [Inject] private IPlayerSlotLobbyViewFactory _factory;

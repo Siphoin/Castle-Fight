@@ -15,7 +15,6 @@ namespace CastleFight.Networking.Handlers
         private void Start()
         {
             _networkManager = NetworkManager.Singleton;
-            DontDestroyOnLoad(gameObject);
         }
 
         public GameObject SpawnNetworkObject(GameObject prefab,
@@ -93,9 +92,9 @@ namespace CastleFight.Networking.Handlers
             var netObj = go.GetComponent<NetworkObject>();
 
             if (withOwnership)
-                netObj.SpawnWithOwnership(clientId, true);
+                netObj.SpawnWithOwnership(clientId);
             else
-                netObj.Spawn(true);
+                netObj.Spawn();
 
             return go;
         }

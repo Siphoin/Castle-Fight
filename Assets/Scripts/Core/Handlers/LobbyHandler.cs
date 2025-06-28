@@ -15,6 +15,7 @@ namespace CastleFight.Core.Handlers
         private bool _isRunning = false;
 
         private Subject<ushort> _onTick = new();
+        private Subject<Unit> _onStartTick = new();
         private Subject<Unit> _onEndTick = new();
         [SerializeField] private LobbyHandlerConfig _config;
         private IPlayerListHandler _playerListHandler;
@@ -32,6 +33,9 @@ namespace CastleFight.Core.Handlers
         }
 
         public IObservable<Unit> OnEndTick => _onEndTick;
+        public IObservable<Unit> OnStartTick => _onStartTick;
+
+        public ushort CurrentTicks => _currentTicks.Value;
 
         private void Awake()
         {
@@ -40,7 +44,6 @@ namespace CastleFight.Core.Handlers
 
         private void Start()
         {
-            DontDestroyOnLoad(gameObject);
             if (!IsHost)
             {
                 _currentTicks.OnValueChanged += OnTickChanged;
@@ -49,18 +52,26 @@ namespace CastleFight.Core.Handlers
 
         private void OnTickChanged(ushort previousValue, ushort newValue)
         {
+            if (newValue == _config.TimeToStart)
+            {
+                _onStartTick.OnNext(Unit.Default);
+            }
             _onTick.OnNext(newValue);
             if (newValue == 0)
             {
                 _onEndTick.OnNext(Unit.Default);
             }
 
+#if UNITY_EDITOR
+            Debug.Log($"{nameof(LobbyHandler)}: tick: {_currentTicks.Value}...");
+#endif
+
 
         }
 
         public void Turn ()
         {
-            if (IsHost && !_isRunning)
+            if (IsHost && !_isRunning && !_isStarted.Value)
             {
                 _isRunning = true;
                 Tick().Forget();
@@ -70,16 +81,22 @@ namespace CastleFight.Core.Handlers
         private async UniTask Tick ()
         {
             _currentTicks.Value = _config.TimeToStart;
+            _onStartTick.OnNext(Unit.Default);
             var token = this.GetCancellationTokenOnDestroy();
             while (_currentTicks.Value > 0)
             {
                 await UniTask.Delay(1000, true, cancellationToken:  token);
                 _currentTicks.Value--;
                 _onTick.OnNext(_currentTicks.Value);
+
+#if UNITY_EDITOR
+                Debug.Log($"{nameof(LobbyHandler)}: tick: {_currentTicks.Value}...");
+#endif
             }
 
             _onEndTick.OnNext(Unit.Default);
-
+            _isStarted.Value = true;
+            _isRunning = false;
 
         }
 
