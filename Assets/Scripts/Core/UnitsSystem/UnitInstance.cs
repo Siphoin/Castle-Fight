@@ -40,7 +40,7 @@ namespace CastleFight.Core.UnitsSystem
 
         public ulong OwnerId => OwnerClientId;
 
-        IUnitNavMesh IUnitInstance.NavMesh => _navMesh;
+        public IUnitNavMesh NavMesh => _navMesh;
 
         public IUnitAnimatorHandler AnimatorHandler => _unitAnimatorHandler;
 

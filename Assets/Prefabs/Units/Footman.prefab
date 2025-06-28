@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 3008300964552343170}
   - component: {fileID: 3466313874383007124}
   - component: {fileID: 7703044810191803342}
+  - component: {fileID: 6128061866669626964}
+  - component: {fileID: 1870696030691366369}
   m_Layer: 0
   m_Name: Footman
   m_TagString: Untagged
@@ -244,6 +246,41 @@ CapsuleCollider:
   m_Height: 3.28
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &6128061866669626964
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1870696030691366369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff5335a2f830bbb418d270727f548c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 6128061866669626964}
 --- !u!1001 &5518429903799379106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -307,6 +344,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7854495662811400555}
+    - targetCorrespondingSourceObject: {fileID: 100050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3142889737174012793}
   m_SourcePrefab: {fileID: 100100000, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
 --- !u!95 &5518429903789887938 stripped
 Animator:
@@ -331,6 +371,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 5518429903789887938}
+--- !u!114 &3142889737174012793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5518429903799411312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db9290502a7e9944af0bf97c54efe60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitInstance: {fileID: 0}
 --- !u!4 &5518429903799516688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
