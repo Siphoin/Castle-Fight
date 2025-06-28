@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Unity.Netcode;
 
@@ -111,13 +113,24 @@ namespace CastleFight.Networking.Models
         {
             if (serializer.IsReader)
             {
-                serializer.SerializeValue(ref _json);
-                _dictionary = JsonConvert.DeserializeObject<Dictionary<TKey, TValue>>(_json) ?? new Dictionary<TKey, TValue>();
+                byte[] data = null;
+                serializer.SerializeValue(ref data);
+                using (var memoryStream = new MemoryStream(data))
+                {
+                    var binaryFormatter = new BinaryFormatter();
+                    _dictionary = (Dictionary<TKey, TValue>)binaryFormatter.Deserialize(memoryStream);
+                }
             }
             else
             {
-                ToJson();
-                serializer.SerializeValue(ref _json);
+                byte[] data;
+                using (var memoryStream = new MemoryStream())
+                {
+                    var binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(memoryStream, _dictionary);
+                    data = memoryStream.ToArray();
+                }
+                serializer.SerializeValue(ref data);
             }
         }
 
