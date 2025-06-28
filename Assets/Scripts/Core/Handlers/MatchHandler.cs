@@ -63,7 +63,7 @@ namespace CastleFight.Core.Handlers
 
             var tempDict = _scoresTeams.Value;
             tempDict[teamId] = newValue;
-            _scoresTeams.Value = tempDict; // Важно: присваиваем новое значение
+            _scoresTeams.Value = tempDict;
         }
 
         public void StartMatch()

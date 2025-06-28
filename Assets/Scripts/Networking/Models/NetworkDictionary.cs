@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Newtonsoft.Json;
 using Unity.Netcode;
 
 namespace CastleFight.Networking.Models
@@ -11,12 +9,10 @@ namespace CastleFight.Networking.Models
     public struct NetworkDictionary<TKey, TValue> : INetworkSerializable, IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>
     {
         private Dictionary<TKey, TValue> _dictionary;
-        private string _json;
 
         public NetworkDictionary(Dictionary<TKey, TValue> dictionary)
         {
             _dictionary = dictionary ?? new Dictionary<TKey, TValue>();
-            _json = JsonConvert.SerializeObject(_dictionary);
         }
 
         
@@ -27,7 +23,6 @@ namespace CastleFight.Networking.Models
             set
             {
                 _dictionary[key] = value;
-                ToJson();
             }
         }
 
@@ -43,31 +38,25 @@ namespace CastleFight.Networking.Models
         public void Add(TKey key, TValue value)
         {
             _dictionary.Add(key, value);
-            ToJson();
         }
-
-        // Добавляем метод для удобного обновления
         public void SetValue(TKey key, TValue value)
         {
             _dictionary[key] = value;
-            ToJson();
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             _dictionary.Add(item.Key, item.Value);
-            ToJson();
         }
 
         public void Clear()
         {
             _dictionary.Clear();
-            ToJson();
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            return _dictionary.TryGetValue(item.Key, out var value) && EqualityComparer<TValue>.Default.Equals(value, item.Value);
+            return TryGetValue(item.Key, out var value) && EqualityComparer<TValue>.Default.Equals(value, item.Value);
         }
 
         public bool ContainsKey(TKey key)
@@ -88,14 +77,12 @@ namespace CastleFight.Networking.Models
         public bool Remove(TKey key)
         {
             bool result = _dictionary.Remove(key);
-            if (result) ToJson();
             return result;
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             bool result = _dictionary.Remove(item.Key);
-            if (result) ToJson();
             return result;
         }
 
@@ -134,10 +121,6 @@ namespace CastleFight.Networking.Models
             }
         }
 
-        private void ToJson()
-        {
-            _json = JsonConvert.SerializeObject(_dictionary);
-        }
 
         public static implicit operator Dictionary<TKey, TValue>(NetworkDictionary<TKey, TValue> networkDict)
         {
