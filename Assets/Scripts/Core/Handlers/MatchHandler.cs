@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using CastleFight.Core.Models;
+using CastleFight.Networking.Models;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using Unity.Netcode;
@@ -11,11 +14,14 @@ namespace CastleFight.Core.Handlers
     public class MatchHandler : NetworkBehaviour, IMatchHandler
     {
         private NetworkVariable<NetworkDateTime> _currentTime = new();
+        private NetworkVariable<NetworkDictionary<ushort, uint>> _scoresTeams = new();
         private Subject<DateTime> _onTickMatchTime = new();
         private CancellationTokenSource _tokenSource;
+        private Subject<IReadOnlyDictionary<ushort, uint>> _onTeamsChanged = new();
 
         public DateTime CurrentTime => _currentTime.Value.DateTime;
         public IObservable<DateTime> OnTickMatchTime => _onTickMatchTime;
+        public IObservable<IReadOnlyDictionary<ushort, uint>> OnTeamsChanged => _onTeamsChanged;
 
         public override void OnNetworkSpawn()
         {
@@ -26,7 +32,23 @@ namespace CastleFight.Core.Handlers
             else
             {
                 _currentTime.OnValueChanged += TimeChanged;
+                _scoresTeams.OnValueChanged += TeamsScoreChanged;
             }
+        }
+
+        private void TeamsScoreChanged(NetworkDictionary<ushort, uint> previousValue, NetworkDictionary<ushort, uint> newValue)
+        {
+            _onTeamsChanged.OnNext(newValue);
+#if UNITY_EDITOR
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (var team in _scoresTeams.Value)
+            {
+                stringBuilder.AppendLine($"{team.Key} {team.Value}");
+            }
+
+            Debug.Log(stringBuilder.ToString());
+#endif
         }
 
         private void TimeChanged(NetworkDateTime previousValue, NetworkDateTime newValue)
@@ -35,10 +57,22 @@ namespace CastleFight.Core.Handlers
             Debug.Log(newValue.DateTime.ToString("mm:ss"));
         }
 
+        private void ModifyScore(ushort teamId, uint newValue)
+        {
+            if (!IsHost) return;
+
+            var tempDict = _scoresTeams.Value;
+            tempDict[teamId] = newValue;
+            _scoresTeams.Value = tempDict; // Важно: присваиваем новое значение
+        }
+
         public void StartMatch()
         {
             if (IsHost)
             {
+                _scoresTeams.Value = new(new());
+                _scoresTeams.Value.Add(0, 1);
+
                 _tokenSource?.Cancel();
                 _currentTime.Value = new NetworkDateTime();
                 TickTimeMatch().Forget();
@@ -65,6 +99,25 @@ namespace CastleFight.Core.Handlers
             if (!IsHost)
             {
                 _currentTime.OnValueChanged -= TimeChanged;
+                _scoresTeams.OnValueChanged -= TeamsScoreChanged;
+            }
+        }
+
+        private void Update()
+        {
+            if (IsHost && Input.GetKeyDown(KeyCode.V))
+            {
+                ModifyScore(0, _scoresTeams.Value.TryGetValue(0, out var current) ? current + 1 : 1);
+#if UNITY_EDITOR
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (var team in _scoresTeams.Value)
+                {
+                    stringBuilder.AppendLine($"{team.Key} {team.Value}");
+                }
+
+                Debug.Log(stringBuilder.ToString());
+#endif
             }
         }
     }

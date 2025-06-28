@@ -54,7 +54,7 @@ namespace CastleFight.Core.Views
 
         private void UpdateButtonActive()
         {
-            _burronStart.interactable = _lobbyHandler.AllPlayersIsReady && _networkHandler.Players.Count() > 1;
+            _burronStart.interactable = _lobbyHandler.AllPlayersIsReady && _networkHandler.Players.Count() > 0;
         }
     }
 }
