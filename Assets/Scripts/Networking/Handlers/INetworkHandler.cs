@@ -8,7 +8,7 @@ namespace CastleFight.Networking.Handlers
     public interface INetworkHandler : ISpawnHandler
     {
         void StartClient(string targetIP, string nickName = null);
-        void StartServer(string nickName = null);
+        void StartServer(string targetIP, string nickName = null);
         void Disconnect();
         bool IsConnected { get; }
         IObservable<Unit> OnConnected { get; }

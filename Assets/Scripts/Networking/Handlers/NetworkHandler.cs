@@ -7,6 +7,7 @@ using CastleFight.Networking.Configs;
 using System;
 using Sirenix.OdinInspector;
 using CastleFight.Networking.Models;
+using static UnityEngine.GraphicsBuffer;
 
 namespace CastleFight.Networking.Handlers
 {
@@ -172,15 +173,23 @@ namespace CastleFight.Networking.Handlers
             }
         }
 
-        public void StartServer(string nickName = null)
+        public void StartServer(string targetIP, string nickName = null)
         {
             if (IsConnected)
             {
                 Debug.Log("Already hosting or connected!");
                 return;
             }
+            string ip = string.IsNullOrEmpty(targetIP) ? _config.DefaultIP : targetIP;
             SetedNickName = nickName;
+
+            var transport = GetComponent<UnityTransport>();
+            if (transport != null)
+            {
+                transport.SetConnectionData(ip, _config.Port);
+            }
             _networkManager.StartHost();
+
             Debug.Log($"P2P Host started on {_config.DefaultIP}:{_config.Port}");
         }
 

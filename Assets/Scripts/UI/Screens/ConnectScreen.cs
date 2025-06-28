@@ -37,7 +37,7 @@ namespace CastleFight.UI.Screens
 
         private void StartHost()
         {
-            _networkHandler.StartServer(_inputName.Text);
+            _networkHandler.StartServer(_inputAddress.Text, _inputName.Text);
         }
     }
 }
