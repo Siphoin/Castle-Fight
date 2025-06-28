@@ -2,21 +2,15 @@
 using CastleFight.Core.UnitsSystem.Components;
 using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
-using Sirenix.OdinInspector;
-using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
+using Unity.Netcode;
+using Sirenix.OdinInspector;
 
-namespace CastleFight.Core.UnitsSystem
+namespace CastleFight.Core.BuildingsSystem
 {
-    [RequireComponent(typeof(NetworkObject))]
-    [RequireComponent(typeof(HealthComponent))]
-    [RequireComponent(typeof(UnitNavMesh))]
-    [RequireComponent(typeof(NetworkTransform))]
-    public class UnitInstance : NetworkBehaviour, IUnitInstance
+    public class BuildingInstance : NetworkBehaviour, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
-        [SerializeField, ReadOnly] private UnitNavMesh _navMesh;
         [SerializeField, ReadOnly] private NetworkHandler _network;
         private NetworkHandler Network
         {
@@ -34,11 +28,9 @@ namespace CastleFight.Core.UnitsSystem
 
         public bool IsMy => IsOwner;
 
-        public NetworkPlayer Owner => Network.Players.GetPlayerById(OwnerId); 
+        public NetworkPlayer Owner => Network.Players.GetPlayerById(OwnerId);
 
         public ulong OwnerId => OwnerClientId;
-
-        IUnitNavMesh IUnitInstance.NavMesh => _navMesh;
 
         private void OnValidate()
         {
@@ -46,13 +38,6 @@ namespace CastleFight.Core.UnitsSystem
             {
                 _healthComponent = GetComponent<HealthComponent>();
             }
-
-            if (!_navMesh)
-            {
-                _navMesh = GetComponent<UnitNavMesh>();
-            }
-
-
         }
     }
 }
