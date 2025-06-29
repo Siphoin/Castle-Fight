@@ -4,7 +4,9 @@ namespace CastleFight.Core.Handlers
 {
     public interface IMatchHandler
     {
-        DateTime CurrentTime { get; }
+        DateTime CurrentTimeMatch { get; }
         IObservable<DateTime> OnTickMatchTime { get; }
+        DateTime CurrentTimeSession { get; }
+        
     }
 }
