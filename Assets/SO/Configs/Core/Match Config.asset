@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guidObject: 57325e65-0bb5-4fe7-a063-847189626605
   _startGold: 500
+  _castlePrefab: {fileID: 6058596132512980733, guid: ea22183ee18085240b84956b7252d9d3, type: 3}

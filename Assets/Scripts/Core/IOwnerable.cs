@@ -1,4 +1,5 @@
-﻿using CastleFight.Networking.Models;
+﻿using System;
+using CastleFight.Networking.Models;
 
 namespace CastleFight.Core
 {
@@ -7,5 +8,8 @@ namespace CastleFight.Core
         bool IsMy {  get; }
         NetworkPlayer Owner { get; }
         ulong OwnerId { get; }
+        IObservable<NetworkPlayer> OnPlayerOwnerChanged { get; }
+
+        public void SetOwner(NetworkPlayer owner);
     }
 }

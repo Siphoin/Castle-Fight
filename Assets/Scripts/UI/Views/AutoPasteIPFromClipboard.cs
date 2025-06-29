@@ -1,8 +1,6 @@
 ﻿using CastleFight.Validation;
-using Sirenix.Utilities.Editor;
 using TMPro;
 using UnityEngine;
-
 namespace CastleFight.UI.Views
 {
     [RequireComponent(typeof(TMP_InputField))]
@@ -10,16 +8,18 @@ namespace CastleFight.UI.Views
     {
         private TMP_InputField _inputField;
         private void Awake()
-        {       
-            if (Clipboard.TryPaste(out string data))
+        {
+            string clipboardText = GUIUtility.systemCopyBuffer;
+            if (!string.IsNullOrEmpty(clipboardText))
             {
-                if (IPValidator.IsValidIPv4(data))
+                if (IPValidator.IsValidIPv4(clipboardText))
                 {
-                    data = data.Trim();
+                    clipboardText = clipboardText.Trim();
                     _inputField = GetComponent<TMP_InputField>();
-                    _inputField.text = data;
+                    _inputField.text = clipboardText;
                 }
             }
+
         }
     }
 }

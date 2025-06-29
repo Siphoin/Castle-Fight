@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
+using CastleFight.Core.Components;
 using CastleFight.Core.Configs;
 using CastleFight.Core.Models;
 using CastleFight.Networking.Handlers;
@@ -22,6 +24,10 @@ namespace CastleFight.Core.Handlers
         private INetworkHandler _networkHandler;
         private CancellationTokenSource _tokenSource;
         private Subject<IReadOnlyDictionary<ushort, uint>> _onTeamsChanged = new();
+
+        private IPointSpawnCastle _leftCastlePoint;
+        private IPointSpawnCastle _rightCastlePoint;
+
         [SerializeField] private MatchConfig _matchConfig;
 
         public static bool IsSpawnedInstance { get; private set; }
@@ -39,6 +45,7 @@ namespace CastleFight.Core.Handlers
             _networkHandler = FindAnyObjectByType<NetworkHandler>();
             if (IsHost)
             {
+                FindSpawnPointCastles();
                 SetupScore();
                 StartMatch();
                 TickTimeSession().Forget();
@@ -52,7 +59,21 @@ namespace CastleFight.Core.Handlers
             }
         }
 
+        private void FindSpawnPointCastles()
+        {
+            IPointSpawnCastle[] points = FindObjectsByType<PointSpawnCastle>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            _leftCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Red);
+            _rightCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Blue);
+        }
 
+        private void SpawnCastle (IPointSpawnCastle point)
+        {
+            var team = (int)point.TypeTeam;
+            var position = point.Position;
+            var rotation = point.Rotation;
+
+            _networkHandler.SpawnNetworkObject(_matchConfig.CastlePrefab.gameObject, null, true, (ulong)team, position, rotation);
+        }
 
         private void TeamsScoreChanged(NetworkDictionary<ushort, uint> previousValue, NetworkDictionary<ushort, uint> newValue)
         {
@@ -79,9 +100,16 @@ namespace CastleFight.Core.Handlers
         {
             if (IsHost)
             {
+                SpawnCastles();
                 ResetMatchTime();
                 ResetGoldPlayers();
             }
+        }
+
+        private void SpawnCastles()
+        {
+            SpawnCastle(_leftCastlePoint);
+            SpawnCastle(_rightCastlePoint);
         }
 
         private void ResetGoldPlayers()
