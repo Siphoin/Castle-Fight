@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba58de930fc9e3e46af0accba8f4b38a, type: 3}
+  m_Name: Barracks
+  m_EditorClassIdentifier: 
+  _icon: {fileID: 0}
+  _entityName: Barracks
+  _description: 
+  _maxHealth: 300
+  _baseGoldBounty: 40
+  _goldBountyVariance: 8
+  _trainSpeed: 5
+  _trainableUnit: {fileID: 5915806101338030891, guid: 8670901d0a4a8d841b4200d81a21d588, type: 3}
+  _buildTime: 12

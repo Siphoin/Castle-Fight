@@ -3,11 +3,12 @@ using CastleFight.Core.Configs;
 using UnityEngine;
 using UniRx;
 using CastleFight.Core.UnitsSystem;
+
 namespace Core.Components
 {
     public class MaterialOwnerHandler : MonoBehaviour
     {
-        [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private MaterialOwnerHandlerConfig _config;
         private IOwnerable _ownerable;
 
@@ -16,24 +17,30 @@ namespace Core.Components
             _ownerable = GetComponentInParent<IOwnerable>();
             _ownerable.OnPlayerOwnerChanged.Subscribe(owner =>
             {
-
-                UpdateMaterial();
-
+                UpdateMaterials();
             }).AddTo(this);
         }
 
         private void Start()
         {
-            UpdateMaterial();
+            UpdateMaterials();
         }
 
-        private void UpdateMaterial()
+        private void UpdateMaterials()
         {
+
             int index = (int)_ownerable.OwnerId;
+            Material material = _ownerable is UnitInstance unitInstance
+                ? _config.GetUnitMaterial(index)
+                : _config.GetBuildingMaterial(index);
 
-            Material material = _ownerable is UnitInstance unitInstance ? _config.GetUnitMaterial(index) : _config.GetBuildingMaterial(index);
-
-            _meshRenderer.material = material;
+            foreach (var renderer in _renderers)
+            {
+                if (renderer != null)
+                {
+                    renderer.material = material;
+                }
+            }
         }
     }
 }

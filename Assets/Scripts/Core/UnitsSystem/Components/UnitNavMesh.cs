@@ -60,14 +60,8 @@ namespace CastleFight.Core.UnitsSystem.Components
         {
             // test
 
-            if (_unitInstance.IsMy)
-            {
-                var building = FindAnyObjectByType<BuildingInstance>();
+            SpeedMovement = _agent.speed;
 
-              SetTarget(building.HealthComponent as HealthComponent);
-
-                SpeedMovement = _agent.speed;
-            }
         }
 
         public void SetTarget(HealthComponent healthComponent)

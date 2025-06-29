@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1169357637473224067
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 565797961244050485}
-  m_Layer: 0
-  m_Name: pointSpawn
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &565797961244050485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169357637473224067}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.74, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8821031424446055325}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227841957691582070
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,9 +13,9 @@ GameObject:
   - component: {fileID: 3990793390751493803}
   - component: {fileID: 6058596132512980733}
   - component: {fileID: 941884947579639073}
-  - component: {fileID: 6207695672780294174}
+  - component: {fileID: 2982749575284756738}
   m_Layer: 0
-  m_Name: Castle
+  m_Name: Barracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4158482658531345272}
-  - {fileID: 565797961244050485}
+  - {fileID: 8638948881644780784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9132793900017966941
@@ -81,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2928953003
+  GlobalObjectIdHash: 33050599
   InScenePlacedSourceGlobalObjectIdHash: 507057887
   DeferredDespawnTick: 0
   Ownership: 1
@@ -146,9 +115,9 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8.9, y: 6.39, z: 9.27}
+  m_Size: {x: 5.15, y: 5.82, z: 7.45}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6207695672780294174
+--- !u!114 &2982749575284756738
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buildingInstance: {fileID: 6058596132512980733}
-  _pointSpawn: {fileID: 565797961244050485}
+  _pointSpawn: {fileID: 8638948881644780784}
 --- !u!1 &6957751437795382987
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +217,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6957751437795382987}
-  m_Mesh: {fileID: 4300004, guid: 637b3bb1a53fd584b8b2f29eddb05290, type: 3}
+  m_Mesh: {fileID: 4300004, guid: e2f28d7d7478cb64597ebb9077abfe6e, type: 3}
 --- !u!114 &4018085421188800490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,3 +233,34 @@ MonoBehaviour:
   _renderers:
   - {fileID: 1570581217342367927}
   _config: {fileID: 11400000, guid: 4b6a31dbc9871654aab8302133be2981, type: 2}
+--- !u!1 &7272633378774528655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8638948881644780784}
+  m_Layer: 0
+  m_Name: pointSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8638948881644780784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7272633378774528655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.47, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821031424446055325}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1,6 +1,7 @@
 ﻿using System;
 using CastleFight.Core.HealthSystem;
 using CastleFight.Core.UnitsSystem.Components;
+using CastleFight.Core.UnitsSystem.SO;
 using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
 using Sirenix.OdinInspector;
@@ -22,6 +23,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private UnitNavMesh _navMesh;
         [SerializeField, ReadOnly] private NetworkHandler _network;
         [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
+        [SerializeField] private ScriptableUnitEntity _stats;
         private NetworkVariable<NetworkPlayer> _owner = new();
         private Subject<NetworkPlayer> _onPlayerOwnerChanged = new();
         private NetworkHandler Network
@@ -52,12 +54,15 @@ namespace CastleFight.Core.UnitsSystem
 
         public IObservable<NetworkPlayer> OnPlayerOwnerChanged => _onPlayerOwnerChanged;
 
+        public ScriptableUnitEntity Stats => _stats;
+
         protected override void OnNetworkPostSpawn()
         {
             if (IsOwner && !IsOwnerSeted)
             {
                 NetworkPlayer networkPlayer = Network.Players.GetPlayerById(OwnerId);
                 SetOwner(networkPlayer);
+                _healthComponent.SetHealthData(_stats.MaxHealth);
             }
 
             else if (!IsOwner)

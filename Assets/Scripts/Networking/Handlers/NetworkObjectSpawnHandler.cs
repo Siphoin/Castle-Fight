@@ -17,13 +17,13 @@ namespace CastleFight.Networking.Handlers
             _networkManager = NetworkManager.Singleton;
         }
 
-        public GameObject SpawnNetworkObject(GameObject prefab,
-                                    Action<GameObject> callback,
-                                   
-                                    bool spawnWithOwnership = true,
-                                    ulong ownerClientId = 0,
-                                     Vector3 position = default,
-                                    Quaternion rotation = default)
+        public GameObject SpawnNetworkObject(
+            GameObject prefab,
+            Action<GameObject> callback,
+            bool spawnWithOwnership = true,
+            ulong ownerClientId = 0,
+            Vector3 position = default,
+            Quaternion rotation = default)
         {
             if (!IsSpawned || prefab == null)
             {
@@ -37,39 +37,40 @@ namespace CastleFight.Networking.Handlers
             {
                 var go = SpawnObjectDirect(prefab, position, rotation, spawnWithOwnership, ownerClientId);
                 callback?.Invoke(go);
-
                 NotifyClientSpawnedClientRpc(requestId, go.GetComponent<NetworkObject>().NetworkObjectId);
                 return go;
             }
             else
             {
-                // Сохраняем callback для этого запроса
                 RegisterCallback(requestId, callback);
-
                 RequestSpawnServerRpc(
                     requestId,
-                    GetNetworkPrefabHash(prefab),
+                    prefab.name, // Передаем имя префаба вместо хеша
                     position,
                     rotation,
                     spawnWithOwnership,
                     ownerClientId
                 );
-
                 return null;
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void RequestSpawnServerRpc(ulong requestId,
-                                         ulong prefabHash,
-                                         Vector3 position,
-                                         Quaternion rotation,
-                                         bool spawnWithOwnership,
-                                         ulong ownerClientId,
-                                         ServerRpcParams rpcParams = default)
+        private void RequestSpawnServerRpc(
+            ulong requestId,
+            string prefabName, // Принимаем имя префаба
+            Vector3 position,
+            Quaternion rotation,
+            bool spawnWithOwnership,
+            ulong ownerClientId,
+            ServerRpcParams rpcParams = default)
         {
-            var prefab = FindPrefabByHash(prefabHash);
-            if (prefab == null) return;
+            var prefab = FindPrefabByName(prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"Prefab with name '{prefabName}' not found in NetworkManager's prefab list!");
+                return;
+            }
 
             var go = SpawnObjectDirect(prefab, position, rotation, spawnWithOwnership, ownerClientId);
             NotifyClientSpawnedClientRpc(requestId, go.GetComponent<NetworkObject>().NetworkObjectId);
@@ -78,15 +79,22 @@ namespace CastleFight.Networking.Handlers
         [ClientRpc]
         private void NotifyClientSpawnedClientRpc(ulong requestId, ulong spawnedObjectId)
         {
-            var netObj = _networkManager.SpawnManager.SpawnedObjects[spawnedObjectId];
-            _onObjectSpawned.OnNext((requestId, netObj.gameObject));
+            if (_networkManager.SpawnManager.SpawnedObjects.TryGetValue(spawnedObjectId, out var netObj))
+            {
+                _onObjectSpawned.OnNext((requestId, netObj.gameObject));
+            }
+            else
+            {
+                Debug.LogError($"NetworkObject with ID {spawnedObjectId} not found!");
+            }
         }
 
-        private GameObject SpawnObjectDirect(GameObject prefab,
-                                          Vector3 position,
-                                          Quaternion rotation,
-                                          bool withOwnership,
-                                          ulong clientId)
+        private GameObject SpawnObjectDirect(
+            GameObject prefab,
+            Vector3 position,
+            Quaternion rotation,
+            bool withOwnership,
+            ulong clientId)
         {
             var go = Instantiate(prefab, position, rotation);
             var netObj = go.GetComponent<NetworkObject>();
@@ -99,14 +107,12 @@ namespace CastleFight.Networking.Handlers
             return go;
         }
 
-        // Генерация уникального ID для запроса
         private ulong GenerateRequestId()
         {
             ulong time = (ulong)DateTime.Now.Ticks;
             return time % ulong.MaxValue;
         }
 
-        // Регистрация callback'ов (упрощенная версия)
         private void RegisterCallback(ulong requestId, Action<GameObject> callback)
         {
             _onObjectSpawned
@@ -115,18 +121,11 @@ namespace CastleFight.Networking.Handlers
                 .Subscribe(x => callback?.Invoke(x.Item2));
         }
 
-        private ulong GetNetworkPrefabHash(GameObject prefab)
-        {
-            var netObj = prefab?.GetComponent<NetworkObject>();
-            return netObj?.NetworkObjectId ?? 0;
-        }
-
-        private GameObject FindPrefabByHash(ulong hash)
+        private GameObject FindPrefabByName(string prefabName)
         {
             foreach (var prefab in _networkManager.NetworkConfig.Prefabs.Prefabs)
             {
-                var netObj = prefab.Prefab.GetComponent<NetworkObject>();
-                if (netObj != null && netObj.NetworkObjectId == hash)
+                if (prefab.Prefab.name == prefabName)
                     return prefab.Prefab;
             }
             return null;

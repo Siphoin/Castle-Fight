@@ -7,13 +7,17 @@ using Unity.Netcode;
 using Sirenix.OdinInspector;
 using UniRx;
 using System;
+using CastleFight.Core.BuildingsSystem.SO;
+using CastleFight.Core.BuildingsSystem.Components;
 
 namespace CastleFight.Core.BuildingsSystem
 {
+    [RequireComponent(typeof(BuildingSpawnHandler))]
     public class BuildingInstance : NetworkBehaviour, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField, ReadOnly] private NetworkHandler _network;
+        [SerializeField] private ScriptableBuuidingEntity _stats;
         private NetworkVariable<NetworkPlayer> _owner = new();
         private Subject<NetworkPlayer> _onPlayerOwnerChanged = new();
 
@@ -31,7 +35,7 @@ namespace CastleFight.Core.BuildingsSystem
 
         public IHealthComponent HealthComponent => _healthComponent;
 
-        public bool IsMy => _owner.Value.Equals(Network.Players.LocalPlayer);
+        public bool IsMy => _owner.Value.Equals(Network.Players.LocalPlayer) || Network.Players.LocalPlayer.ClientId == OwnerId;
 
         public NetworkPlayer Owner => Network.Players.GetPlayerById(_owner.Value.ClientId);
 
@@ -41,12 +45,15 @@ namespace CastleFight.Core.BuildingsSystem
 
         public IObservable<NetworkPlayer> OnPlayerOwnerChanged => _onPlayerOwnerChanged;
 
+        public ScriptableBuuidingEntity Stats => _stats;
+
         private void Start()
         {
             if (IsOwner && !IsOwnerSeted)
             {
                 NetworkPlayer networkPlayer = Network.Players.GetPlayerById(OwnerId);
                 SetOwner(networkPlayer);
+                _healthComponent.SetHealthData(_stats.MaxHealth);
             }
 
             else if (!IsOwner)

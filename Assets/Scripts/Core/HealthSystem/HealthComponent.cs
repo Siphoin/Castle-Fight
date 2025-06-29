@@ -97,5 +97,32 @@ namespace CastleFight.Core.HealthSystem
             RegenEvent regenEvent = new RegenEvent(amount);
             _onRegen.OnNext(regenEvent);
         }
+
+        public void SetHealthData(float maxHealth)
+        {
+            if (IsServer)
+            {
+                ApplyHealthData(maxHealth);
+            }
+            else
+            {
+                SetHealthDataServerRpc(maxHealth);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetHealthDataServerRpc(float maxHealth, ServerRpcParams rpcParams = default)
+        {
+            ApplyHealthData(maxHealth);
+        }
+
+        private void ApplyHealthData(float maxHealth)
+        {
+            _maxHealth.Value = maxHealth;
+            _currentHealth.Value = maxHealth;
+
+            _onCurrentHealthChanged.OnNext(_currentHealth.Value);
+        }
+
     }
 }
