@@ -42,20 +42,11 @@ namespace CastleFight.Core.Handlers
         private void TeamsScoreChanged(NetworkDictionary<ushort, uint> previousValue, NetworkDictionary<ushort, uint> newValue)
         {
             _onTeamsChanged.OnNext(newValue);
-#if UNITY_EDITOR
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (var team in newValue)
-            {
-                stringBuilder.AppendLine($"{team.Key} {team.Value}");
-            }
-            Debug.Log(stringBuilder.ToString());
-#endif
         }
 
         private void TimeChanged(NetworkDateTime previousValue, NetworkDateTime newValue)
         {
             _onTickMatchTime.OnNext(newValue.DateTime);
-            Debug.Log(newValue.DateTime.ToString("mm:ss"));
         }
 
 
@@ -104,17 +95,9 @@ namespace CastleFight.Core.Handlers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.V))
+            if (Input.GetKeyDown(KeyCode.V) && IsHost)
             {
                 ModifyScore(0, _scoresTeams.Value.TryGetValue(0, out var current) ? current + 1 : 1);
-#if UNITY_EDITOR
-                StringBuilder stringBuilder = new StringBuilder();
-                foreach (var team in _scoresTeams.Value)
-                {
-                    stringBuilder.AppendLine($"{team.Key} {team.Value}");
-                }
-                Debug.Log(stringBuilder.ToString());
-#endif
             }
         }
     }

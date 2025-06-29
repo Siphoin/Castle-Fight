@@ -49,12 +49,10 @@ namespace CastleFight.Networking.Handlers
                 _pingStopwatch.Stop();
                 int pingMs = (int)_pingStopwatch.ElapsedMilliseconds / 2;
                 _onPingChanged.OnNext(pingMs);
-                Debug.Log($"Ping: {pingMs}ms");
             }
             catch (TimeoutException)
             {
                 Debug.LogWarning("Ping measurement timed out");
-                _onPingChanged.OnNext(-1);
             }
         }
 
