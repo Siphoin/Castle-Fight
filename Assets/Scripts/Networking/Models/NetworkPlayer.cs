@@ -1,4 +1,5 @@
 ﻿using System;
+using SouthPointe.Serialization.MessagePack;
 using Unity.Collections;
 using Unity.Netcode;
 namespace CastleFight.Networking.Models
@@ -13,6 +14,8 @@ namespace CastleFight.Networking.Models
         public bool IsReady;
         public ushort Team;
 
+        private static readonly MessagePackFormatter _formatter = new();
+
         internal NetworkPlayer(ulong clientId, FixedString32Bytes nickName)
         {
             ClientId = clientId;
@@ -25,12 +28,22 @@ namespace CastleFight.Networking.Models
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref ClientId);
-            serializer.SerializeValue(ref Gold);
-            serializer.SerializeValue(ref NickName);
-            serializer.SerializeValue(ref ColorType);
-            serializer.SerializeValue(ref IsReady);
-            serializer.SerializeValue(ref Team);
+            if (serializer.IsReader)
+            {
+                byte[] bytes = default;
+                serializer.SerializeValue(ref bytes);
+
+                if (bytes != null && bytes.Length > 0)
+                {
+                    NetworkPlayer deserialized = _formatter.Deserialize<NetworkPlayer>(bytes);
+                    this = deserialized;
+                }
+            }
+            else
+            {
+                byte[] bytes = _formatter.Serialize(this);
+                serializer.SerializeValue(ref bytes);
+            }
         }
 
         public bool Equals(NetworkPlayer other)

@@ -25,10 +25,13 @@ namespace CastleFight.Core.Handlers
 
         public override void OnNetworkSpawn()
         {
+           
+
             if (IsHost)
             {
                 StartMatch();
             }
+
             else
             {
                 _currentTime.OnValueChanged += TimeChanged;
@@ -41,12 +44,10 @@ namespace CastleFight.Core.Handlers
             _onTeamsChanged.OnNext(newValue);
 #if UNITY_EDITOR
             StringBuilder stringBuilder = new StringBuilder();
-
-            foreach (var team in _scoresTeams.Value)
+            foreach (var team in newValue)
             {
                 stringBuilder.AppendLine($"{team.Key} {team.Value}");
             }
-
             Debug.Log(stringBuilder.ToString());
 #endif
         }
@@ -57,21 +58,24 @@ namespace CastleFight.Core.Handlers
             Debug.Log(newValue.DateTime.ToString("mm:ss"));
         }
 
-        private void ModifyScore(ushort teamId, uint newValue)
-        {
-            if (!IsHost) return;
 
-            var tempDict = _scoresTeams.Value;
-            tempDict[teamId] = newValue;
-            _scoresTeams.Value = tempDict;
+        public void ModifyScore(ushort teamId, uint newValue)
+        {
+            if (IsHost)
+            {
+                var tempDict = new Dictionary<ushort, uint>(_scoresTeams.Value);
+                tempDict[teamId] = newValue;
+                _scoresTeams.Value = new(tempDict);
+            }
         }
 
         public void StartMatch()
         {
             if (IsHost)
             {
-                _scoresTeams.Value = new(new());
-                _scoresTeams.Value.Add(0, 1);
+                var initialScores = new Dictionary<ushort, uint>();
+                initialScores.Add(0, 1);
+                _scoresTeams.Value = new NetworkDictionary<ushort, uint>(initialScores);
 
                 _tokenSource?.Cancel();
                 _currentTime.Value = new NetworkDateTime();
@@ -85,37 +89,30 @@ namespace CastleFight.Core.Handlers
             while (true)
             {
                 await UniTask.Delay(1000, cancellationToken: _tokenSource.Token);
-
                 var newTime = _currentTime.Value;
                 newTime.AddSeconds(1);
                 _currentTime.Value = newTime;
-                Debug.Log(_currentTime.Value.DateTime.ToString("mm:ss"));
             }
         }
 
         private void OnDisable()
         {
             _tokenSource?.Cancel();
-            if (!IsHost)
-            {
-                _currentTime.OnValueChanged -= TimeChanged;
-                _scoresTeams.OnValueChanged -= TeamsScoreChanged;
-            }
+            _currentTime.OnValueChanged -= TimeChanged;
+            _scoresTeams.OnValueChanged -= TeamsScoreChanged;
         }
 
         private void Update()
         {
-            if (IsHost && Input.GetKeyDown(KeyCode.V))
+            if (Input.GetKeyDown(KeyCode.V))
             {
                 ModifyScore(0, _scoresTeams.Value.TryGetValue(0, out var current) ? current + 1 : 1);
 #if UNITY_EDITOR
                 StringBuilder stringBuilder = new StringBuilder();
-
                 foreach (var team in _scoresTeams.Value)
                 {
                     stringBuilder.AppendLine($"{team.Key} {team.Value}");
                 }
-
                 Debug.Log(stringBuilder.ToString());
 #endif
             }
