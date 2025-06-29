@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8285b38446bdd6a4dad89bd3c06994dd, type: 3}
+  m_Name: Team Score View Config
+  m_EditorClassIdentifier: 
+  _guidObject: f898ab0c-2759-4f69-990b-40c86a3ec6f2
+  _colorFirstTeam: '#d95f5f'
+  _colorSecondTeam: '#5f69d9'

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CastleFight.Core.Handlers
 {
@@ -7,6 +8,9 @@ namespace CastleFight.Core.Handlers
         DateTime CurrentTimeMatch { get; }
         IObservable<DateTime> OnTickMatchTime { get; }
         DateTime CurrentTimeSession { get; }
-        
+        IReadOnlyDictionary<ushort, uint> ScoresTeams { get; }
+        IObservable<IReadOnlyDictionary<ushort, uint>> OnTeamsChanged { get; }
+
+
     }
 }

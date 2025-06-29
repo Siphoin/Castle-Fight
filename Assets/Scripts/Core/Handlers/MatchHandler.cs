@@ -31,6 +31,8 @@ namespace CastleFight.Core.Handlers
         public IObservable<DateTime> OnTickMatchTime => _onTickMatchTime;
         public IObservable<IReadOnlyDictionary<ushort, uint>> OnTeamsChanged => _onTeamsChanged;
 
+        public IReadOnlyDictionary<ushort, uint> ScoresTeams => _scoresTeams.Value;
+
         public override void OnNetworkSpawn()
         {
             IsSpawnedInstance = true;
