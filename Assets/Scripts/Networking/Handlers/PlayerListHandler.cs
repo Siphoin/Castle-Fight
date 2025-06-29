@@ -124,16 +124,6 @@ namespace CastleFight.Networking.Handlers
                     Debug.Log($"Player removed: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
             }
-
-#if UNITY_EDITOR
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Players list:\n");
-            foreach (var player in Players)
-            {
-                sb.AppendLine(player.NickName.ToString());
-            }
-            Debug.Log(sb.ToString());
-#endif
         }
 
         [ServerRpc(RequireOwnership = false)]
