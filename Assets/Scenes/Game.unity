@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
+  - {fileID: 757240588}
   - {fileID: 471652546}
   _installerPrefabs: []
   _autoRun: 1
@@ -182,6 +183,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 471652547}
+  - {fileID: 757240587}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &151049770
@@ -1011,7 +1013,7 @@ GameObject:
   - component: {fileID: 447276992}
   - component: {fileID: 447276991}
   m_Layer: 5
-  m_Name: time_match_panel (1)
+  m_Name: score_team
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1389,6 +1391,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 683680148}
   m_CullTransparentMesh: 1
+--- !u!1 &757240586
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 757240587}
+  - component: {fileID: 757240588}
+  m_Layer: 0
+  m_Name: GameCameraInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &757240587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757240586}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 29837625}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &757240588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757240586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32db9b93debb90245b29619314fa47da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _asSingle: 1
+  _instance: {fileID: 1216777492}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1664,7 +1712,7 @@ GameObject:
   - component: {fileID: 1216777489}
   - component: {fileID: 1216777488}
   - component: {fileID: 1216777491}
-  - component: {fileID: 1216777490}
+  - component: {fileID: 1216777492}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -1730,7 +1778,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
---- !u!114 &1216777490
+--- !u!114 &1216777491
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1739,20 +1787,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 1216777487}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ef8c68bade09b41aca258d42a632f2, type: 3}
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardMovementSpeed: 15
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: -10.86629, z: -10}
+--- !u!114 &1216777492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216777487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ee9cc1d4d1d944eb92c1b8f3c78acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboardMovementSpeed: 10
   screenEdgeMovementSpeed: 10
   followingSpeed: 5
   panningSpeed: 10
   keyboardRotationSpeed: 90
   mouseRotationSpeed: 50
-  autoHeight: 1
+  autoHeight: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 8
-  minHeight: 2
+    m_Bits: 63
+  minHeight: 14
   maxHeight: 40
   heightDampening: 5
   keyboardZoomSensitivity: 2
@@ -1777,25 +1844,6 @@ MonoBehaviour:
   rotateLeftKey: 122
   useMouseRotation: 1
   mouseRotationKey: 324
---- !u!114 &1216777491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216777487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TrackerSettings:
-    BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
-    AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
-    QuaternionDamping: 1
-  FollowOffset: {x: 0, y: -10.86629, z: -10}
 --- !u!1 &1249483473
 GameObject:
   m_ObjectHideFlags: 0
