@@ -12,6 +12,7 @@ namespace CastleFight.Core.BuildingsSystem.Components
         [SerializeField, ReadOnly] private BuildingInstance _buildingInstance;
         [SerializeField] private Transform _pointSpawn;
         private INetworkHandler _networkHandler;
+        private static readonly Quaternion DefaultRotation = Quaternion.Euler(0f, -190f, 0f);
 
         private void Start()
         {
@@ -37,7 +38,7 @@ namespace CastleFight.Core.BuildingsSystem.Components
             while (true)
             {
                 await UniTask.Delay(timeSpawn, cancellationToken: token);
-                _networkHandler.SpawnNetworkObject(_buildingInstance.Stats.TrainableUnit.gameObject, null, true, _buildingInstance.OwnerId, _pointSpawn.position, Quaternion.identity);
+                _networkHandler.SpawnNetworkObject(_buildingInstance.Stats.TrainableUnit.gameObject, null, true, _buildingInstance.OwnerId, _pointSpawn.position, DefaultRotation);
             }
         }
     }
