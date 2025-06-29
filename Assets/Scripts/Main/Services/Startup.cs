@@ -10,13 +10,19 @@ namespace CastleFight.Main.Services
     {
         [SerializeField, MinValue(30)] private int _targetFPS = 60;
         [SerializeField] private bool _isDevBuild;
+#if UNITY_EDITOR
+        [SerializeField] private bool _loadStartupScene;
+#endif
 
         public bool IsDevBuild => _isDevBuild;
 
         public void Initialize()
         {
 #if UNITY_EDITOR
-              SceneManager.LoadScene(0);
+            if (_loadStartupScene)
+            {
+                SceneManager.LoadScene(0);
+            }
 #endif
             Application.targetFrameRate = _targetFPS;
             Application.runInBackground = true;
