@@ -40,6 +40,7 @@ namespace CastleFight.UI.Views
             PlayerId = player.ClientId;
             _toggleReady.interactable = _networkHandler.Players.LocalPlayer.Equals(player);
             _toggleReady.isOn = player.IsReady;
+            transform.SetSiblingIndex((int)PlayerId);
 
 
             if (_toggleReady.interactable)
