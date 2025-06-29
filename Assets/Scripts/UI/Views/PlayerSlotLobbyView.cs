@@ -26,7 +26,7 @@ namespace CastleFight.UI.Views
         {
             _compositeDisposable?.Clear();
             PlayerId = 0;
-            transform.SetParent(null);
+            transform.SetParent(null, false);
             gameObject.SetActive(false);
             
         }

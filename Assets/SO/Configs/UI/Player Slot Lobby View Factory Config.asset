@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Player Slot Lobby View Factory Config
   m_EditorClassIdentifier: 
   _guidObject: b8008466-2a5c-437a-b15a-e5dde556c017
-  _prefab: {fileID: 6528934998925886012, guid: fe3db79e01c09da4986c00d908b75d50, type: 3}
+  _prefab: {fileID: 2107278986601415591, guid: fe3db79e01c09da4986c00d908b75d50, type: 3}
   _startCount: 12
