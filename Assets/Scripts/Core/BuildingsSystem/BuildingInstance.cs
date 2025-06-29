@@ -35,7 +35,7 @@ namespace CastleFight.Core.BuildingsSystem
 
         public IHealthComponent HealthComponent => _healthComponent;
 
-        public bool IsMy => _owner.Value.Equals(Network.Players.LocalPlayer) || Network.Players.LocalPlayer.ClientId == OwnerId;
+        public bool IsMy => Network.Players.LocalPlayer.Equals(_owner.Value);
 
         public NetworkPlayer Owner => Network.Players.GetPlayerById(_owner.Value.ClientId);
 

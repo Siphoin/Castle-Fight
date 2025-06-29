@@ -48,7 +48,7 @@ namespace CastleFight.Networking.Models
 
         public bool Equals(NetworkPlayer other)
         {
-            return ClientId == other.ClientId && NickName.Equals(other.NickName);
+            return ClientId == other.ClientId;
         }
 
     }

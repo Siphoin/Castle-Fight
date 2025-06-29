@@ -15,7 +15,7 @@ namespace CastleFight.Core.BuildingsSystem.Components
 
         private void Start()
         {
-            if (_buildingInstance.IsOwner && _buildingInstance.Stats.TrainableUnit != null)
+            if (_buildingInstance.IsMy && _buildingInstance.Stats.TrainableUnit != null)
             {
                 _networkHandler = FindAnyObjectByType<NetworkHandler>();
                 TickSpawn().Forget();
