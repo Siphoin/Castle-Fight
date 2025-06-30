@@ -10,7 +10,8 @@ namespace CastleFight.Core.Handlers
         IObservable<Unit> OnEndTick { get; }
         IObservable<Unit> OnStartTick { get; }
         bool AllPlayersIsReady { get; }
-        ushort CurrentTicks {  get; }
+        ushort CurrentTicks { get; }
+        bool IsTickingTimer { get; }
 
         void Turn();
     }

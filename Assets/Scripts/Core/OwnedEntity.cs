@@ -8,7 +8,7 @@ using Sirenix.OdinInspector;
 
 namespace CastleFight.Core
 {
-    public abstract class OwnedEntity : NetworkBehaviour
+    public abstract class OwnedEntity : NetworkBehaviour, IOwnerable, ITeamableObject
     {
         [SerializeField, ReadOnly] protected NetworkHandler _network;
         [SerializeField] protected NetworkVariable<NetworkPlayer> _owner = new();
@@ -73,6 +73,26 @@ namespace CastleFight.Core
         protected virtual void OnDisable()
         {
             _owner.OnValueChanged -= OwnerChanged;
+        }
+
+        public bool IsAlly(ITeamableObject other)
+        {
+            return other.Owner.Team == _owner.Value.Team;
+        }
+
+        public bool IsEnemy(ITeamableObject other)
+        {
+            return other.Owner.Team != _owner.Value.Team;
+        }
+
+        public bool IsAlly(IOwnerable other)
+        {
+            return other.Owner.Team == _owner.Value.Team;
+        }
+
+        public bool IsEnemy(IOwnerable other)
+        {
+            return other.Owner.Team != _owner.Value.Team;
         }
     }
 }

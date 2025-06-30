@@ -13,6 +13,7 @@ namespace CastleFight.Core.UnitsSystem
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(UnitNavMesh))]
     [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(UnitObjectRepository))]
     public class UnitInstance : OwnedEntity, IUnitInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;

@@ -5,7 +5,7 @@ using CastleFight.Main.Factories;
 
 namespace CastleFight.Core.UnitsSystem
 {
-    public interface IUnitInstance : IFactoryObject, ILivingEntity, IOwnerable, IStatsableEntity<ScriptableUnitEntity>
+    public interface IUnitInstance : IFactoryObject, ILivingEntity, IOwnerable, ITeamableObject, IStatsableEntity<ScriptableUnitEntity>
     {
         IUnitNavMesh NavMesh { get; }
         IUnitAnimatorHandler AnimatorHandler { get; }

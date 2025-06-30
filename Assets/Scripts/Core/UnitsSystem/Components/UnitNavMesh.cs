@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.HealthSystem;
@@ -58,10 +59,18 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         private void Start()
         {
-            // test
+            SetNavMeshParameters();
+            FindEnemyCastle();
+        }
 
+        private void FindEnemyCastle()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SetNavMeshParameters()
+        {
             SpeedMovement = _agent.speed;
-
         }
 
         public void SetTarget(HealthComponent healthComponent)

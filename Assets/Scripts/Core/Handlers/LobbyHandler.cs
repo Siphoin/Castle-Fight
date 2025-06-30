@@ -11,6 +11,7 @@ namespace CastleFight.Core.Handlers
     public class LobbyHandler : NetworkBehaviour, ILobbyHandler
     {
         private NetworkVariable<bool> _isStarted = new(false);
+        private NetworkVariable<bool> _isTickingTimer = new(false);
         private NetworkVariable<ushort> _currentTicks = new();
         private bool _isRunning = false;
 
@@ -23,6 +24,7 @@ namespace CastleFight.Core.Handlers
         public IObservable<ushort> OnTick => _onTick;
 
         public bool IsStarted => _isStarted.Value;
+        public bool IsTickingTimer => _isTickingTimer.Value;
 
         public bool AllPlayersIsReady
         {
@@ -81,6 +83,7 @@ namespace CastleFight.Core.Handlers
         private async UniTask Tick ()
         {
             _currentTicks.Value = _config.TimeToStart;
+            _isTickingTimer.Value = true;
             _onStartTick.OnNext(Unit.Default);
             var token = this.GetCancellationTokenOnDestroy();
             while (_currentTicks.Value > 0)
@@ -97,6 +100,7 @@ namespace CastleFight.Core.Handlers
             _onEndTick.OnNext(Unit.Default);
             _isStarted.Value = true;
             _isRunning = false;
+            _isTickingTimer.Value = false;
 
         }
 

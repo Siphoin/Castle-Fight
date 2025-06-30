@@ -8,6 +8,8 @@ using UnityEngine;
 namespace CastleFight.Core.BuildingsSystem
 {
     [RequireComponent(typeof(BuildingSpawnHandler))]
+    [RequireComponent (typeof(HealthComponent))]
+    [RequireComponent(typeof(BuildingObjectRepository))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
