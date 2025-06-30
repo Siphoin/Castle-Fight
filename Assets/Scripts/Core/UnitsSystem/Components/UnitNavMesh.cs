@@ -65,7 +65,6 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         private void FindEnemyCastle()
         {
-            throw new NotImplementedException();
         }
 
         private void SetNavMeshParameters()

@@ -49,7 +49,9 @@ namespace CastleFight.Networking.Handlers
             
         }
 
-        
+        public NetworkPlayer this[int id] => _players[id];
+
+
 
         public override void OnDestroy()
         {
@@ -94,7 +96,6 @@ namespace CastleFight.Networking.Handlers
 
         public override void OnNetworkSpawn()
         {
-            base.OnNetworkSpawn();
             HandleClientConnected(NetworkManager.Singleton.LocalClientId);
            
         }
@@ -151,27 +152,6 @@ namespace CastleFight.Networking.Handlers
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void SetNickNameServerRpc(ulong clientId, FixedString32Bytes newNickName)
-        {
-            if (!IsServer) return;
-
-            for (int i = 0; i < _players.Count; i++)
-            {
-                if (_players[i].ClientId == clientId)
-                {
-                    NetworkPlayer modifiedPlayer = _players[i];
-                    modifiedPlayer.NickName = newNickName;
-                    _players[i] = modifiedPlayer;
-                    break;
-                }
-            }
-        }
-
-        public void SetNickName(ulong clientId, string newNickName)
-        {
-            SetNickNameServerRpc(clientId, new FixedString32Bytes(newNickName));
-        }
 
         [ServerRpc(RequireOwnership = false)]
         public void SetPlayerTeamServerRpc(ulong clientId, ushort team)
@@ -237,12 +217,13 @@ namespace CastleFight.Networking.Handlers
             SetPlayerReadyStatusServerRpc(clientId, status);
         }
 
-        public NetworkPlayer GetPlayerById (ulong id)
-        {
-            return Players.FirstOrDefault(x => x.ClientId == id);
-        }
 
         public IEnumerator<NetworkPlayer> GetEnumerator() => Players.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public NetworkPlayer GetPlayerById(ulong id)
+        {
+            return _players[(int)id];
+        }
     }
 }

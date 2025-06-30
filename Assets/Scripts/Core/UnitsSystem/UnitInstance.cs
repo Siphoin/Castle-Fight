@@ -26,9 +26,9 @@ namespace CastleFight.Core.UnitsSystem
         public IUnitAnimatorHandler AnimatorHandler => _unitAnimatorHandler;
         public ScriptableUnitEntity Stats => _stats;
 
-        protected override void Start()
+        public override void OnNetworkSpawn()
         {
-            base.Start();
+            base.OnNetworkSpawn();
             if (IsOwner && !IsOwnerSeted)
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);

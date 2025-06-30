@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using SouthPointe.Serialization.MessagePack;
 using Unity.Collections;
 using Unity.Netcode;
@@ -8,6 +9,7 @@ namespace CastleFight.Networking.Models
     public struct NetworkPlayer : INetworkSerializable, IEquatable<NetworkPlayer>
     {
         public ulong ClientId;
+        public Guid Guid;
         public uint Gold;
         public FixedString32Bytes NickName;
         public int ColorType;
@@ -24,6 +26,7 @@ namespace CastleFight.Networking.Models
             ColorType = (int)clientId;
             IsReady = false;
             Team = 0;
+            Guid = System.Guid.NewGuid();
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -48,7 +51,17 @@ namespace CastleFight.Networking.Models
 
         public bool Equals(NetworkPlayer other)
         {
-            return ClientId == other.ClientId;
+            return Guid == other.Guid;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"id: {ClientId}");
+            sb.AppendLine($"Team: {Team}");
+            sb.AppendLine($"Gold: {Gold}");
+            sb.AppendLine($"NickName: {NickName}");
+            return sb.ToString();
         }
 
     }

@@ -11,7 +11,9 @@ namespace CastleFight.Core
     public abstract class OwnedEntity : NetworkBehaviour, IOwnerable, ITeamableObject
     {
         [SerializeField, ReadOnly] protected NetworkHandler _network;
-        [SerializeField] protected NetworkVariable<NetworkPlayer> _owner = new();
+        [SerializeField] protected NetworkVariable<NetworkPlayer> _owner = new(
+    readPerm: NetworkVariableReadPermission.Owner,
+    writePerm: NetworkVariableWritePermission.Owner);
         protected Subject<NetworkPlayer> _onPlayerOwnerChanged = new();
 
         protected NetworkHandler Network
@@ -32,12 +34,13 @@ namespace CastleFight.Core
         protected bool IsOwnerSeted => !string.IsNullOrEmpty(_owner.Value.NickName.ToString());
         public IObservable<NetworkPlayer> OnPlayerOwnerChanged => _onPlayerOwnerChanged;
 
-        protected virtual void Start()
+        public override void OnNetworkSpawn()
         {
             if (IsOwner && !IsOwnerSeted)
             {
-                NetworkPlayer networkPlayer = Network.Players.GetPlayerById(OwnerId);
-                SetOwner(networkPlayer);
+                NetworkPlayer owner = Network.Players.GetPlayerById(OwnerClientId);
+                _owner.Value = owner;
+                _onPlayerOwnerChanged.OnNext(owner);
             }
             else if (!IsOwner)
             {
@@ -52,22 +55,8 @@ namespace CastleFight.Core
 
         public void SetOwner(NetworkPlayer owner)
         {
-            if (IsServer)
-            {
-                _owner.Value = owner;
-                _onPlayerOwnerChanged.OnNext(owner);
-            }
-            else
-            {
-                SetOwnerServerRpc(owner.ClientId);
-            }
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SetOwnerServerRpc(ulong id)
-        {
-            NetworkPlayer owner = Network.Players.GetPlayerById(id);
-            SetOwner(owner);
+            _owner.Value = owner;
+            _onPlayerOwnerChanged.OnNext(owner);
         }
 
         protected virtual void OnDisable()
@@ -93,6 +82,16 @@ namespace CastleFight.Core
         public bool IsEnemy(IOwnerable other)
         {
             return other.Owner.Team != _owner.Value.Team;
+        }
+
+        public bool IsAlly(NetworkPlayer player)
+        {
+            return player.Team == _owner.Value.Team;
+        }
+
+        public bool IsEnemy(NetworkPlayer player)
+        {
+            return player.Team != _owner.Value.Team;
         }
     }
 }
