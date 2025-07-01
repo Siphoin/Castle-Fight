@@ -18,7 +18,7 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         public void Damage ()
         {
-            _unitInstance.NavMesh.CurrentTarget?.Damage(10, _unitInstance);
+            _unitInstance.NavMesh.CurrentTarget?.Damage(_unitInstance.Stats.GetFinalDamage(), _unitInstance);
         }
 
         private void OnValidate()

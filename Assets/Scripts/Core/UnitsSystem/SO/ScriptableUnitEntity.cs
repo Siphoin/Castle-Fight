@@ -13,6 +13,18 @@ namespace CastleFight.Core.UnitsSystem.SO
         [SerializeField] private int _damage = 10;
 
         [BoxGroup("Combat Stats")]
+        [MinValue(0)]
+        [SerializeField] private float _damageSpread = 0.5f;
+
+#if UNITY_EDITOR
+        [BoxGroup("Combat Stats")]
+        [ShowInInspector, ReadOnly]
+        [LabelText("Final Damage (Debug)")]
+        private string FinalDamageDebug => $"{_damage - _damageSpread:0.0} — {_damage + _damageSpread:0.0}";
+#endif
+
+
+        [BoxGroup("Combat Stats")]
         [MinValue(0.1f)]
         [SerializeField] private float _attackSpeed = 1f;
 
@@ -30,11 +42,16 @@ namespace CastleFight.Core.UnitsSystem.SO
         [SerializeField] private float _rotationSpeed = 120f;
 
         public int Damage => _damage;
+        public float DamageSpread => _damageSpread;
         public float AttackSpeed => _attackSpeed;
         public float AttackRange => _attackRange;
-
         public float MoveSpeed => _moveSpeed;
         public float RotationSpeed => _rotationSpeed;
 
+        public float GetFinalDamage()
+        {
+            float randomSpread = Random.Range(-_damageSpread, _damageSpread);
+            return _damage + randomSpread;
+        }
     }
 }
