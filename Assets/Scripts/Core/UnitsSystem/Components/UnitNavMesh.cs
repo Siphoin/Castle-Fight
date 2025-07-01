@@ -135,6 +135,7 @@ namespace CastleFight.Core.UnitsSystem.Components
             CurrentTarget = null;
             CurrentState = UnitStateType.Dead;
             _agent.isStopped = true;
+            _agentGraph.enabled = false;
         }
     }
 }
