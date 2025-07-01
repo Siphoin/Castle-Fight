@@ -32,6 +32,15 @@ namespace CastleFight.Core.UnitsSystem.SO
         [MinValue(0)]
         [SerializeField] private float _attackRange = 1.5f;
 
+        [BoxGroup("Combat Stats")]
+        [MinValue(0)]
+        [SerializeField] private float _initialAttackDelayRandomness = 0.1f;
+
+        [BoxGroup("Combat Stats")]
+        [MinValue(0)]
+        [SerializeField] private float _attackSpeedRandomness = 0.05f;
+
+
         [Title("Movement Stats")]
         [BoxGroup("Movement Stats")]
         [MinValue(0)]
@@ -53,5 +62,8 @@ namespace CastleFight.Core.UnitsSystem.SO
             float randomSpread = Random.Range(-_damageSpread, _damageSpread);
             return _damage + randomSpread;
         }
+
+        public float GetInitialAttackDelay() => Random.Range(0, _initialAttackDelayRandomness);
+        public float GetFinalAttackSpeed() => _attackSpeed * (1 + Random.Range(-_attackSpeedRandomness, _attackSpeedRandomness));
     }
 }
