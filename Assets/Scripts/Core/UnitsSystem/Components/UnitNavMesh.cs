@@ -66,10 +66,12 @@ namespace CastleFight.Core.UnitsSystem.Components
             if (_unitInstance.IsOwner)
             {
                 SetNavMeshParameters();
-                _unitInstance.HealthComponent.OnDeath.Subscribe(_ =>
+                _unitInstance.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
                 {
-
-                    SetDeath();
+                    if (health <= 0)
+                    {
+                        SetDeath();
+                    }
 
                 }).AddTo(this);
             }
@@ -133,8 +135,6 @@ namespace CastleFight.Core.UnitsSystem.Components
             CurrentTarget = null;
             CurrentState = UnitStateType.Dead;
             _agent.isStopped = true;
-            _agent.enabled = false;
-            _agentGraph.enabled = false;
         }
     }
 }
