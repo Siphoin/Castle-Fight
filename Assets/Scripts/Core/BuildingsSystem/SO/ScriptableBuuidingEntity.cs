@@ -20,8 +20,13 @@ namespace CastleFight.Core.BuildingsSystem.SO
         [BoxGroup("Building Stats")]
         [SerializeField] private int _buildTime = 30;
 
+        [BoxGroup("Building Stats")]
+        [SerializeField] private uint _income = 5;
+
         public float TrainSpeed => _trainSpeed;
         public UnitInstance TrainableUnit => _trainableUnit;
         public int BuildTime => _buildTime;
+
+        public uint Income => _income;
     }
 }

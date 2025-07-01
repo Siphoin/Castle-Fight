@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using CastleFight.Networking.Handlers;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Assets.Scripts.Core.Components
@@ -12,7 +13,7 @@ namespace Assets.Scripts.Core.Components
         [SerializeField] private bool _destroyOnStart = false;
 
         [SerializeField] private float _timeDestroy = 5;
-        [SerializeField] private NetworkHandler _network;
+        [SerializeField, ReadOnly] private NetworkHandler _network;
 
         public float TimeDestroy { get => _timeDestroy; set => _timeDestroy = value; }
 

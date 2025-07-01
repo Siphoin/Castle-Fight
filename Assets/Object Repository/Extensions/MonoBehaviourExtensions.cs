@@ -38,5 +38,11 @@ namespace ObjectRepositories.Extensions
             var repository = ObjectRepository.GetInstance<T>();
             return repository.FirstOrDefault(condition);
         }
+
+        public static IEnumerable<T> FindManyByConditionOnRepository<T>(this MonoBehaviour _, Func<T, bool> condition)
+        {
+            var repository = ObjectRepository.GetInstance<T>();
+            return repository.Where(condition);
+        }
     }
 }
