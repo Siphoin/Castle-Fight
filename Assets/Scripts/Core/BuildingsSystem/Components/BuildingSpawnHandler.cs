@@ -35,11 +35,8 @@ namespace CastleFight.Core.BuildingsSystem.Components
         {
             var token = this.GetCancellationTokenOnDestroy();
             TimeSpan timeSpawn = TimeSpan.FromSeconds(_buildingInstance.Stats.TrainSpeed);
-            while (true)
-            {
                 await UniTask.Delay(timeSpawn, cancellationToken: token);
                 _networkHandler.SpawnNetworkObject(_buildingInstance.Stats.TrainableUnit.gameObject, null, true, _buildingInstance.OwnerId, _pointSpawn.position, DefaultRotation);
-            }
         }
     }
 }

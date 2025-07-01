@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
-using CastleFight.Core.AI;
+﻿using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.HealthSystem;
+using ObjectRepositories.Extensions;
 using Sirenix.OdinInspector;
+using UniRx;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,6 +17,8 @@ namespace CastleFight.Core.UnitsSystem.Components
         [SerializeField, ReadOnly] private UnitInstance _unitInstance;
         [SerializeField, ReadOnly] private NavMeshAgent _agent;
         [SerializeField, ReadOnly] private BehaviorGraphAgent _agentGraph;
+
+        
 
         public IHealthComponent CurrentTarget
         {
@@ -59,12 +61,13 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         private void Start()
         {
-            SetNavMeshParameters();
-            FindEnemyCastle();
-        }
+            enabled = _unitInstance.IsMy;
 
-        private void FindEnemyCastle()
-        {
+            if (_unitInstance.IsMy)
+            {
+                SetNavMeshParameters();
+
+            }
         }
 
         private void SetNavMeshParameters()
@@ -82,6 +85,11 @@ namespace CastleFight.Core.UnitsSystem.Components
         {
             CurrentTarget = null;
             CurrentState = UnitStateType.Idle;
+        }
+
+        private void SetAttackState ()
+        {
+            CurrentState = UnitStateType.MeleeAttack;
         }
 
         private void OnValidate()

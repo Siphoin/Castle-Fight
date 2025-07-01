@@ -25,8 +25,6 @@ namespace CastleFight.Core.BuildingsSystem
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);
             }
-
-            name = $"{name}_{Owner.ClientId}_Team{Owner.Team}";
         }
 
         private void OnValidate()

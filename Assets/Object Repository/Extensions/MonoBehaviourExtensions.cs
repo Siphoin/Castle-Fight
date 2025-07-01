@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 namespace ObjectRepositories.Extensions
 {
     public static class MonoBehaviourExtensions
@@ -30,6 +31,12 @@ namespace ObjectRepositories.Extensions
         public static IEnumerable<T> FindObjectsByTagOnRepository<T>(this MonoBehaviour _, string tag) where T : Component
         {
             return FindObjectsOfTypeOnRepository<T>(_).Where(x => x.tag == tag);
+        }
+
+        public static T FindByConditionOnRepository<T> (this MonoBehaviour _, Func<T, bool> condition)
+        {
+            var repository = ObjectRepository.GetInstance<T>();
+            return repository.FirstOrDefault(condition);
         }
     }
 }

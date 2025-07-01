@@ -10,6 +10,7 @@ namespace CastleFight.Core
 {
     public abstract class OwnedEntity : NetworkBehaviour, IOwnerable, ITeamableObject
     {
+        private const string TAG_OWNED = "OwnerableObject";
         [SerializeField, ReadOnly] protected NetworkHandler _network;
         [SerializeField] protected NetworkVariable<NetworkPlayer> _owner = new(
     readPerm: NetworkVariableReadPermission.Owner,
@@ -36,6 +37,7 @@ namespace CastleFight.Core
 
         public override void OnNetworkSpawn()
         {
+            tag = TAG_OWNED;
             if (IsOwner && !IsOwnerSeted)
             {
                 NetworkPlayer owner = Network.Players.GetPlayerById(OwnerClientId);
@@ -62,16 +64,6 @@ namespace CastleFight.Core
         protected virtual void OnDisable()
         {
             _owner.OnValueChanged -= OwnerChanged;
-        }
-
-        public bool IsAlly(ITeamableObject other)
-        {
-            return other.Owner.Team == _owner.Value.Team;
-        }
-
-        public bool IsEnemy(ITeamableObject other)
-        {
-            return other.Owner.Team != _owner.Value.Team;
         }
 
         public bool IsAlly(IOwnerable other)

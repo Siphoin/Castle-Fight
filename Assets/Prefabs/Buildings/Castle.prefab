@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6058596132512980733}
   - component: {fileID: 941884947579639073}
   - component: {fileID: 6207695672780294174}
+  - component: {fileID: 6699366007357915649}
   m_Layer: 0
   m_Name: Castle
   m_TagString: Untagged
@@ -124,8 +125,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _healthComponent: {fileID: 3990793390751493803}
   _network: {fileID: 0}
+  _owner:
+    m_InternalValue:
+      ClientId: 0
+      Gold: 0
+      NickName:
+        utf8LengthInBytes: 0
+        bytes:
+          offset0000:
+            byte0000: 0
+            byte0001: 0
+            byte0002: 0
+            byte0003: 0
+            byte0004: 0
+            byte0005: 0
+            byte0006: 0
+            byte0007: 0
+            byte0008: 0
+            byte0009: 0
+            byte0010: 0
+            byte0011: 0
+            byte0012: 0
+            byte0013: 0
+            byte0014: 0
+            byte0015: 0
+          byte0016: 0
+          byte0017: 0
+          byte0018: 0
+          byte0019: 0
+          byte0020: 0
+          byte0021: 0
+          byte0022: 0
+          byte0023: 0
+          byte0024: 0
+          byte0025: 0
+          byte0026: 0
+          byte0027: 0
+          byte0028: 0
+          byte0029: 0
+      ColorType: 0
+      IsReady: 0
+      Team: 0
+  _healthComponent: {fileID: 3990793390751493803}
   _stats: {fileID: 11400000, guid: fdfd4c74a08c2854bbb71586c624d830, type: 2}
 --- !u!65 &941884947579639073
 BoxCollider:
@@ -146,7 +188,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8.9, y: 6.39, z: 9.27}
+  m_Size: {x: 7.1, y: 6.39, z: 9.27}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6207695672780294174
 MonoBehaviour:
@@ -162,6 +204,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buildingInstance: {fileID: 6058596132512980733}
   _pointSpawn: {fileID: 565797961244050485}
+--- !u!114 &6699366007357915649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227841957691582070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3321a573f8585a340b9cfcdd5b1bcea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6957751437795382987
 GameObject:
   m_ObjectHideFlags: 0
