@@ -254,5 +254,10 @@ namespace CastleFight.Networking.Handlers
                 rotation
             );
         }
+
+        public void DestroyNetworkObject(GameObject gameObject, Action callback = null)
+        {
+            ObjectSpawner.DestroyNetworkObject(gameObject, callback);
+        }
     }
 }

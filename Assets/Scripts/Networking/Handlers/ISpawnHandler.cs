@@ -11,5 +11,7 @@ namespace CastleFight.Networking.Handlers
                             ulong ownerClientId = 0,
                             Vector3 position = default,
                             Quaternion rotation = default);
+
+        void DestroyNetworkObject(GameObject gameObject, Action callback = null);
     }
 }

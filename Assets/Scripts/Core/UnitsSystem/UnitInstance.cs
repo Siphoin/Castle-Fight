@@ -1,8 +1,11 @@
-﻿using CastleFight.Core.Handlers;
+﻿using Assets.Scripts.Core.Components;
+using CastleFight.Core.Handlers;
 using CastleFight.Core.HealthSystem;
 using CastleFight.Core.UnitsSystem.Components;
+using CastleFight.Core.UnitsSystem.Configs;
 using CastleFight.Core.UnitsSystem.SO;
 using Sirenix.OdinInspector;
+using UniRx;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -22,6 +25,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
         [SerializeField, ReadOnly] private Collider _collider;
         [SerializeField] private ScriptableUnitEntity _stats;
+        [SerializeField] private UnitGlobalConfig _globalConfig;
 
 
         public IHealthComponent HealthComponent => _healthComponent;
@@ -35,6 +39,17 @@ namespace CastleFight.Core.UnitsSystem
             if (IsMy)
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);
+                _healthComponent.OnCurrentHealthChanged.Subscribe(health =>
+                {
+
+                    if (health <= 0)
+                    {
+                        TimedDestroyHandler timedDestroyHandler = gameObject.AddComponent<TimedDestroyHandler>();
+                        timedDestroyHandler.TimeDestroy = _globalConfig.TimeDestroyCorpse;
+                        timedDestroyHandler.DestroyObject();
+                    }
+
+                }).AddTo(this);
             }
         }
 

@@ -184,6 +184,7 @@ MonoBehaviour:
   _unitAnimatorHandler: {fileID: 552439247121823113}
   _collider: {fileID: 4906147285987384275}
   _stats: {fileID: 11400000, guid: 8f5f752802c2a174d9724dd2c5867e3c, type: 2}
+  _globalConfig: {fileID: 11400000, guid: 8c2fd2eee7d95874fa0cee024da29a1c, type: 2}
 --- !u!114 &3008300964552343170
 MonoBehaviour:
   m_ObjectHideFlags: 0

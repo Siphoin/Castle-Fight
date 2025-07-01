@@ -9,8 +9,10 @@ namespace CastleFight.Networking.Handlers
     {
         private NetworkManager _networkManager;
         private readonly Subject<(ulong, GameObject)> _onObjectSpawned = new();
+        private readonly Subject<GameObject> _onObjectDestroyed = new();
 
         public IObservable<(ulong requestId, GameObject spawnedObject)> OnObjectSpawned => _onObjectSpawned;
+        public IObservable<GameObject> OnObjectDestroyed => _onObjectDestroyed;
 
         private void Start()
         {
@@ -45,7 +47,7 @@ namespace CastleFight.Networking.Handlers
                 RegisterCallback(requestId, callback);
                 RequestSpawnServerRpc(
                     requestId,
-                    prefab.name, // Передаем имя префаба вместо хеша
+                    prefab.name,
                     position,
                     rotation,
                     spawnWithOwnership,
@@ -55,10 +57,68 @@ namespace CastleFight.Networking.Handlers
             }
         }
 
+        public void DestroyNetworkObject(GameObject gameObject, Action callback = null)
+        {
+            if (!IsSpawned || gameObject == null)
+            {
+                callback?.Invoke();
+                return;
+            }
+
+            var networkObject = gameObject.GetComponent<NetworkObject>();
+            if (networkObject == null)
+            {
+                Debug.LogError("GameObject doesn't have NetworkObject component!");
+                callback?.Invoke();
+                return;
+            }
+
+            if (IsServer)
+            {
+                DestroyObjectDirect(gameObject);
+                callback?.Invoke();
+                NotifyClientDestroyedClientRpc(networkObject.NetworkObjectId);
+            }
+            else
+            {
+                RegisterDestroyCallback(networkObject.NetworkObjectId, callback);
+                RequestDestroyServerRpc(networkObject.NetworkObjectId);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void RequestDestroyServerRpc(ulong networkObjectId, ServerRpcParams rpcParams = default)
+        {
+            if (_networkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out var netObj))
+            {
+                DestroyObjectDirect(netObj.gameObject);
+                NotifyClientDestroyedClientRpc(networkObjectId);
+            }
+        }
+
+        [ClientRpc]
+        private void NotifyClientDestroyedClientRpc(ulong destroyedObjectId)
+        {
+            if (_networkManager.SpawnManager.SpawnedObjects.TryGetValue(destroyedObjectId, out var netObj))
+            {
+                _onObjectDestroyed.OnNext(netObj.gameObject);
+            }
+        }
+
+        private void DestroyObjectDirect(GameObject gameObject)
+        {
+            var networkObject = gameObject.GetComponent<NetworkObject>();
+            if (networkObject != null)
+            {
+                networkObject.Despawn();
+            }
+            Destroy(gameObject);
+        }
+
         [ServerRpc(RequireOwnership = false)]
         private void RequestSpawnServerRpc(
             ulong requestId,
-            string prefabName, // Принимаем имя префаба
+            string prefabName,
             Vector3 position,
             Quaternion rotation,
             bool spawnWithOwnership,
@@ -119,6 +179,14 @@ namespace CastleFight.Networking.Handlers
                 .Where(x => x.Item1 == requestId)
                 .Take(1)
                 .Subscribe(x => callback?.Invoke(x.Item2));
+        }
+
+        private void RegisterDestroyCallback(ulong networkObjectId, Action callback)
+        {
+            _onObjectDestroyed
+                .Where(x => x.GetComponent<NetworkObject>().NetworkObjectId == networkObjectId)
+                .Take(1)
+                .Subscribe(_ => callback?.Invoke());
         }
 
         private GameObject FindPrefabByName(string prefabName)

@@ -1,2 +1,18 @@
 fileFormatVersion: 2
 guid: f5de100168ebc1b43ba9f4daad9c1088
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _network: {instanceID: 0}
+  - _healthComponent: {instanceID: 0}
+  - _navMesh: {instanceID: 0}
+  - _unitAnimatorHandler: {instanceID: 0}
+  - _collider: {instanceID: 0}
+  - _stats: {instanceID: 0}
+  - _globalConfig: {fileID: 11400000, guid: 8c2fd2eee7d95874fa0cee024da29a1c, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
