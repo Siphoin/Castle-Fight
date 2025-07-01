@@ -4,12 +4,14 @@ using CastleFight.Core.BuildingsSystem.SO;
 using CastleFight.Core.BuildingsSystem.Components;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using CastleFight.Core.Handlers;
 
 namespace CastleFight.Core.BuildingsSystem
 {
     [RequireComponent(typeof(BuildingSpawnHandler))]
     [RequireComponent (typeof(HealthComponent))]
     [RequireComponent(typeof(BuildingObjectRepository))]
+    [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;

@@ -5,6 +5,7 @@ using UnityEngine;
 using UniRx;
 using CastleFight.Core.HealthSystem.Events;
 using System;
+using Unity.Cinemachine;
 
 namespace CastleFight.Core.HealthSystem
 {
@@ -29,6 +30,21 @@ namespace CastleFight.Core.HealthSystem
 
         public IObservable<RegenEvent> OnRegen => _onRegen;
 
+        public override void OnNetworkSpawn()
+        {
+            _currentHealth.OnValueChanged += HealthChanged;
+        }
+
+        private void HealthChanged(float previousValue, float newValue)
+        {
+            _onCurrentHealthChanged.OnNext(newValue);
+            if (newValue <= 0)
+            {
+                DeathEvent deathEvent = new DeathEvent();
+                _onDeath.OnNext(deathEvent);
+            }
+        }
+
         public void Damage(float damage, object damager = null)
         {
             if (IsDead)
@@ -42,15 +58,14 @@ namespace CastleFight.Core.HealthSystem
             }
             else
             {
-                DamageServerRpc(damage, damager != null ? damager.ToString() : "");
+                DamageServerRpc(damage);
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void DamageServerRpc(float damage, string damagerString, ServerRpcParams rpcParams = default)
+        private void DamageServerRpc(float damage)
         {
-            object damager = !string.IsNullOrEmpty(damagerString) ? damagerString : null;
-            ApplyDamage(damage, damager);
+            ApplyDamage(damage, null);
         }
 
         private void ApplyDamage(float damage, object damager)

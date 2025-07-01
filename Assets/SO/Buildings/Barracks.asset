@@ -18,6 +18,6 @@ MonoBehaviour:
   _maxHealth: 300
   _baseGoldBounty: 40
   _goldBountyVariance: 8
-  _trainSpeed: 5
+  _trainSpeed: 15
   _trainableUnit: {fileID: 5915806101338030891, guid: 8670901d0a4a8d841b4200d81a21d588, type: 3}
   _buildTime: 12

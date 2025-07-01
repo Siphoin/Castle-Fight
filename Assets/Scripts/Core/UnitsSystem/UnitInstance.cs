@@ -1,4 +1,4 @@
-﻿// UnitInstance.cs
+﻿using CastleFight.Core.Handlers;
 using CastleFight.Core.HealthSystem;
 using CastleFight.Core.UnitsSystem.Components;
 using CastleFight.Core.UnitsSystem.SO;
@@ -14,12 +14,15 @@ namespace CastleFight.Core.UnitsSystem
     [RequireComponent(typeof(UnitNavMesh))]
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(UnitObjectRepository))]
+    [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
     public class UnitInstance : OwnedEntity, IUnitInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField, ReadOnly] private UnitNavMesh _navMesh;
         [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
+        [SerializeField, ReadOnly] private Collider _collider;
         [SerializeField] private ScriptableUnitEntity _stats;
+
 
         public IHealthComponent HealthComponent => _healthComponent;
         public IUnitNavMesh NavMesh => _navMesh;
@@ -29,7 +32,7 @@ namespace CastleFight.Core.UnitsSystem
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsOwner && !IsOwnerSeted)
+            if (IsMy)
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);
             }
@@ -40,6 +43,12 @@ namespace CastleFight.Core.UnitsSystem
             if (!_healthComponent) _healthComponent = GetComponent<HealthComponent>();
             if (!_navMesh) _navMesh = GetComponent<UnitNavMesh>();
             if (!_unitAnimatorHandler) _unitAnimatorHandler = GetComponentInChildren<UnitAnimatorHandler>();
+            if (!_collider) _collider = GetComponent<Collider>();
+        }
+
+        public void Disable()
+        {
+            _collider.enabled = false;
         }
     }
 }

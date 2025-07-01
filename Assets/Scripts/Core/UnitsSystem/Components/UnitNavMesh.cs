@@ -61,9 +61,9 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         private void Start()
         {
-            enabled = _unitInstance.IsMy;
+            enabled = _unitInstance.IsOwner;
 
-            if (_unitInstance.IsMy)
+            if (_unitInstance.IsOwner)
             {
                 SetNavMeshParameters();
                 _unitInstance.HealthComponent.OnDeath.Subscribe(_ =>
@@ -84,6 +84,18 @@ namespace CastleFight.Core.UnitsSystem.Components
         {
             CurrentTarget = healthComponent;
             CurrentState = UnitStateType.MoveToTarget;
+        }
+
+        public void Move ()
+        {
+            _agent.isStopped = false;
+            HealthComponent healthComponent = CurrentTarget as HealthComponent;
+            _agent.SetDestination(healthComponent.transform.position);
+        }
+
+        public void Stop ()
+        {
+            _agent.isStopped = true;
         }
 
         public void SetIdle ()
@@ -114,6 +126,15 @@ namespace CastleFight.Core.UnitsSystem.Components
             {
                 _agentGraph = GetComponent<BehaviorGraphAgent>();
             }
+        }
+
+        public void Disable()
+        {
+            CurrentTarget = null;
+            CurrentState = UnitStateType.Dead;
+            _agent.isStopped = true;
+            _agent.enabled = false;
+            _agentGraph.enabled = false;
         }
     }
 }
