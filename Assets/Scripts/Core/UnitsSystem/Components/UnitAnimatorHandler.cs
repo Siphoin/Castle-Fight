@@ -15,6 +15,11 @@ namespace CastleFight.Core.UnitsSystem.Components
             PlayAnimation(UnitAnimationType.Attack);
         }
 
+        public void PlayAnimationDeath()
+        {
+            PlayAnimation(UnitAnimationType.Death);
+        }
+
         private void PlayAnimation (UnitAnimationType animationType)
         {
             string name = animationType.ToString();

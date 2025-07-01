@@ -7,6 +7,7 @@ namespace CastleFight.Core.AI
     {
         Idle,
         MoveToTarget,
-        MeleeAttack
+        Attack,
+        Dead,
     }
 }

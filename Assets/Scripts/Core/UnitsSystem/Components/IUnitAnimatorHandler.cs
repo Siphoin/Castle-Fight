@@ -3,5 +3,6 @@
     public interface IUnitAnimatorHandler
     {
         void PlayAnimationAttack();
+        void PlayAnimationDeath();
     }
 }

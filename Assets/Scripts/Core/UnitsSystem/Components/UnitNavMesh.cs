@@ -66,7 +66,12 @@ namespace CastleFight.Core.UnitsSystem.Components
             if (_unitInstance.IsMy)
             {
                 SetNavMeshParameters();
+                _unitInstance.HealthComponent.OnDeath.Subscribe(_ =>
+                {
 
+                    SetDeath();
+
+                }).AddTo(this);
             }
         }
 
@@ -87,9 +92,10 @@ namespace CastleFight.Core.UnitsSystem.Components
             CurrentState = UnitStateType.Idle;
         }
 
-        private void SetAttackState ()
+        private void SetDeath ()
         {
-            CurrentState = UnitStateType.MeleeAttack;
+            CurrentTarget = null;
+            CurrentState = UnitStateType.Dead;
         }
 
         private void OnValidate()
