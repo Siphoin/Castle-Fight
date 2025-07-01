@@ -8,7 +8,7 @@ using Debug = UnityEngine.Debug;
 
 namespace CastleFight.Networking.Handlers
 {
-    public class PingHandler : NetworkBehaviour
+    public class PingHandler : NetworkBehaviour, IPingHandler
     {
         private readonly Subject<int> _onPingChanged = new Subject<int>();
         public IObservable<int> OnPingChanged => _onPingChanged;

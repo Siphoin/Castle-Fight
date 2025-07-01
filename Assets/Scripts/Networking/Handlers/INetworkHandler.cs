@@ -14,6 +14,7 @@ namespace CastleFight.Networking.Handlers
         IObservable<Unit> OnConnected { get; }
         IObservable<Unit> OnDisconnected { get; }
         IPlayerListHandler Players { get; }
+        IPingHandler Ping { get; }
         ulong LocalClientId { get; }
         bool IsHost { get; }
         NetworkClient LocalClient { get; }

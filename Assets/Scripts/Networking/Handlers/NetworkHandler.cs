@@ -19,6 +19,7 @@ namespace CastleFight.Networking.Handlers
         [SerializeField, ReadOnly] private NetworkManager _networkManager;
         [SerializeField, ReadOnly] private PlayerListHandler _playerListHandler;
         [SerializeField, ReadOnly] private NetworkObjectSpawnHandler _objectSpawnHandler;
+        [SerializeField, ReadOnly] private PingHandler _pingHandler;
 
         private readonly Subject<Unit> _onConnected = new Subject<Unit>();
         private readonly Subject<Unit> _onDisconnected = new Subject<Unit>();
@@ -59,6 +60,19 @@ namespace CastleFight.Networking.Handlers
                 }
                 
                 return _objectSpawnHandler;
+            }
+        }
+
+        public IPingHandler Ping
+        {
+            get
+            {
+                if (_pingHandler is null)
+                {
+                    _pingHandler = FindAnyObjectByType<PingHandler>();
+                }
+
+                return _pingHandler;
             }
         }
 
