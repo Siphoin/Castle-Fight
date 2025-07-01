@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 using UniRx;
 using CastleFight.Core.HealthSystem.Events;
 using System;
-using Unity.Cinemachine;
 
 namespace CastleFight.Core.HealthSystem
 {
+    [RequireComponent(typeof(HealthComponentObjectRegistrer))]
     public class HealthComponent : NetworkBehaviour, IHealthComponent
     {
         [SerializeField, ReadOnly] private NetworkVariable<float> _currentHealth = new(100);
