@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
-using CastleFight.Networking.Handlers;
+using CastleFight.Core.UnitsSystem.Factories;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Zenject;
 
 namespace CastleFight.Core.BuildingsSystem.Components
 {
@@ -11,14 +11,13 @@ namespace CastleFight.Core.BuildingsSystem.Components
     {
         [SerializeField, ReadOnly] private BuildingInstance _buildingInstance;
         [SerializeField] private Transform _pointSpawn;
-        private INetworkHandler _networkHandler;
+        [Inject]  private IUnitFactory _unitFactory;
         private static readonly Quaternion DefaultRotation = Quaternion.Euler(0f, -190f, 0f);
 
         private void Start()
         {
             if (_buildingInstance.IsMy && _buildingInstance.Stats.TrainableUnit != null)
             {
-                _networkHandler = FindAnyObjectByType<NetworkHandler>();
                 TickSpawn().Forget();
             }
         }
@@ -35,12 +34,13 @@ namespace CastleFight.Core.BuildingsSystem.Components
         {
             var token = this.GetCancellationTokenOnDestroy();
             TimeSpan timeSpawn = TimeSpan.FromSeconds(_buildingInstance.Stats.TrainSpeed);
-            
             while (true)
             {
                 await UniTask.Delay(timeSpawn, cancellationToken: token);
-                _networkHandler.SpawnNetworkObject(_buildingInstance.Stats.TrainableUnit.gameObject, null, true, _buildingInstance.OwnerId, _pointSpawn.position, DefaultRotation);
+                _unitFactory.Create(_buildingInstance.Stats.TrainableUnit, _pointSpawn.position, DefaultRotation);
             }
+
         }
+
     }
-}
+    }

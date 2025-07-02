@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4906147285987384275}
   - component: {fileID: 5635121251502549488}
   - component: {fileID: 4099156569230001718}
+  - component: {fileID: 2602959775789453994}
   m_Layer: 0
   m_Name: Footman
   m_TagString: Untagged
@@ -97,7 +98,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2.5
+  m_Speed: 4
   m_Acceleration: 5.466667e+21
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -182,6 +183,7 @@ MonoBehaviour:
   _healthComponent: {fileID: 6175328486229803888}
   _navMesh: {fileID: 3641157971579332417}
   _unitAnimatorHandler: {fileID: 552439247121823113}
+  _combatSystem: {fileID: 2593995064304509878}
   _collider: {fileID: 4906147285987384275}
   _stats: {fileID: 11400000, guid: 8f5f752802c2a174d9724dd2c5867e3c, type: 2}
   _globalConfig: {fileID: 11400000, guid: 8c2fd2eee7d95874fa0cee024da29a1c, type: 2}
@@ -351,6 +353,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthComponent: {fileID: 6175328486229803888}
+--- !u!114 &2602959775789453994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f710d77262e74647b2fe422c7305b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8115186340521367088
 GameObject:
   m_ObjectHideFlags: 0

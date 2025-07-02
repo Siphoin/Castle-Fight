@@ -50,7 +50,6 @@ namespace CastleFight.Core.UnitsSystem.SO
         [MinValue(0)]
         [SerializeField] private float _rotationSpeed = 120f;
 
-        public int Damage => _damage;
         public float DamageSpread => _damageSpread;
         public float AttackSpeed => _attackSpeed;
         public float AttackRange => _attackRange;

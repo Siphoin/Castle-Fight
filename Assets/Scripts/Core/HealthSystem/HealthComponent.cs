@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using CastleFight.Core.HealthSystem.Events;
 using System;
+using System.Linq;
 
 namespace CastleFight.Core.HealthSystem
 {
@@ -12,6 +13,7 @@ namespace CastleFight.Core.HealthSystem
     {
         [SerializeField, ReadOnly] private NetworkVariable<float> _currentHealth = new(100);
         [SerializeField, ReadOnly] private NetworkVariable<float> _maxHealth = new(100);
+        [SerializeField] private NetworkVariable<DeathEvent> _deathEvent = new(readPerm: NetworkVariableReadPermission.Everyone, writePerm: NetworkVariableWritePermission.Owner);
 
         private Subject<float> _onCurrentHealthChanged = new();
         private Subject<DeathEvent> _onDeath = new();
@@ -32,19 +34,30 @@ namespace CastleFight.Core.HealthSystem
         public override void OnNetworkSpawn()
         {
             _currentHealth.OnValueChanged += HealthChanged;
+            _deathEvent.OnValueChanged += OnDeathChanged;
+        }
+
+        private void OnDeathChanged(DeathEvent previousValue, DeathEvent newValue)
+        {
+            _currentHealth.OnValueChanged -= HealthChanged;
+            _deathEvent.OnValueChanged -= OnDeathChanged;
+
+            _onDeath.OnNext(_deathEvent.Value);
+
+            var networkObject = NetworkManager.SpawnManager.SpawnedObjects.FirstOrDefault(x => x.Key == _deathEvent.Value.IdObject).Value;
+
+            if (networkObject != null)
+            {
+                Debug.Log($"unit {networkObject.name} kill {name} Killer ID {networkObject.NetworkObjectId}");
+            }
         }
 
         private void HealthChanged(float previousValue, float newValue)
         {
             _onCurrentHealthChanged.OnNext(newValue);
-            if (newValue <= 0)
-            {
-                DeathEvent deathEvent = new DeathEvent();
-                _onDeath.OnNext(deathEvent);
-            }
         }
 
-        public void Damage(float damage, object damager = null)
+        public void Damage(float damage, ulong damager)
         {
             if (IsDead)
             {
@@ -57,14 +70,20 @@ namespace CastleFight.Core.HealthSystem
             }
             else
             {
-                DamageServerRpc(damage);
+                DamageServerRpc(damage, damager);
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void DamageServerRpc(float damage)
+        private void DamageServerRpc(float damage, ulong objectId)
         {
-            ApplyDamage(damage, null);
+            object damager = null;
+
+            if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var networkObject))
+            {
+                damager = networkObject.GetComponent<NetworkBehaviour>();
+            }
+            ApplyDamage(damage, damager);
         }
 
         private void ApplyDamage(float damage, object damager)
@@ -74,10 +93,16 @@ namespace CastleFight.Core.HealthSystem
             _onHit.OnNext(hitEvent);
             _onCurrentHealthChanged.OnNext(_currentHealth.Value);
 
-            if (_currentHealth.Value <= 0)
+            if (_currentHealth.Value <= 0 && IsOwner)
             {
-                DeathEvent deathEvent = new DeathEvent(damager);
-                _onDeath.OnNext(deathEvent);
+                _deathEvent.Value = new();
+
+                if (damager is NetworkBehaviour behaviour)
+                {
+                    ulong idObject = behaviour.NetworkObjectId;
+                    _deathEvent.Value = new(idObject);
+                }
+                _onDeath.OnNext(_deathEvent.Value);
             }
         }
 

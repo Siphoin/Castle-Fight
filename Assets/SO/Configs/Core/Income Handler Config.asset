@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Income Handler Config
   m_EditorClassIdentifier: 
   _guidObject: dfcfd3c5-330f-44ed-b3c7-eacaba9c40a0
-  _timeIncome: 3
+  _timeIncome: 30

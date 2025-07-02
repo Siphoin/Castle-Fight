@@ -12,6 +12,6 @@ namespace CastleFight.Core.HealthSystem
         IObservable<RegenEvent> OnRegen { get; }
         float Health { get; }
         float MaxHealth { get; }
-        void Damage(float damage, object damager = null);
+        void Damage(float damage, ulong damager);
     }
 }

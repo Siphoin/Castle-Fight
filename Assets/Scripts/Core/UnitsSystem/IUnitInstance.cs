@@ -10,5 +10,6 @@ namespace CastleFight.Core.UnitsSystem
     {
         IUnitNavMesh NavMesh { get; }
         IUnitAnimatorHandler AnimatorHandler { get; }
+        IUnitCombatSystem Combat { get; }
     }
 }

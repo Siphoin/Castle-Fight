@@ -18,8 +18,11 @@ MonoBehaviour:
   _maxHealth: 25
   _baseGoldBounty: 4
   _goldBountyVariance: 1
-  _damage: 6
+  _damage: 8
+  _damageSpread: 2.22
   _attackSpeed: 1
   _attackRange: 1.5
+  _initialAttackDelayRandomness: 0.1
+  _attackSpeedRandomness: 0.05
   _moveSpeed: 3
   _rotationSpeed: 120

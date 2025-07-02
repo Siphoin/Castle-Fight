@@ -2,19 +2,20 @@
 using Zenject;
 using UniRx;
 using CastleFight.Extensions;
+using System;
 namespace CastleFight.UI.Views
 {
     public class GoldView : UIText
     {
         [Inject] private INetworkHandler _network;
-        private ulong _idPlayer;
+        private Guid _idPlayer;
 
         private void Awake()
         {
-            _idPlayer = _network.LocalClientId;
+            _idPlayer = _network.Players.LocalPlayer.Guid;
             _network.Players.OnPlayerUpdated.Subscribe(player =>
             {
-                if (player.ClientId != _idPlayer)
+                if (player.Guid == _idPlayer)
                 {
                     UpdateValue();
                 }

@@ -11,9 +11,10 @@ namespace CastleFight.Core
     public abstract class OwnedEntity : NetworkBehaviour, IOwnerable, ITeamableObject
     {
         private const string TAG_OWNED = "OwnerableObject";
+
         [SerializeField, ReadOnly] protected NetworkHandler _network;
         [SerializeField] protected NetworkVariable<NetworkPlayer> _owner = new(
-    readPerm: NetworkVariableReadPermission.Owner,
+    readPerm: NetworkVariableReadPermission.Everyone,
     writePerm: NetworkVariableWritePermission.Owner);
         protected Subject<NetworkPlayer> _onPlayerOwnerChanged = new();
 

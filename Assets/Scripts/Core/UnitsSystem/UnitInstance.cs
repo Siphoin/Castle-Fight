@@ -23,6 +23,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField, ReadOnly] private UnitNavMesh _navMesh;
         [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
+        [SerializeField, ReadOnly] private UnitCombatSystem _combatSystem;
         [SerializeField, ReadOnly] private Collider _collider;
         [SerializeField] private ScriptableUnitEntity _stats;
         [SerializeField] private UnitGlobalConfig _globalConfig;
@@ -32,6 +33,8 @@ namespace CastleFight.Core.UnitsSystem
         public IUnitNavMesh NavMesh => _navMesh;
         public IUnitAnimatorHandler AnimatorHandler => _unitAnimatorHandler;
         public ScriptableUnitEntity Stats => _stats;
+
+        public IUnitCombatSystem Combat => _combatSystem;
 
         public override void OnNetworkSpawn()
         {
@@ -59,6 +62,7 @@ namespace CastleFight.Core.UnitsSystem
             if (!_navMesh) _navMesh = GetComponent<UnitNavMesh>();
             if (!_unitAnimatorHandler) _unitAnimatorHandler = GetComponentInChildren<UnitAnimatorHandler>();
             if (!_collider) _collider = GetComponent<Collider>();
+            if (!_combatSystem) _combatSystem = GetComponentInChildren<UnitCombatSystem>();
         }
 
         public void Disable()

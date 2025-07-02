@@ -1,12 +1,19 @@
-﻿namespace CastleFight.Core.HealthSystem.Events
-{
-    public struct DeathEvent
-    {
-        public object Killer { get; private set; }
+﻿using Unity.Netcode;
 
-        public DeathEvent(object killer)
+namespace CastleFight.Core.HealthSystem.Events
+{
+    public struct DeathEvent : INetworkSerializable
+    {
+        public ulong IdObject;
+
+        public DeathEvent(ulong idObject)
         {
-            Killer = killer;
+            IdObject = idObject;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref IdObject);
         }
     }
 }

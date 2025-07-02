@@ -4,5 +4,6 @@ namespace CastleFight.Core.UnitsSystem.Factories
 {
     public interface IUnitFactory : IMonoBehaviorFactory<UnitInstance, IUnitInstance>
     {
+        
     }
 }
