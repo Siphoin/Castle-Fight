@@ -20,8 +20,8 @@ MonoBehaviour:
   _goldBountyVariance: 1
   _damage: 8
   _damageSpread: 2.22
-  _attackSpeed: 4.5
+  _attackSpeed: 2.2
   _attackRange: 1.5
   _initialAttackDelayRandomness: 0.1
   _attackSpeedRandomness: 0.05
-  _moveSpeed: 15
+  _moveSpeed: 5

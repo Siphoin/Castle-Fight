@@ -16,7 +16,8 @@ namespace CastleFight.Core.BuildingsSystem.Components
 
         private void Start()
         {
-            if (_buildingInstance.IsMy && _buildingInstance.Stats.TrainableUnit != null)
+
+            if (_buildingInstance.IsOwner && _buildingInstance.Stats.TrainableUnit != null)
             {
                 TickSpawn().Forget();
             }
