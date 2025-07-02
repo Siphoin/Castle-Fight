@@ -18,6 +18,7 @@ public partial class CheckingEnemiesInRadiusAction : Action
     protected override Status OnUpdate()
     {
         Collider[] hitColliders = Physics.OverlapSphere(Unit.Value.transform.position, Radius.Value);
+        Debug.Log("checking");
         foreach (Collider collider in hitColliders)
         {
             if (collider.TryGetComponent(out UnitInstance otherUnit))
@@ -25,6 +26,7 @@ public partial class CheckingEnemiesInRadiusAction : Action
                 if (otherUnit.IsEnemy(Unit.Value) && otherUnit.HealthComponent != Unit.Value.NavMesh.CurrentTarget)
                 {
                     Unit.Value.NavMesh.SetTarget(otherUnit.HealthComponent as HealthComponent);
+                    Debug.Log("enemy");
                     return Status.Success;
                 }
             }
