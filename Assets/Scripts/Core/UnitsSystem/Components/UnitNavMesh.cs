@@ -74,8 +74,12 @@ namespace CastleFight.Core.UnitsSystem.Components
                     }
 
                 }).AddTo(this);
+
             }
         }
+
+
+        
 
         private void SetNavMeshParameters()
         {

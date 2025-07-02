@@ -37,7 +37,7 @@ namespace CastleFight.Core.Observers
                     if (healthComponent.TryGetComponent(out IUnitInstance unitComponent))
                     {
                         var player = _networkHandler.Players.GetPlayerById(unit.OwnerId);
-                        var gains = player.Gold + unitComponent.Stats.GetRandomGoldBounty();
+                        var gains = player.Gold + unit.Stats.GetRandomGoldBounty();
                         if (gains != player.Gold)
                         {
                             _networkHandler.Players.SetPlayerGold(player.ClientId, (uint)gains);
