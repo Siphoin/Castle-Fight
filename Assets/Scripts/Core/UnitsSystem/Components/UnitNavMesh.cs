@@ -20,7 +20,7 @@ namespace CastleFight.Core.UnitsSystem.Components
         [SerializeField, ReadOnly] private BehaviorGraphAgent _agentGraph;
         [Inject] private UnitGlobalConfig _unitGlobalConfig;
 
-        
+        private const float ROTATION_SPEED_DEG_PER_SECONDS = 180f;
 
         public IHealthComponent CurrentTarget
         {
@@ -99,13 +99,19 @@ namespace CastleFight.Core.UnitsSystem.Components
             {
                 Vector3 direction = _agent.steeringTarget - transform.position;
                 direction.y = 0;
-                if (direction != Vector3.zero)
+
+                if (direction.sqrMagnitude > 0.001f)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _unitGlobalConfig.RotationSpeed * Time.deltaTime);
+
+                    transform.rotation = RotateTowardsLimited(transform.rotation, targetRotation, ROTATION_SPEED_DEG_PER_SECONDS * Time.deltaTime);
                 }
             }
+        }
 
+        private Quaternion RotateTowardsLimited(Quaternion current, Quaternion target, float maxDegreesDelta)
+        {
+            return Quaternion.RotateTowards(current, target, maxDegreesDelta);
         }
 
 
