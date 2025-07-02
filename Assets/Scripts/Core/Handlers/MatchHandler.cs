@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using CastleFight.Core.BuildingsSystem;
+using CastleFight.Core.BuildingsSystem.Factories;
 using CastleFight.Core.Components;
 using CastleFight.Core.Configs;
 using CastleFight.Core.Models;
+using CastleFight.Core.UnitsSystem;
 using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
 using Cysharp.Threading.Tasks;
+using ObjectRepositories.Extensions;
 using UniRx;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 namespace CastleFight.Core.Handlers
 {
@@ -23,12 +29,20 @@ namespace CastleFight.Core.Handlers
         private Subject<DateTime> _onTickMatchTime = new();
         private INetworkHandler _networkHandler;
         private CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _sessionTimerToken;
         private Subject<IReadOnlyDictionary<ushort, uint>> _onTeamsChanged = new();
 
         private IPointSpawnCastle _leftCastlePoint;
         private IPointSpawnCastle _rightCastlePoint;
 
+        private IBuildingInstance _redCastle;
+        private IBuildingInstance _blueCastle;
+
+        private CompositeDisposable _castleDeadDisposable;
+
         [SerializeField] private MatchConfig _matchConfig;
+        [Inject] private IBuildingFactory _buildingFactory;
+
 
         public static bool IsSpawnedInstance { get; private set; }
 
@@ -66,13 +80,18 @@ namespace CastleFight.Core.Handlers
             _rightCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Blue);
         }
 
-        private void SpawnCastle (IPointSpawnCastle point)
+        private IBuildingInstance SpawnCastle (IPointSpawnCastle point, ulong ownerId)
         {
             var team = (int)point.TypeTeam;
             var position = point.Position;
             var rotation = point.Rotation;
 
-            _networkHandler.SpawnNetworkObject(_matchConfig.CastlePrefab.gameObject, null, true, (ulong)team, position, rotation);
+           var castle = _buildingFactory.Create(_matchConfig.CastlePrefab, position, rotation);
+          var owner = _networkHandler.Players.GetPlayerById(ownerId);
+
+            castle.SetOwner(owner);
+
+            return castle;
         }
 
         private void TeamsScoreChanged(NetworkDictionary<ushort, uint> previousValue, NetworkDictionary<ushort, uint> newValue)
@@ -93,13 +112,16 @@ namespace CastleFight.Core.Handlers
                 var tempDict = new Dictionary<ushort, uint>(_scoresTeams.Value);
                 tempDict[teamId] = newValue;
                 _scoresTeams.Value = new(tempDict);
+                _onTeamsChanged.OnNext(_scoresTeams.Value);
             }
         }
 
-        public void StartMatch()
+        public async void StartMatch()
         {
             if (IsHost)
             {
+                var token = this.GetCancellationTokenOnDestroy();
+                await UniTask.WaitForEndOfFrame(cancellationToken: token);
                 SpawnCastles();
                 ResetMatchTime();
                 ResetGoldPlayers();
@@ -108,8 +130,61 @@ namespace CastleFight.Core.Handlers
 
         private void SpawnCastles()
         {
-            SpawnCastle(_leftCastlePoint);
-            SpawnCastle(_rightCastlePoint);
+            _castleDeadDisposable?.Dispose();
+
+            _castleDeadDisposable = new CompositeDisposable();
+
+            _redCastle = SpawnCastle(_leftCastlePoint, 0);
+            _blueCastle = SpawnCastle(_rightCastlePoint, 1);
+
+           Debug.Log(nameof(SpawnCastles));
+
+            _redCastle.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
+            {
+                if (health <= 0)
+                {
+                    WinTeam(1);
+                    _castleDeadDisposable?.Dispose();
+                }
+            }).AddTo(_castleDeadDisposable);
+
+            _blueCastle.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
+            {
+                if (health <= 0)
+                {
+                    WinTeam(0);
+                    _castleDeadDisposable?.Dispose();
+                }
+            }).AddTo(_castleDeadDisposable);
+        }
+
+        private void WinTeam(ushort teamId)
+        {
+
+            RemoveAllBuildings();
+            RemoveAllUnits();
+            uint currentScore = _scoresTeams.Value[teamId] + 1;
+            ModifyScore(teamId, currentScore);
+            StartMatch();
+            Debug.Log($"WinTeam called for team {teamId}");
+        }
+
+        private void RemoveAllUnits()
+        {
+            var units = this.FindObjectsOfTypeOnRepository<UnitInstance>().ToArray();
+            for (uint i = 0; i < units.Length; i++)
+            {
+                _networkHandler.DestroyNetworkObject(units[i].gameObject);
+            }
+        }
+
+        private void RemoveAllBuildings()
+        {
+            var buildings = this.FindObjectsOfTypeOnRepository<BuildingInstance>().ToArray();
+            for (int i = 0; i < buildings.Length; i++)
+            {
+                _networkHandler.DestroyNetworkObject(buildings[i].gameObject);
+            }
         }
 
         private void ResetGoldPlayers()

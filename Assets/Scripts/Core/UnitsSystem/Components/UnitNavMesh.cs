@@ -65,12 +65,12 @@ namespace CastleFight.Core.UnitsSystem.Components
         {
             get
             {
-                return (float)_agentGraph.BlackboardReference.Blackboard.Variables[6].ObjectValue;
+                return (float)_agentGraph.BlackboardReference.Blackboard.Variables[7].ObjectValue;
             }
 
             private set
             {
-                _agentGraph.BlackboardReference.Blackboard.Variables[6].ObjectValue = value;
+                _agentGraph.BlackboardReference.Blackboard.Variables[7].ObjectValue = value;
             }
         }
 

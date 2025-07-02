@@ -20,6 +20,17 @@ namespace CastleFight.Core.HealthSystem
         private Subject<HitEvent> _onHit = new();
         private Subject<RegenEvent> _onRegen = new();
 
+#if UNITY_EDITOR
+        [Button(60)]
+        private void KillDebug ()
+        {
+            if (IsOwner)
+            {
+                Kill();
+            }
+        }
+#endif
+
         public float Health => _currentHealth.Value;
         public float MaxHealth => _maxHealth.Value;
 
@@ -93,7 +104,6 @@ namespace CastleFight.Core.HealthSystem
             _currentHealth.Value = Mathf.Clamp(_currentHealth.Value - damage, 0, _maxHealth.Value);
             HitEvent hitEvent = new HitEvent(damage, damager);
             _onHit.OnNext(hitEvent);
-            _onCurrentHealthChanged.OnNext(_currentHealth.Value);
 
             if (_currentHealth.Value <= 0 && IsOwner)
             {
@@ -163,6 +173,11 @@ namespace CastleFight.Core.HealthSystem
             _currentHealth.Value = maxHealth;
 
             _onCurrentHealthChanged.OnNext(_currentHealth.Value);
+        }
+
+        public void Kill ()
+        {
+            Damage(float.MaxValue, 0);
         }
 
     }

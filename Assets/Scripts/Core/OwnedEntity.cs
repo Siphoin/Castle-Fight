@@ -59,6 +59,7 @@ namespace CastleFight.Core
         public void SetOwner(NetworkPlayer owner)
         {
             _owner.Value = owner;
+            NetworkObject.ChangeOwnership(_owner.Value.ClientId);
             _onPlayerOwnerChanged.OnNext(owner);
         }
 
