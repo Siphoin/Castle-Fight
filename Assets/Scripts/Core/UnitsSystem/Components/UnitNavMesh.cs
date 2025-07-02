@@ -20,8 +20,6 @@ namespace CastleFight.Core.UnitsSystem.Components
         [SerializeField, ReadOnly] private BehaviorGraphAgent _agentGraph;
         [Inject] private UnitGlobalConfig _unitGlobalConfig;
 
-        private const float ROTATION_SPEED_DEG_PER_SECONDS = 180f;
-
         public IHealthComponent CurrentTarget
         {
             get
