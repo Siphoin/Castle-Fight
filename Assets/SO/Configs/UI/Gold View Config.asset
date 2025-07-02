@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c50378594b71cf4abca3ec0f7c29f7e, type: 3}
+  m_Name: Gold View Config
+  m_EditorClassIdentifier: 
+  _guidObject: 4fcdb2e1-7f87-449f-bf55-186d3da8a6a4
+  _speedAnimation: 0.5
+  _ease: 1
+  _colorIncrement: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _colorDecrement: {r: 1, g: 0, b: 0, a: 1}
