@@ -104,7 +104,7 @@ namespace CastleFight.Core.UnitsSystem.Components
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-                    transform.rotation = RotateTowardsLimited(transform.rotation, targetRotation, ROTATION_SPEED_DEG_PER_SECONDS * Time.deltaTime);
+                    transform.rotation = RotateTowardsLimited(transform.rotation, targetRotation, _unitGlobalConfig.RotationSpeed * Time.deltaTime);
                 }
             }
         }
