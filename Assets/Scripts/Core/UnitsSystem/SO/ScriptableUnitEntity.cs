@@ -46,15 +46,10 @@ namespace CastleFight.Core.UnitsSystem.SO
         [MinValue(0)]
         [SerializeField] private float _moveSpeed = 3f;
 
-        [BoxGroup("Movement Stats")]
-        [MinValue(0)]
-        [SerializeField] private float _rotationSpeed = 120f;
-
         public float DamageSpread => _damageSpread;
         public float AttackSpeed => _attackSpeed;
         public float AttackRange => _attackRange;
         public float MoveSpeed => _moveSpeed;
-        public float RotationSpeed => _rotationSpeed;
 
         public float GetFinalDamage()
         {

@@ -52,6 +52,8 @@ namespace CastleFight.Core.HealthSystem
             }
         }
 
+        
+
         private void HealthChanged(float previousValue, float newValue)
         {
             _onCurrentHealthChanged.OnNext(newValue);

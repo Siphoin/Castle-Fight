@@ -1,13 +1,14 @@
 ﻿using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.HealthSystem;
+using CastleFight.Core.UnitsSystem.Configs;
 using ObjectRepositories.Extensions;
 using Sirenix.OdinInspector;
 using UniRx;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
-
+using Zenject;
 namespace CastleFight.Core.UnitsSystem.Components
 {
     [RequireComponent(typeof(NavMeshAgent))]
@@ -17,6 +18,7 @@ namespace CastleFight.Core.UnitsSystem.Components
         [SerializeField, ReadOnly] private UnitInstance _unitInstance;
         [SerializeField, ReadOnly] private NavMeshAgent _agent;
         [SerializeField, ReadOnly] private BehaviorGraphAgent _agentGraph;
+        [Inject] private UnitGlobalConfig _unitGlobalConfig;
 
         
 
@@ -59,8 +61,22 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        public float SpeedAttack
+        {
+            get
+            {
+                return (float)_agentGraph.BlackboardReference.Blackboard.Variables[6].ObjectValue;
+            }
+
+            private set
+            {
+                _agentGraph.BlackboardReference.Blackboard.Variables[6].ObjectValue = value;
+            }
+        }
+
         private void Start()
         {
+            _agent.updateRotation = false;
             enabled = _unitInstance.IsOwner;
 
             if (_unitInstance.IsOwner)
@@ -74,16 +90,33 @@ namespace CastleFight.Core.UnitsSystem.Components
                     }
 
                 }).AddTo(this);
-
             }
         }
 
+        private void Update()
+        {
+            if (CurrentTarget != null)
+            {
+                Vector3 direction = _agent.steeringTarget - transform.position;
+                direction.y = 0;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _unitGlobalConfig.RotationSpeed * Time.deltaTime);
+                }
+            }
 
-        
+        }
+
+
+
+
 
         private void SetNavMeshParameters()
         {
+            _agent.speed = _unitInstance.Stats.MoveSpeed;
             SpeedMovement = _agent.speed;
+            SpeedAttack = _unitInstance.Stats.AttackSpeed;
         }
 
         public void SetTarget(HealthComponent healthComponent)

@@ -6,7 +6,10 @@ namespace CastleFight.Core.UnitsSystem.Configs
     public class UnitGlobalConfig : ScriptableConfig
     {
         [SerializeField] private float _timeDestroyCorpse;
+        [SerializeField] private float _rotationSpeed = 6;
 
         public float TimeDestroyCorpse => _timeDestroyCorpse;
+
+        public float RotationSpeed => _rotationSpeed;
     }
 }

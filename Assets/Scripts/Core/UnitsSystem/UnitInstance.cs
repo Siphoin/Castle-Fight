@@ -9,6 +9,7 @@ using UniRx;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using Zenject;
 
 namespace CastleFight.Core.UnitsSystem
 {
@@ -26,7 +27,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private UnitCombatSystem _combatSystem;
         [SerializeField, ReadOnly] private Collider _collider;
         [SerializeField] private ScriptableUnitEntity _stats;
-        [SerializeField] private UnitGlobalConfig _globalConfig;
+        [Inject] private UnitGlobalConfig _globalConfig;
 
 
         public IHealthComponent HealthComponent => _healthComponent;

@@ -185,7 +185,7 @@ MonoBehaviour:
       IsReady: 0
       Team: 0
   _healthComponent: {fileID: 3990793390751493803}
-  _stats: {fileID: 11400000, guid: fdfd4c74a08c2854bbb71586c624d830, type: 2}
+  _stats: {fileID: 11400000, guid: d9a3dc50a9bea1140b7abe4a24c8389e, type: 2}
 --- !u!114 &6207695672780294174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,10 +258,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4026762711917003724}
-  - component: {fileID: 8450310622094790044}
+  - component: {fileID: 936491085843114402}
   m_Layer: 0
   m_Name: HitBox
-  m_TagString: HtBox
+  m_TagString: HitBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -281,7 +281,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8821031424446055325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8450310622094790044
+--- !u!65 &936491085843114402
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -300,8 +300,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.1, y: 6.39, z: 9.27}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 9.6, y: 6.5, z: 9.27}
+  m_Center: {x: 0, y: 4.11, z: 0}
 --- !u!1 &6957751437795382987
 GameObject:
   m_ObjectHideFlags: 0

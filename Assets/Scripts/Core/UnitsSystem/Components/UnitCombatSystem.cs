@@ -32,6 +32,7 @@ namespace CastleFight.Core.UnitsSystem.Components
 
                 if (totalHealthFromDDamage <= 0)
                 {
+                    Debug.Log(nameof (_onKill));
                     _onKill.OnNext(_unitInstance.NavMesh.CurrentTarget);
                 }
             }
