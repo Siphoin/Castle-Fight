@@ -64,10 +64,6 @@ namespace CastleFight.Core.Handlers
                 _onEndTick.OnNext(Unit.Default);
             }
 
-#if UNITY_EDITOR
-            Debug.Log($"{nameof(LobbyHandler)}: tick: {_currentTicks.Value}...");
-#endif
-
 
         }
 
@@ -91,10 +87,6 @@ namespace CastleFight.Core.Handlers
                 await UniTask.Delay(1000, true, cancellationToken:  token);
                 _currentTicks.Value--;
                 _onTick.OnNext(_currentTicks.Value);
-
-#if UNITY_EDITOR
-                Debug.Log($"{nameof(LobbyHandler)}: tick: {_currentTicks.Value}...");
-#endif
             }
 
             _onEndTick.OnNext(Unit.Default);
