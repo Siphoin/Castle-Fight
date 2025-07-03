@@ -4,7 +4,6 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
-using CastleFight.Core;
 using CastleFight.Core.HealthSystem;
 using CastleFight.Core.BuildingsSystem;
 
@@ -25,7 +24,6 @@ public partial class CheckingEnemiesInRadiusAction : Action
                 if (otherUnit.IsEnemy(Unit.Value) && otherUnit.HealthComponent != Unit.Value.NavMesh.CurrentTarget)
                 {
                     Unit.Value.NavMesh.SetTarget(otherUnit.HealthComponent as HealthComponent);
-                    Debug.Log("enemy");
                     return Status.Success;
                 }
             }
