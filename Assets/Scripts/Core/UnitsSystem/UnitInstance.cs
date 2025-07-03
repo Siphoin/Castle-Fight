@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Core.Components;
+using CastleFight.Core.Graphic;
 using CastleFight.Core.Handlers;
 using CastleFight.Core.HealthSystem;
 using CastleFight.Core.UnitsSystem.Components;
@@ -26,6 +27,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private UnitAnimatorHandler _unitAnimatorHandler;
         [SerializeField, ReadOnly] private UnitCombatSystem _combatSystem;
         [SerializeField, ReadOnly] private Collider _collider;
+        [SerializeField, ReadOnly] private Portail _portail;
         [SerializeField] private ScriptableUnitEntity _stats;
         [Inject] private UnitGlobalConfig _globalConfig;
 
@@ -40,6 +42,8 @@ namespace CastleFight.Core.UnitsSystem
         public string Name => _stats.EntityName;
 
         public string DamageInfo => _stats.GetDamageInfo();
+
+        public IPortail Portail => _portail;
 
         public override void OnNetworkSpawn()
         {
@@ -68,6 +72,7 @@ namespace CastleFight.Core.UnitsSystem
             if (!_unitAnimatorHandler) _unitAnimatorHandler = GetComponentInChildren<UnitAnimatorHandler>();
             if (!_collider) _collider = GetComponent<Collider>();
             if (!_combatSystem) _combatSystem = GetComponentInChildren<UnitCombatSystem>();
+            if (!_portail) _portail = GetComponentInChildren<Portail>();
         }
 
         public void Disable()

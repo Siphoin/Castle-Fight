@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CastleFight.Core;
+using CastleFight.Core.Graphic;
 using CastleFight.Core.Views;
 using TMPro;
 using UniRx;
@@ -13,6 +14,7 @@ namespace Assets.Scripts.Core.Views
         [SerializeField] private HealthView _healthView;
         [SerializeField] private TextMeshProUGUI _damageInfo;
         [SerializeField] private TextMeshProUGUI _nameInfo;
+        [SerializeField] private PortailRenderer _portailRenderer;
         private CompositeDisposable _disposable;
 
         private void Start()
@@ -28,6 +30,7 @@ namespace Assets.Scripts.Core.Views
             _nameInfo.text = target.Name;
             _disposable?.Clear();
             _disposable = new();
+            _portailRenderer.SetPortail(target);
             _target.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
             {
                 if (health <= 0)
