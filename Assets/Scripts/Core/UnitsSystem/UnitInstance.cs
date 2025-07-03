@@ -37,6 +37,10 @@ namespace CastleFight.Core.UnitsSystem
 
         public IUnitCombatSystem Combat => _combatSystem;
 
+        public string Name => _stats.EntityName;
+
+        public string DamageInfo => _stats.GetDamageInfo();
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace CastleFight.Extensions
@@ -7,12 +9,28 @@ namespace CastleFight.Extensions
     {
         public static bool IsBlockedByUI(this EventSystem eventSystem)
         {
-            bool isOverUI = eventSystem.IsPointerOverGameObject();
+            Vector2 position = Vector2.zero;
 
-            bool isClicking = Input.GetMouseButtonDown(0) ||
-                             (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
+#if UNITY_STANDALONE
+            position = new(Input.mousePosition.x, Input.mousePosition.y);
+#endif
+#if UNITY_ANDROID || UNITY_IOS
+            if (Input.touchCount > 0)
+            {
+                var positionTouch = Input.GetTouch(0).position;
+                position = new(positionTouch.x, positionTouch.y);
+            }
+#endif
 
-            return isOverUI || isClicking;
+            var eventDataCurrentPosition = new PointerEventData(eventSystem)
+            {
+                position = new(position.x, position.y)
+            };
+
+            List<RaycastResult> results = new();
+            eventSystem.RaycastAll(eventDataCurrentPosition, results);
+
+            return results.Any(result => result.gameObject.layer == LayerMask.NameToLayer("UI"));
         }
     }
 }
