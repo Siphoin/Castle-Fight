@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace CastleFight.Extensions
 {
     public static class StringExtensions

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Unity.Cinemachine;
 using CastleFight.Core.GameCamera;
+using UnityEngine.EventSystems;
+using CastleFight.Extensions;
 namespace CastleFight.Core.GameCamer
 {
     [RequireComponent(typeof(CinemachineCamera))]
@@ -57,9 +59,11 @@ namespace CastleFight.Core.GameCamer
         private CinemachineCamera _virtualCamera;
         private CinemachineFollow _transposer;
         private Transform _cameraTransform;
-        private float _zoomPosition = 0; // Value in range (0, 1) used for zoom interpolation
+        private float _zoomPosition = 0;
         private Transform _targetFollow;
         private Vector3 _targetOffset;
+
+        private EventSystem _eventSystem;
 
         #region Properties
 
@@ -105,6 +109,7 @@ namespace CastleFight.Core.GameCamer
 
         private void Awake()
         {
+            _eventSystem = EventSystem.current;
             _virtualCamera = GetComponent<CinemachineCamera>();
             _transposer = _virtualCamera.GetComponent<CinemachineFollow>();
             _cameraTransform = transform;
@@ -127,9 +132,19 @@ namespace CastleFight.Core.GameCamer
             {
                 FollowTarget();
             }
+
+           
             else
             {
-                MoveCamera();
+                if (!_eventSystem.IsBlockedByUI())
+                {
+                    MoveCamera();
+                }
+            }
+
+            if (_eventSystem.IsBlockedByUI())
+            {
+                return;
             }
 
             UpdateHeightAndZoom();
