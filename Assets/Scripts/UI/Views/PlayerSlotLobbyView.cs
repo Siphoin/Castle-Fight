@@ -1,6 +1,6 @@
-﻿using CastleFight.Networking.Handlers;
+﻿using CastleFight.Main.Configs;
+using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
-using CastleFight.UI.Configs;
 using Sirenix.OdinInspector;
 using TMPro;
 using UniRx;
