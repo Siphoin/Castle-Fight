@@ -18,5 +18,6 @@ namespace CastleFight.Networking.Handlers
         ulong LocalClientId { get; }
         bool IsHost { get; }
         NetworkClient LocalClient { get; }
+        IChatHandler Chat { get; }
     }
 }

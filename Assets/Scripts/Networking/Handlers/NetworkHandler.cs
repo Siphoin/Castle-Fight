@@ -20,7 +20,7 @@ namespace CastleFight.Networking.Handlers
         [SerializeField, ReadOnly] private PlayerListHandler _playerListHandler;
         [SerializeField, ReadOnly] private NetworkObjectSpawnHandler _objectSpawnHandler;
         [SerializeField, ReadOnly] private PingHandler _pingHandler;
-
+        [SerializeField, ReadOnly] private ChatHandler _chat;
         private readonly Subject<Unit> _onConnected = new Subject<Unit>();
         private readonly Subject<Unit> _onDisconnected = new Subject<Unit>();
 
@@ -60,6 +60,19 @@ namespace CastleFight.Networking.Handlers
                 }
                 
                 return _objectSpawnHandler;
+            }
+        }
+
+        public IChatHandler Chat
+        {
+            get
+            {
+                if (_chat is null)
+                {
+                    _chat = FindAnyObjectByType<ChatHandler>();
+                }
+
+                return _chat;
             }
         }
 
