@@ -13,7 +13,7 @@ using Zenject;
 
 namespace CastleFight.Core.Views.Chat
 {
-    public class ChatView : MonoBehaviour
+    public class ChatView : MonoBehaviour, IChatView
     {
         private StringBuilder _containerMessages = new();
         [SerializeField] private TextMeshProUGUI _textChat;
@@ -24,6 +24,8 @@ namespace CastleFight.Core.Views.Chat
         [Inject] private INetworkHandler _networkHandler;
 
         private IChatHandler Chat => _networkHandler.Chat;
+
+        public bool IsActive => gameObject.activeSelf;
 
         private async void Awake()
         {
@@ -74,6 +76,11 @@ namespace CastleFight.Core.Views.Chat
         {
             _containerMessages.Clear();
             UpdateChatView();
+        }
+
+        public void SetStateActive(bool active)
+        {
+            gameObject.SetActive(active);
         }
     }
 }
