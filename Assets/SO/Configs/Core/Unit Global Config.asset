@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guidObject: 256d883d-8568-46af-a503-14d377a3f800
   _timeDestroyCorpse: 5
+  _rotationSpeed: 180

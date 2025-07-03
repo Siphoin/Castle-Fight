@@ -1,4 +1,5 @@
-﻿using CastleFight.Networking.Models;
+﻿using System;
+using CastleFight.Networking.Models;
 
 namespace CastleFight.Core
 {
@@ -9,5 +10,6 @@ namespace CastleFight.Core
         bool IsEnemy(IOwnerable other);
         bool IsAlly(NetworkPlayer player);
         bool IsEnemy(NetworkPlayer player);
+        IObservable<NetworkPlayer> OnPlayerOwnerChanged { get; }
     }
 }

@@ -9,6 +9,14 @@ namespace CastleFight.Core.UnitsSystem.Testing
         [SerializeField] private UnitInstance _prefab;
         [Inject] private IUnitFactory _factory;
 
+        private void Awake()
+        {
+            if (!Application.isEditor)
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.E))

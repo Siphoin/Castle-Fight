@@ -18,7 +18,6 @@ public partial class CheckingEnemiesInRadiusAction : Action
     protected override Status OnUpdate()
     {
         Collider[] hitColliders = Physics.OverlapSphere(Unit.Value.transform.position, Radius.Value);
-        Debug.Log("checking");
         foreach (Collider collider in hitColliders)
         {
             if (collider.TryGetComponent(out UnitInstance otherUnit))
