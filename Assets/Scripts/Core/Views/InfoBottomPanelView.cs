@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CastleFight.Core;
+using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.Graphic;
 using CastleFight.Core.Views;
 using TMPro;
@@ -15,6 +16,8 @@ namespace Assets.Scripts.Core.Views
         [SerializeField] private TextMeshProUGUI _damageInfo;
         [SerializeField] private TextMeshProUGUI _nameInfo;
         [SerializeField] private PortailRenderer _portailRenderer;
+        [SerializeField] private RectTransform _infoIncome;
+        [SerializeField] private TextMeshProUGUI _textIncome;
         private CompositeDisposable _disposable;
 
         private void Start()
@@ -39,6 +42,14 @@ namespace Assets.Scripts.Core.Views
                 }
 
             }).AddTo(_disposable);
+
+            _infoIncome.gameObject.SetActive(false);
+
+            if (target is IBuildingInstance building)
+            {
+                _infoIncome.gameObject.SetActive(true);
+                _textIncome.text = $"<color=yellow>Income:</color> {building.Stats.Income}";
+            }
 
             SetStateVisible(true);
         }
