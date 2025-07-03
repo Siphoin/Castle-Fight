@@ -34,6 +34,11 @@ namespace CastleFight.Core.BuildingsSystem.SO
         public uint Income => _income;
 
         public IEnumerable<Mesh> ConstructMeshes => _constructMeshes;
+
+        public string GetDamageInfo ()
+        {
+            return "N/A";
+        }
     }
 
 }

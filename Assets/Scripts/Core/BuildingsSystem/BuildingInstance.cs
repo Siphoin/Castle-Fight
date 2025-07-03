@@ -5,20 +5,28 @@ using CastleFight.Core.BuildingsSystem.Components;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using CastleFight.Core.Handlers;
+using CastleFight.Core.Graphic;
 
 namespace CastleFight.Core.BuildingsSystem
 {
     [RequireComponent(typeof(BuildingSpawnHandler))]
-    [RequireComponent (typeof(HealthComponent))]
+    [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(BuildingObjectRepository))]
     [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField] private ScriptableBuuidingEntity _stats;
+        [SerializeField] private Portail _portail;
 
         public IHealthComponent HealthComponent => _healthComponent;
         public ScriptableBuuidingEntity Stats => _stats;
+
+        public string Name => _stats.EntityName;
+
+        public string DamageInfo => _stats.GetDamageInfo();
+
+        public IPortail Portail => _portail;
 
         public override void OnNetworkSpawn()
         {

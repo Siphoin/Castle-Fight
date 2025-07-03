@@ -12,9 +12,6 @@ namespace CastleFight.Core.Graphic
         [SerializeField] private Vector3 _cameraOffset = new Vector3(0, 0, -2);
         [SerializeField] private Color _backgroundColor = new Color(0, 0, 0, 0);
 
-        [Title("Portrait Settings")]
-        [SerializeField, ReadOnly] private Vector3 _portraitPosition = new Vector3(0, -0.69f, 0);
-        [SerializeField, ReadOnly] private Vector3 _portraitRotation = new Vector3(0, 172.42f, 0);
 
         private RenderTexture _renderTexture;
         private Camera _portraitCamera;
@@ -41,8 +38,8 @@ namespace CastleFight.Core.Graphic
             _previousRotation = _currentPortail.transform.localRotation;
 
             _currentPortail.transform.SetParent(_portraitCamera.transform);
-            _currentPortail.transform.localPosition = _portraitPosition;
-            _currentPortail.transform.localEulerAngles = _portraitRotation;
+            _currentPortail.transform.localPosition = _currentPortail.PortraitPosition;
+            _currentPortail.transform.localEulerAngles = _currentPortail.PortraitRotation;
         }
 
         [Button("Update View")]
@@ -55,8 +52,8 @@ namespace CastleFight.Core.Graphic
 
             if (_currentPortail != null)
             {
-                _currentPortail.transform.localPosition = _portraitPosition;
-                _currentPortail.transform.localEulerAngles = _portraitRotation;
+                _currentPortail.transform.localPosition = _currentPortail.PortraitPosition;
+                _currentPortail.transform.localEulerAngles = _currentPortail.PortraitRotation;
             }
         }
 

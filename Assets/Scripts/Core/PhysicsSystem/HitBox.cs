@@ -45,7 +45,10 @@ namespace CastleFight.Core.PhysicsSystem
 
         public void Disable()
         {
-            _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            if (_rigidbody)
+            {
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            }
             _collider.enabled = false;
         }
 
