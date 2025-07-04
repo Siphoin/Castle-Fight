@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9043d189262ad14280440d6e4b6bdc5, type: 3}
   m_Name: Footman
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 9262af8e3a8301c43981f4eb497aa1ef, type: 3}
   _entityName: Footman
   _description: 
   _maxHealth: 25

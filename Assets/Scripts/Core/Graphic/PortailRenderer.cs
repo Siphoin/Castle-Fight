@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,9 @@ namespace CastleFight.Core.Graphic
         [SerializeField] private Vector3 _cameraOffset = new Vector3(0, 0, -2);
         [SerializeField] private Color _backgroundColor = new Color(0, 0, 0, 0);
 
+#if UNITY_EDITOR
+        [SerializeField] private Button _buttonScreenShot;
+#endif
 
         private RenderTexture _renderTexture;
         private Camera _portraitCamera;
@@ -24,6 +28,14 @@ namespace CastleFight.Core.Graphic
         {
             CreateRenderTexture();
             SetupCamera();
+
+#if UNITY_EDITOR
+            _buttonScreenShot.onClick.AsObservable().Subscribe(_ =>
+            {
+                SaveRenderAsPNG();
+
+            }).AddTo(this);
+#endif
         }
 
         public void SetPortail(IPortaable portaable)
@@ -57,6 +69,34 @@ namespace CastleFight.Core.Graphic
             }
         }
 
+#if UNITY_EDITOR
+        [Button("Save Render as PNG")]
+        private void SaveRenderAsPNG()
+        {
+            string folderPath = "Assets/RenderScreenshots";
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
+
+            Texture2D tex = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false);
+            RenderTexture.active = _renderTexture;
+            tex.ReadPixels(new Rect(0, 0, _renderTexture.width, _renderTexture.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+
+            byte[] bytes = tex.EncodeToPNG();
+            DestroyImmediate(tex);
+            string timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
+            string filePath = $"{folderPath}/Render_{timestamp}.png";
+
+            System.IO.File.WriteAllBytes(filePath, bytes);
+            Debug.Log($"Render saved to: {filePath}");
+
+            UnityEditor.AssetDatabase.Refresh();
+        }
+#endif
+
         private void ReturnPreviousPortail()
         {
             if (_currentPortail == null) return;
@@ -79,7 +119,7 @@ namespace CastleFight.Core.Graphic
             _portraitCamera.orthographic = true;
             _portraitCamera.orthographicSize = 1;
             _portraitCamera.cullingMask = LayerMask.GetMask("Portail");
-            _portraitCamera.nearClipPlane = -500f; // Установлено большое отрицательное значение
+            _portraitCamera.nearClipPlane = -500f;
             _portraitCamera.depth = 0;
         }
 
@@ -114,11 +154,11 @@ namespace CastleFight.Core.Graphic
             if (_renderTexture != null)
                 _renderTexture.Release();
         }
+
         private void OnDestroy()
         {
             if (_portraitCamera != null)
                 Destroy(_portraitCamera.gameObject);
         }
-
     }
 }

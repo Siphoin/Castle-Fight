@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9043d189262ad14280440d6e4b6bdc5, type: 3}
   m_Name: Worker
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: fff12baaccf9cf948aa3544689cd2a10, type: 3}
   _entityName: Worker
   _description: 
   _maxHealth: 1000

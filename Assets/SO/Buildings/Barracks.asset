@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba58de930fc9e3e46af0accba8f4b38a, type: 3}
   m_Name: Barracks
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 8a8e20c8598b9e447bc8b453a6bc02a2, type: 3}
   _entityName: Barracks
   _description: 
   _maxHealth: 300

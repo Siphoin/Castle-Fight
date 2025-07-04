@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba58de930fc9e3e46af0accba8f4b38a, type: 3}
   m_Name: Castle
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 2350041375209c943ac84356d9b6edbe, type: 3}
   _entityName: Castle
   _description: 
   _maxHealth: 1500
