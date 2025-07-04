@@ -122,6 +122,41 @@ namespace CastleFight.Core.HealthSystem
             }
         }
 
+        public void SetHealth(float health)
+        {
+            if (IsDead) return;
+
+            if (IsServer)
+            {
+                ApplySetHealth(health);
+            }
+            else
+            {
+                SetHealthServerRpc(health);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetHealthServerRpc(float health, ServerRpcParams rpcParams = default)
+        {
+            ApplySetHealth(health);
+        }
+
+        private void ApplySetHealth(float health)
+        {
+            float newHealth = Mathf.Clamp(health, 0, _maxHealth.Value);
+            float difference = newHealth - _currentHealth.Value;
+
+            _currentHealth.Value = newHealth;
+            _onCurrentHealthChanged.OnNext(_currentHealth.Value);
+
+            if (difference > 0)
+            {
+                RegenEvent regenEvent = new RegenEvent(difference);
+                _onRegen.OnNext(regenEvent);
+            }
+        }
+
         public void Regen(float amount)
         {
             if (IsDead)

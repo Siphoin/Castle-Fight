@@ -1,5 +1,4 @@
-﻿// BuildingInstance.cs
-using CastleFight.Core.HealthSystem;
+﻿using CastleFight.Core.HealthSystem;
 using CastleFight.Core.BuildingsSystem.SO;
 using CastleFight.Core.BuildingsSystem.Components;
 using Sirenix.OdinInspector;
@@ -21,28 +20,25 @@ namespace CastleFight.Core.BuildingsSystem
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField] private ScriptableBuuidingEntity _stats;
         [SerializeField] private Portail _portail;
-        [SerializeField, ReadOnly]   private SelectorHandler _selectorHandler;
+        [SerializeField, ReadOnly] private SelectorHandler _selectorHandler;
         [SerializeField, ReadOnly] private BuildingConstructHandler _constructHandler;
-        public bool IsContructed { get; private set; } = true;
-        private bool _hasConstruction = false;
+
+        public bool IsContructed { get; internal set; } = true;
+        public bool HasConstruction => _stats.BuildTime > 0;
 
         public IHealthComponent HealthComponent => _healthComponent;
         public ScriptableBuuidingEntity Stats => _stats;
 
         public string Name => _stats.EntityName;
-
         public string DamageInfo => _stats.GetDamageInfo();
-
         public IPortail Portail => _portail;
-
         public float SelectionScale => _stats.SelectionScale;
-
         public IBuildingConstructHandler ConstructHandler => _constructHandler;
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (IsOwner && !IsOwnerSeted)
+            if (IsMy)
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);
             }
@@ -55,7 +51,7 @@ namespace CastleFight.Core.BuildingsSystem
 
         public void TurnConstruct()
         {
-            if (!_hasConstruction)
+            if (HasConstruction && IsContructed)
             {
                 IsContructed = false;
                 _healthComponent.TurnConstructHealth();
