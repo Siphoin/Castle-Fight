@@ -1002,6 +1002,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 155500, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 156840, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -1616,6 +1620,18 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 14b8dce946c5ce244bee947ba54d17e2, type: 2}
+    - target: {fileID: 6558518706726105154, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -2.9737475
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558518706726105154, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -6.4283323
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558518706726105154, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 170.40335
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
