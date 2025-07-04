@@ -7,7 +7,7 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 
-namespace Assets.Scripts.Core.Views
+namespace CastleFight.Core.Views
 {
     public class InfoBottomPanelView : MonoBehaviour, IInfoBottomPanelView
     {

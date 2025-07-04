@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Threading.Tasks;
 using CastleFight.Networking.Handlers;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Assets.Scripts.Core.Components
+namespace CastleFight.Core.Components
 {
     public class TimedDestroyHandler : MonoBehaviour
     {

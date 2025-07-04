@@ -1,6 +1,6 @@
 ﻿using CastleFight.Core;
 
-namespace Assets.Scripts.Core.Views
+namespace CastleFight.Core.Views
 {
     public interface IInfoBottomPanelView
     {

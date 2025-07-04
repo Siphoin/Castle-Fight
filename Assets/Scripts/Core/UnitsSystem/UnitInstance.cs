@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Components;
+﻿using CastleFight.Core.Components;
 using CastleFight.Core.Graphic;
 using CastleFight.Core.Handlers;
 using CastleFight.Core.HealthSystem;

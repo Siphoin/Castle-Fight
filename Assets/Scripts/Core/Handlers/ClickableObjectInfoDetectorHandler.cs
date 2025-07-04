@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using Assets.Scripts.Core.Views;
-using CastleFight.Core.PhysicsSystem;
+﻿using CastleFight.Core.PhysicsSystem;
+using CastleFight.Core.Views;
 using CastleFight.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
