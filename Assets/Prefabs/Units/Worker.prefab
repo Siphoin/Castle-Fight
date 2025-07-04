@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 2602959775789453994}
   - component: {fileID: 6263272635287143762}
   - component: {fileID: 5396604479704383264}
+  - component: {fileID: 4409928459191822276}
   m_Layer: 6
   m_Name: Worker
   m_TagString: Untagged
@@ -203,7 +204,7 @@ MonoBehaviour:
   _collider: {fileID: 6263272635287143762}
   _portail: {fileID: 1666218535217915048}
   _selectorHandler: {fileID: 5396604479704383264}
-  _stats: {fileID: 11400000, guid: 8f5f752802c2a174d9724dd2c5867e3c, type: 2}
+  _stats: {fileID: 11400000, guid: b0ecf8668e142734a9f8f94727dab32c, type: 2}
 --- !u!114 &3008300964552343170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,6 +386,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb7a3e1fe8d44d48be0e5cc796e689c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4409928459191822276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a8f6dfef2af984baa6eb4f249aa527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitInstance: {fileID: 5915806101338030891}
+  _workerNavMesh: {fileID: 6000662545937197878}
 --- !u!1 &7502624798169456713
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,6 +1434,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9589574, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 14b8dce946c5ce244bee947ba54d17e2, type: 2}
     - target: {fileID: 18751215801554613, guid: 53eb1e18130e9be4387a785b482187e1, type: 3}
       propertyPath: m_Layer
       value: 7

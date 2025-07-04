@@ -49,6 +49,8 @@ namespace CastleFight.Core.UnitsSystem
 
         public float SelectionScale => _stats.SelectionScale;
 
+        public bool IsSelected => _selectorHandler.IsSelect;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

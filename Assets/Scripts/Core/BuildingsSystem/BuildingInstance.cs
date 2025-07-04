@@ -48,6 +48,8 @@ namespace CastleFight.Core.BuildingsSystem
 
         public IObservable<bool> OnStartConstruct => _onStartConstruct;
 
+        public bool IsSelected => _selectorHandler.IsSelect;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

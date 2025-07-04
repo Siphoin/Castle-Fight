@@ -57,7 +57,9 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         public void SetPointMove (Vector3 point)
         {
+            CurrentStateWorker = WorkerUnitStateType.Idle;
             CurrentStateWorker = WorkerUnitStateType.MoveToPoint;
+            MovePoint = point;
         }
     }
 }
