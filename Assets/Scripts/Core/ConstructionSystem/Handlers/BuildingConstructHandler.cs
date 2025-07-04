@@ -17,7 +17,7 @@ namespace CastleFight.Core.ConstructionSystem
 
         public IHealthComponent HealthComponent => _healthComponent;
         public bool IsConstructing { get; private set; }
-        public bool ConstructProcess { get; set; } = false;
+        public bool ConstructProcess { get; set; } = true;
 
         public void TurnConstruct()
         {

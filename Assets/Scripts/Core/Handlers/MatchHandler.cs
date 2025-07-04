@@ -29,8 +29,8 @@ namespace CastleFight.Core.Handlers
         private Subject<DateTime> _onTickMatchTime = new();
         private INetworkHandler _networkHandler;
         private CancellationTokenSource _tokenSource;
-        private CancellationTokenSource _sessionTimerToken;
         private Subject<IReadOnlyDictionary<ushort, uint>> _onTeamsChanged = new();
+        private Subject<ushort> _onWinTeam = new();
 
         private IPointSpawnCastle _leftCastlePoint;
         private IPointSpawnCastle _rightCastlePoint;
@@ -52,6 +52,8 @@ namespace CastleFight.Core.Handlers
         public IObservable<IReadOnlyDictionary<ushort, uint>> OnTeamsChanged => _onTeamsChanged;
 
         public IReadOnlyDictionary<ushort, uint> ScoresTeams => _scoresTeams.Value;
+
+        public IObservable<ushort> OnWinTeam => _onWinTeam;
 
         public override void OnNetworkSpawn()
         {
@@ -159,13 +161,13 @@ namespace CastleFight.Core.Handlers
 
         private void WinTeam(ushort teamId)
         {
-
             RemoveAllBuildings();
             RemoveAllUnits();
             uint currentScore = _scoresTeams.Value[teamId] + 1;
             ModifyScore(teamId, currentScore);
+            _onWinTeam.OnNext(teamId);
+            WinTeamClientRpc(teamId);
             StartMatch();
-            Debug.Log($"WinTeam called for team {teamId}");
         }
 
         private void RemoveAllUnits()
@@ -238,6 +240,12 @@ namespace CastleFight.Core.Handlers
                 newTime.AddSeconds(1);
                 _currentTimeSession.Value = newTime;
             }
+        }
+
+        [ClientRpc]
+        private void WinTeamClientRpc(ushort teamId)
+        {
+            _onWinTeam.OnNext(teamId);
         }
 
         private void OnDisable()

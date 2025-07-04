@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Team Score View Config
   m_EditorClassIdentifier: 
   _guidObject: f898ab0c-2759-4f69-990b-40c86a3ec6f2
-  _colorFirstTeam: '#d95f5f'
-  _colorSecondTeam: '#5f69d9'
+  _colorFirstTeam: '#CF576A'
+  _colorSecondTeam: '#5766CF'

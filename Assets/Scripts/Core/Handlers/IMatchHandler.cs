@@ -10,6 +10,7 @@ namespace CastleFight.Core.Handlers
         DateTime CurrentTimeSession { get; }
         IReadOnlyDictionary<ushort, uint> ScoresTeams { get; }
         IObservable<IReadOnlyDictionary<ushort, uint>> OnTeamsChanged { get; }
+        IObservable<ushort> OnWinTeam {  get; }
 
 
     }

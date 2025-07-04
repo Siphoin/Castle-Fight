@@ -19,8 +19,8 @@ MonoBehaviour:
   _baseGoldBounty: 0
   _goldBountyVariance: 0
   _selectionScale: 0.19
-  _damage: 10
-  _damageSpread: 0.5
+  _damage: 0
+  _damageSpread: 0
   _attackSpeed: 1
   _attackRange: 1.5
   _initialAttackDelayRandomness: 0.1
