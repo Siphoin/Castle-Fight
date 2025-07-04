@@ -13,11 +13,13 @@ namespace CastleFight.Core.BuildingsSystem
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(BuildingObjectRepository))]
     [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
+    [RequireComponent(typeof(SelectorHandler))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField] private ScriptableBuuidingEntity _stats;
         [SerializeField] private Portail _portail;
+        [SerializeField, ReadOnly]   private SelectorHandler _selectorHandler;
 
         public IHealthComponent HealthComponent => _healthComponent;
         public ScriptableBuuidingEntity Stats => _stats;
@@ -37,9 +39,15 @@ namespace CastleFight.Core.BuildingsSystem
             }
         }
 
+        public void SetStateSelect(bool visible)
+        {
+            _selectorHandler.SetVisible(visible);
+        }
+
         private void OnValidate()
         {
             if (!_healthComponent) _healthComponent = GetComponent<HealthComponent>();
+            if (!_selectorHandler) _selectorHandler = GetComponent<SelectorHandler>();
         }
     }
 }

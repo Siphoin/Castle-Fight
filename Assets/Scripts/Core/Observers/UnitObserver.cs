@@ -28,7 +28,6 @@ namespace CastleFight.Core.Observers
             if (unit.IsMy)
             {
                 CompositeDisposable disposables = new CompositeDisposable();
-                Debug.Log(nameof(ListenUnit));
                 unit.Combat.OnKill.Subscribe(killingObject =>
                 {
 

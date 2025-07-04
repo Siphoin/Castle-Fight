@@ -106,23 +106,19 @@ namespace CastleFight.Networking.Handlers
             {
                 case NetworkListEvent<NetworkPlayer>.EventType.Add:
                     _onPlayerAdded.OnNext(changeEvent.Value);
-                    Debug.Log($"Player added: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
 
                 case NetworkListEvent<NetworkPlayer>.EventType.Remove:
                     _onPlayerRemoved.OnNext(changeEvent.Value);
-                    Debug.Log($"Player removed: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
 
                 case NetworkListEvent<NetworkPlayer>.EventType.Value:
                     _onPlayerUpdated.OnNext(changeEvent.Value);
-                    Debug.Log($"Player updated: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
              
                     break;
 
                 case NetworkListEvent<NetworkPlayer>.EventType.RemoveAt:
                     _onPlayerRemoved.OnNext(changeEvent.Value);
-                    Debug.Log($"Player removed: {changeEvent.Value.NickName} (ID: {changeEvent.Value.ClientId})");
                     break;
             }
         }

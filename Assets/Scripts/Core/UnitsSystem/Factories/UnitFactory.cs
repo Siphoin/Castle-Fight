@@ -35,7 +35,6 @@ namespace CastleFight.Core.UnitsSystem.Factories
         private void OnSpawnUnit(GameObject unit)
         {
             _onSpawn.OnNext(unit.GetComponent<UnitInstance>());
-            Debug.Log(nameof(OnSpawnUnit));
         }
     }
 }

@@ -6,5 +6,7 @@ namespace CastleFight.Core
     {
         string Name { get; }
         string DamageInfo { get; }
+
+        void SetStateSelect(bool visible);
     }
 }

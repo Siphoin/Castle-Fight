@@ -20,6 +20,7 @@ namespace CastleFight.Core.UnitsSystem
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(UnitObjectRepository))]
     [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
+    [RequireComponent(typeof(SelectorHandler))]
     public class UnitInstance : OwnedEntity, IUnitInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
@@ -28,6 +29,7 @@ namespace CastleFight.Core.UnitsSystem
         [SerializeField, ReadOnly] private UnitCombatSystem _combatSystem;
         [SerializeField, ReadOnly] private Collider _collider;
         [SerializeField, ReadOnly] private Portail _portail;
+        [SerializeField, ReadOnly] private SelectorHandler _selectorHandler;
         [SerializeField] private ScriptableUnitEntity _stats;
         [Inject] private UnitGlobalConfig _globalConfig;
 
@@ -73,11 +75,17 @@ namespace CastleFight.Core.UnitsSystem
             if (!_collider) _collider = GetComponent<Collider>();
             if (!_combatSystem) _combatSystem = GetComponentInChildren<UnitCombatSystem>();
             if (!_portail) _portail = GetComponentInChildren<Portail>();
+            if (!_selectorHandler) _selectorHandler = GetComponent<SelectorHandler>();
         }
 
         public void Disable()
         {
             _collider.enabled = false;
+        }
+
+        public void SetStateSelect(bool visible)
+        {
+            _selectorHandler.SetVisible(visible);
         }
     }
 }

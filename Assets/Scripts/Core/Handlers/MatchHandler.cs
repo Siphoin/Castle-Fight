@@ -137,7 +137,6 @@ namespace CastleFight.Core.Handlers
             _redCastle = SpawnCastle(_leftCastlePoint, 0);
             _blueCastle = SpawnCastle(_rightCastlePoint, 1);
 
-           Debug.Log(nameof(SpawnCastles));
 
             _redCastle.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
             {

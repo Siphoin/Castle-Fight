@@ -34,13 +34,13 @@ namespace CastleFight.Core.Handlers
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                
+
                 if (Physics.Raycast(ray, out hit, _layerMask))
                 {
-                    Debug.Log(hit.collider);
                     if (hit.collider.TryGetComponent(out IClickableObject clickableObject) && !clickableObject.HealthComponent.IsDead)
                     {
                         View.SetTarget(clickableObject);
+                        clickableObject.SetStateSelect(true);
 
                     }
 
@@ -51,6 +51,7 @@ namespace CastleFight.Core.Handlers
                             if (hitBox.transform.parent.TryGetComponent(out IClickableObject hitObject) && !hitObject.HealthComponent.IsDead)
                             {
                                 View.SetTarget(hitObject);
+                                hitObject.SetStateSelect(true);
                             }
                         }
                     }

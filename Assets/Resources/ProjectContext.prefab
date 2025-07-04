@@ -44,6 +44,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25bc1b9d89b8124e903b7a35d891c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &40435698801155759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4890440875411166349}
+  - component: {fileID: 4439665145481455671}
+  m_Layer: 0
+  m_Name: ClickableViewFactoryInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4890440875411166349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40435698801155759}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6072636119365579299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4439665145481455671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40435698801155759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80422cff9ed6fa1439957ed683a69664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1604059261604776009
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,6 +144,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8c2fd2eee7d95874fa0cee024da29a1c, type: 2}
   - {fileID: 11400000, guid: 3e431deded7141c4680a20e8d81b37b0, type: 2}
   - {fileID: 11400000, guid: 07c7666f49f13734da19cf127236ae71, type: 2}
+  - {fileID: 11400000, guid: 2f5ff629dd07a8b4783be0673b980a85, type: 2}
+  - {fileID: 11400000, guid: 7da06244eed7a5847821178e9bbba3e2, type: 2}
 --- !u!1 &1862206586767516662
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +230,7 @@ Transform:
   - {fileID: 5239866719077995640}
   - {fileID: 842742718631918629}
   - {fileID: 5163103536598044025}
+  - {fileID: 4890440875411166349}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7844404584603537647
@@ -206,6 +253,7 @@ MonoBehaviour:
   - {fileID: 2515499496173001249}
   - {fileID: 2925731585129491908}
   - {fileID: 3727209548272682357}
+  - {fileID: 4439665145481455671}
   _installerPrefabs: []
   _parentNewObjectsUnderContext: 1
   _editorReflectionBakingCoverageMode: 0
