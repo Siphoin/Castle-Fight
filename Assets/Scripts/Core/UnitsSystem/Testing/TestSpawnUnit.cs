@@ -21,11 +21,16 @@ namespace CastleFight.Core.UnitsSystem.Testing
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E) && !EventSystem.current.IsBlockedByUI())
+            if (Input.GetKeyDown(KeyCode.U) && !EventSystem.current.IsBlockedByUI())
             {
-                _factory.Create(_prefab, Vector3.zero, Quaternion.identity);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Terrain")))
+                {
+                    _factory.Create(_prefab, hit.point, Quaternion.identity);
+                }
             }
         }
-
     }
 }

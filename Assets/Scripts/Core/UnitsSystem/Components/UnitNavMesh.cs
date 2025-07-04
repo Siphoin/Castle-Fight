@@ -46,20 +46,20 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
-        public float SpeedMovement
+        public virtual float SpeedMovement
         {
             get
             {
                 return (float)_agentGraph.BlackboardReference.Blackboard.Variables[4].ObjectValue;
             }
 
-            private set
+            protected set
             {
                 _agentGraph.BlackboardReference.Blackboard.Variables[4].ObjectValue = value;
             }
         }
 
-        public float SpeedAttack
+        public virtual float SpeedAttack
         {
             get
             {
@@ -72,7 +72,9 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
-        private void Start()
+        protected BehaviorGraphAgent AgentGraph => _agentGraph;
+
+        protected virtual void Start()
         {
             _agent.updateRotation = false;
             enabled = _unitInstance.IsOwner;
@@ -91,7 +93,7 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (CurrentTarget != null)
             {
@@ -119,8 +121,21 @@ namespace CastleFight.Core.UnitsSystem.Components
         private void SetNavMeshParameters()
         {
             _agent.speed = _unitInstance.Stats.MoveSpeed;
-            SpeedMovement = _agent.speed;
-            SpeedAttack = _unitInstance.Stats.AttackSpeed;
+            try
+            {
+                SpeedMovement = _agent.speed;
+            }
+            catch
+            {
+            }
+            try
+            {
+                SpeedAttack = _unitInstance.Stats.AttackSpeed;
+            }
+            catch
+            {
+
+            }
         }
 
         public void SetTarget(HealthComponent healthComponent)
@@ -141,7 +156,7 @@ namespace CastleFight.Core.UnitsSystem.Components
             _agent.isStopped = true;
         }
 
-        public void SetIdle ()
+        public virtual void SetIdle ()
         {
             CurrentTarget = null;
             CurrentState = UnitStateType.Idle;
