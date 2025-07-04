@@ -17,6 +17,7 @@ namespace CastleFight.Core.ConstructionSystem
 
         public IHealthComponent HealthComponent => _healthComponent;
         public bool IsConstructing { get; private set; }
+        public bool ConstructProcess { get; set; } = false;
 
         public void TurnConstruct()
         {
@@ -46,8 +47,9 @@ namespace CastleFight.Core.ConstructionSystem
 
                 while (elapsed < buildTime)
                 {
-                    ct.ThrowIfCancellationRequested();
 
+                    ct.ThrowIfCancellationRequested();
+                    await UniTask.WaitUntil(() => ConstructProcess, cancellationToken: ct);
                     float progress = Mathf.Clamp01(elapsed / buildTime);
                     float targetHealth = startHealth + totalHPToRegen * progress;
 
