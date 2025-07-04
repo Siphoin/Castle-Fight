@@ -47,6 +47,8 @@ namespace CastleFight.Core.UnitsSystem
 
         public IPortail Portail => _portail;
 
+        public float SelectionScale => _stats.SelectionScale;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

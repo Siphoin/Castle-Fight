@@ -30,6 +30,10 @@ namespace CastleFight.Core.SO
         [MinValue(0)]
         [SerializeField] private int _goldBountyVariance = 5;
 
+        [BoxGroup("UI Settings")]
+        [MinValue(0)]
+        [SerializeField] private float _selectionScale = 1;
+
         [BoxGroup("Gold Bounty Settings")]
         [InfoBox("Calculated bounty range")]
         [ShowInInspector, ReadOnly]
@@ -39,6 +43,8 @@ namespace CastleFight.Core.SO
         public string EntityName => _entityName;
         public string Description => _description;
         public int MaxHealth => _maxHealth;
+
+        public float SelectionScale => _selectionScale;
 
         public int GetRandomGoldBounty()
         {

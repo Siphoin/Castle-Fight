@@ -27,11 +27,6 @@ namespace CastleFight.Core.Views
             {
                 transform.SetParent(null, false);
                 transform.position = Vector3.zero;
-                transform.rotation = _initialRotation;
-            }
-            else
-            {
-                transform.rotation = _initialRotation;
             }
         }
 
@@ -55,6 +50,9 @@ namespace CastleFight.Core.Views
                     _selection.gameObject.SetActive(false);
                 }
             }).AddTo(_disposable);
+
+            Vector3 scale = new(target.SelectionScale, target.SelectionScale, target.SelectionScale);
+            transform.localScale = scale;
         }
 
         private void OnDisable()
