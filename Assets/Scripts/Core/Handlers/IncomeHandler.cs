@@ -1,10 +1,12 @@
-﻿using CastleFight.Core.BuildingsSystem;
+﻿using System.Threading;
+using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.Configs;
 using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
 using Cysharp.Threading.Tasks;
 using ObjectRepositories.Extensions;
 using Sirenix.OdinInspector;
+using UniRx;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,6 +17,8 @@ namespace CastleFight.Core.Handlers
         [SerializeField] private IncomeHandlerConfig _config;
 
         [SerializeField, ReadOnly] private NetworkHandler _network;
+        [SerializeField, ReadOnly] private MatchHandler _matchHandler;
+        private CancellationTokenSource _incomeCts;
 
         private INetworkHandler Network
         {
@@ -29,22 +33,46 @@ namespace CastleFight.Core.Handlers
             }
         }
 
+        private IMatchHandler MatchHandler
+        {
+            get
+            {
+                if (_matchHandler is null)
+                {
+                    _matchHandler = FindAnyObjectByType<MatchHandler>();
+                }
+                return _matchHandler;
+            }
+        }
+
 
         public override void OnNetworkSpawn()
         {
-           if (IsServer)
+            if (IsServer)
             {
-                TickIncome().Forget();
+                MatchHandler.OnWinTeam.Subscribe(_ =>
+                {
+                    Restart();
+
+                }).AddTo(this);
+                StartIncomeTicking();
             }
+        }
+
+        private void StartIncomeTicking()
+        {
+            _incomeCts?.Cancel();
+
+            TickIncome().Forget();
         }
 
         private async UniTask TickIncome ()
         {
-            var token = this.GetCancellationTokenOnDestroy();
+            _incomeCts = new();
 
             while (true)
             {
-                await UniTask.Delay(_config.TimeIncome, cancellationToken: token);
+                await UniTask.Delay(_config.TimeIncome, cancellationToken: _incomeCts.Token);
                 foreach (var player in Network.Players)
                 {
                     IncomeToPlayer(player);
@@ -54,7 +82,7 @@ namespace CastleFight.Core.Handlers
 
         private void IncomeToPlayer (NetworkPlayer player)
         {
-            var buildings = this.FindManyByConditionOnRepository<BuildingInstance>(x => x.Owner.Equals(player));
+            var buildings = this.FindManyByConditionOnRepository<BuildingInstance>(x => x.Owner.Equals(player) && x.IsContructed);
             uint totalIncome = 0;
 
             foreach (var building in buildings)
@@ -65,6 +93,17 @@ namespace CastleFight.Core.Handlers
             var result = player.Gold += totalIncome;
             Network.Players.SetPlayerGold(player.ClientId, result);
 
+        }
+
+        private void Restart ()
+        {
+            _incomeCts?.Cancel();
+            TickIncome().Forget();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            _incomeCts?.Cancel();
         }
     }
 }
