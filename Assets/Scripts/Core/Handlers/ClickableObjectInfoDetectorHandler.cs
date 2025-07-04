@@ -48,7 +48,7 @@ namespace CastleFight.Core.Handlers
                     {
                         if (hitBox.transform.parent != null)
                         {
-                            if (hitBox.transform.parent.TryGetComponent(out IClickableObject hitObject) && !hitObject.HealthComponent.IsDead)
+                            if (hitBox.transform.parent.TryGetComponent(out IClickableObject hitObject))
                             {
                                 View.SetTarget(hitObject);
                                 hitObject.SetStateSelect(true);

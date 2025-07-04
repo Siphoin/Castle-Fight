@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7009f1f3e5fa0e47be95ed46107b48b, type: 3}
+  m_Name: Health Component Config
+  m_EditorClassIdentifier: 
+  _guidObject: 97ca14ec-bd09-4109-8182-2488fb0340b0
+  _startHealthConstructBuilding: 1

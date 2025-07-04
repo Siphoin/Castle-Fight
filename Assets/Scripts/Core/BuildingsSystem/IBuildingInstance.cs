@@ -6,5 +6,6 @@ namespace CastleFight.Core.BuildingsSystem
 {
     public interface IBuildingInstance : IFactoryObject, ILivingEntity, IOwnerable, IStatsableEntity<ScriptableBuuidingEntity>, IClickableObject
     {
+        void TurnConstruct();
     }
 }

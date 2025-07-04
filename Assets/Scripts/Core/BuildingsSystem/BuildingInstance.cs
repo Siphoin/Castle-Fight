@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using CastleFight.Core.Handlers;
 using CastleFight.Core.Graphic;
+using CastleFight.Core.ConstructionSystem;
 
 namespace CastleFight.Core.BuildingsSystem
 {
@@ -14,12 +15,16 @@ namespace CastleFight.Core.BuildingsSystem
     [RequireComponent(typeof(BuildingObjectRepository))]
     [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
     [RequireComponent(typeof(SelectorHandler))]
+    [RequireComponent(typeof(BuildingConstructHandler))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField] private ScriptableBuuidingEntity _stats;
         [SerializeField] private Portail _portail;
         [SerializeField, ReadOnly]   private SelectorHandler _selectorHandler;
+        [SerializeField, ReadOnly] private BuildingConstructHandler _constructHandler;
+        public bool IsContructed { get; private set; } = true;
+        private bool _hasConstruction = false;
 
         public IHealthComponent HealthComponent => _healthComponent;
         public ScriptableBuuidingEntity Stats => _stats;
@@ -31,6 +36,8 @@ namespace CastleFight.Core.BuildingsSystem
         public IPortail Portail => _portail;
 
         public float SelectionScale => _stats.SelectionScale;
+
+        public IBuildingConstructHandler ConstructHandler => _constructHandler;
 
         public override void OnNetworkSpawn()
         {
@@ -46,10 +53,21 @@ namespace CastleFight.Core.BuildingsSystem
             _selectorHandler.SetVisible(visible);
         }
 
+        public void TurnConstruct()
+        {
+            if (!_hasConstruction)
+            {
+                IsContructed = false;
+                _healthComponent.TurnConstructHealth();
+                _constructHandler.TurnConstruct();
+            }
+        }
+
         private void OnValidate()
         {
             if (!_healthComponent) _healthComponent = GetComponent<HealthComponent>();
             if (!_selectorHandler) _selectorHandler = GetComponent<SelectorHandler>();
+            if (!_constructHandler) _constructHandler = GetComponent<BuildingConstructHandler>();
         }
     }
 }

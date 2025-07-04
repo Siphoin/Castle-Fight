@@ -2,7 +2,8 @@
 
 namespace CastleFight.Core.ConstructionSystem
 {
-    public interface IBuildingConstructInstance : IFactoryObject, ILivingEntity, IOwnerable
+    public interface IBuildingConstructHandler : ILivingEntity
     {
+        void TurnConstruct();
     }
 }

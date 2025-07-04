@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 3188299842819847731}
   - component: {fileID: 8506404916115975918}
   - component: {fileID: 2819578704153392056}
+  - component: {fileID: 3303171841838224241}
   m_Layer: 0
   m_Name: Castle
   m_TagString: Untagged
@@ -187,9 +188,10 @@ MonoBehaviour:
       IsReady: 0
       Team: 0
   _healthComponent: {fileID: 3990793390751493803}
-  _stats: {fileID: 11400000, guid: fdfd4c74a08c2854bbb71586c624d830, type: 2}
+  _stats: {fileID: 11400000, guid: d9a3dc50a9bea1140b7abe4a24c8389e, type: 2}
   _portail: {fileID: 6676897036765683562}
   _selectorHandler: {fileID: 2819578704153392056}
+  _constructHandler: {fileID: 3303171841838224241}
 --- !u!114 &6207695672780294174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,6 +267,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb7a3e1fe8d44d48be0e5cc796e689c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3303171841838224241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227841957691582070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3db49b52647f87b4b8e865b3513353b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _network: {fileID: 0}
+  _owner:
+    m_InternalValue:
+      ClientId: 0
+      Gold: 0
+      NickName:
+        utf8LengthInBytes: 0
+        bytes:
+          offset0000:
+            byte0000: 0
+            byte0001: 0
+            byte0002: 0
+            byte0003: 0
+            byte0004: 0
+            byte0005: 0
+            byte0006: 0
+            byte0007: 0
+            byte0008: 0
+            byte0009: 0
+            byte0010: 0
+            byte0011: 0
+            byte0012: 0
+            byte0013: 0
+            byte0014: 0
+            byte0015: 0
+          byte0016: 0
+          byte0017: 0
+          byte0018: 0
+          byte0019: 0
+          byte0020: 0
+          byte0021: 0
+          byte0022: 0
+          byte0023: 0
+          byte0024: 0
+          byte0025: 0
+          byte0026: 0
+          byte0027: 0
+          byte0028: 0
+          byte0029: 0
+      ColorType: 0
+      IsReady: 0
+      Team: 0
+  _healthComponent: {fileID: 3990793390751493803}
 --- !u!1 &3762877203437315990
 GameObject:
   m_ObjectHideFlags: 0

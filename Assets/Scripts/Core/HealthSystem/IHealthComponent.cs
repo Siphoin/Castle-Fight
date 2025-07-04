@@ -13,5 +13,6 @@ namespace CastleFight.Core.HealthSystem
         float Health { get; }
         float MaxHealth { get; }
         void Damage(float damage, ulong damager);
+        void TurnConstructHealth();
     }
 }

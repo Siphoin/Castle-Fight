@@ -35,6 +35,8 @@ namespace CastleFight.Core.BuildingsSystem.Components
         {
             var token = this.GetCancellationTokenOnDestroy();
             TimeSpan timeSpawn = TimeSpan.FromSeconds(_buildingInstance.Stats.TrainSpeed);
+            await UniTask.WaitUntil(() => _buildingInstance.IsContructed, cancellationToken: token);
+            Debug.Log("TURN SPAWN");
             while (true)
             {
                 await UniTask.Delay(timeSpawn, cancellationToken: token);

@@ -18,6 +18,7 @@ namespace CastleFight.Core.Graphic
 
         private void Start()
         {
+            gameObject.layer = LayerMask.NameToLayer("Portail");
             transform.localScale = _scale;
         }
     }

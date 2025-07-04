@@ -11,7 +11,7 @@ namespace CastleFight.Core.BuildingsSystem.Factories
         [Inject] private INetworkHandler _network;
         private Subject<IBuildingInstance> _onSpawn = new();
 
-        public IObservable<IBuildingInstance> OnSpawn => throw new NotImplementedException();
+        public IObservable<IBuildingInstance> OnSpawn => _onSpawn;
 
         public IBuildingInstance Create(BuildingInstance prefab, Vector3 position, Quaternion rotation, Transform parent = null)
         {

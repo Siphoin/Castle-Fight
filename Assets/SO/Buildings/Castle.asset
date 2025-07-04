@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Castle
   m_EditorClassIdentifier: 
   _icon: {fileID: 0}
-  _entityName: 
+  _entityName: Castle
   _description: 
   _maxHealth: 1500
   _baseGoldBounty: 0
@@ -22,5 +22,5 @@ MonoBehaviour:
   _trainSpeed: 0.1
   _trainableUnit: {fileID: 0}
   _buildTime: 0
-  _income: 5
+  _income: 0
   _constructMeshes: []

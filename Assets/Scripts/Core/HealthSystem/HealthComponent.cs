@@ -5,6 +5,9 @@ using UniRx;
 using CastleFight.Core.HealthSystem.Events;
 using System;
 using System.Linq;
+using Zenject;
+using CastleFight.Core.HealthSystem.Configs;
+using CastleFight.Core.BuildingsSystem;
 
 namespace CastleFight.Core.HealthSystem
 {
@@ -14,6 +17,7 @@ namespace CastleFight.Core.HealthSystem
         [SerializeField, ReadOnly] private NetworkVariable<float> _currentHealth = new(100);
         [SerializeField, ReadOnly] private NetworkVariable<float> _maxHealth = new(100);
         [SerializeField] private NetworkVariable<DeathEvent> _deathEvent = new(readPerm: NetworkVariableReadPermission.Everyone, writePerm: NetworkVariableWritePermission.Owner);
+        [Inject] private HealthComponentConfig _config;
 
         private Subject<float> _onCurrentHealthChanged = new();
         private Subject<DeathEvent> _onDeath = new();
@@ -178,6 +182,20 @@ namespace CastleFight.Core.HealthSystem
         public void Kill ()
         {
             Damage(float.MaxValue, 0);
+        }
+
+        public void TurnConstructHealth ()
+        {
+            if (TryGetComponent(out IBuildingInstance _))
+            {
+                _currentHealth.Value = _config.StartHealthConstructBuilding;
+
+            }
+
+            else
+            {
+                Debug.LogError($"health component owner not a Building");
+            }
         }
 
     }

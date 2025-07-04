@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 98290821}
   - component: {fileID: 98290823}
   - component: {fileID: 98290822}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1800,7 +1800,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 127
+    m_Bits: 383
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -9110,6 +9110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1964602099}
   - component: {fileID: 1964602100}
+  - component: {fileID: 1964602101}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -9145,6 +9146,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 5915806101338030891, guid: 8670901d0a4a8d841b4200d81a21d588, type: 3}
+--- !u!114 &1964602101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964602097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4763d047ef30abe41b096c19c93e4bda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _building: {fileID: 6058596132512980733, guid: b212d69bce5d28d4199ef6b7da6ae191, type: 3}
 --- !u!1 &1990458907 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 6dc5d495c37d65043b022964d98631b9, type: 3}
