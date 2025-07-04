@@ -23,4 +23,7 @@ MonoBehaviour:
   _trainableUnit: {fileID: 5915806101338030891, guid: 8670901d0a4a8d841b4200d81a21d588, type: 3}
   _buildTime: 12
   _income: 5
-  _constructMeshes: []
+  _constructMeshes:
+  - {fileID: 4300000, guid: 89fb5f68a7a07e24aa03504d5a034e9e, type: 3}
+  - {fileID: 4300000, guid: a2bc843dcc7a5be45993257d22444585, type: 3}
+  - {fileID: 4300004, guid: e2f28d7d7478cb64597ebb9077abfe6e, type: 3}

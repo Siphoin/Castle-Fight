@@ -1,4 +1,6 @@
-﻿using CastleFight.Main.Factories;
+﻿using System;
+using CastleFight.Main.Factories;
+using UniRx;
 
 namespace CastleFight.Core.ConstructionSystem
 {

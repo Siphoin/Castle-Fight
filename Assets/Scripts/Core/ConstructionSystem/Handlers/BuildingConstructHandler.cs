@@ -15,8 +15,6 @@ namespace CastleFight.Core.ConstructionSystem
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField, ReadOnly] private BuildingInstance _buildingInstance;
 
-        private float _regenPerSecond;
-
         public IHealthComponent HealthComponent => _healthComponent;
         public bool IsConstructing { get; private set; }
 
@@ -28,7 +26,6 @@ namespace CastleFight.Core.ConstructionSystem
 
             float totalHPToRegen = _buildingInstance.Stats.MaxHealth - 1;
             float buildTime = _buildingInstance.Stats.BuildTime;
-            _regenPerSecond = totalHPToRegen / buildTime;
 
             ConstructionProcess().Forget();
         }
@@ -42,7 +39,6 @@ namespace CastleFight.Core.ConstructionSystem
                 float totalHPToRegen = _buildingInstance.Stats.MaxHealth - 1;
                 float startHealth = 1f;
 
-                // Установка начального здоровья
                 _healthComponent.SetHealth(startHealth);
 
                 float elapsed = 0f;
@@ -55,7 +51,6 @@ namespace CastleFight.Core.ConstructionSystem
                     float progress = Mathf.Clamp01(elapsed / buildTime);
                     float targetHealth = startHealth + totalHPToRegen * progress;
 
-                    // Устанавливаем точное значение здоровья
                     _healthComponent.SetHealth(targetHealth);
 
                     await UniTask.Delay(TimeSpan.FromSeconds(updateInterval), cancellationToken: ct);

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9052571865819038035}
   - component: {fileID: 6117903432431072073}
   - component: {fileID: 645807962192993023}
+  - component: {fileID: 4627055503457014614}
   m_Layer: 0
   m_Name: HitBox
   m_TagString: HitBox
@@ -68,6 +69,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 6117903432431072073}
   _rigidbody: {fileID: 0}
+--- !u!208 &4627055503457014614
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823110477648030776}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.555, y: 8.45, z: 5.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1227841957691582070
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +105,7 @@ GameObject:
   - component: {fileID: 8506404916115975918}
   - component: {fileID: 2819578704153392056}
   - component: {fileID: 4672831207104602354}
+  - component: {fileID: 4345889583900529284}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -360,6 +378,22 @@ MonoBehaviour:
       IsReady: 0
       Team: 0
   _healthComponent: {fileID: 3990793390751493803}
+  _buildingInstance: {fileID: 6058596132512980733}
+--- !u!114 &4345889583900529284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227841957691582070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43029f09d4d74c4587baeab788e3469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _meshFilter: {fileID: 2889992520609103706}
+  _buildingInstance: {fileID: 6058596132512980733}
 --- !u!1 &5407341610549497158
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +512,7 @@ MonoBehaviour:
   _portraitPosition: {x: 0, y: -0.41, z: 0}
   _portraitRotation: {x: -84.4, y: -213.9, z: -29.2}
   _scale: {x: 0.19, y: 0.19, z: 0.19}
+  _meshFitler: {fileID: 5607726298326971275}
 --- !u!1 &6957751437795382987
 GameObject:
   m_ObjectHideFlags: 0

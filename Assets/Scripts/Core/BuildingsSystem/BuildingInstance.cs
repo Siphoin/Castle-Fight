@@ -6,6 +6,10 @@ using UnityEngine;
 using CastleFight.Core.Handlers;
 using CastleFight.Core.Graphic;
 using CastleFight.Core.ConstructionSystem;
+using CastleFight.Core.Views;
+using Unity.Netcode;
+using System;
+using UniRx;
 
 namespace CastleFight.Core.BuildingsSystem
 {
@@ -15,6 +19,7 @@ namespace CastleFight.Core.BuildingsSystem
     [RequireComponent(typeof(ComponentDisableAfterDeadHandler))]
     [RequireComponent(typeof(SelectorHandler))]
     [RequireComponent(typeof(BuildingConstructHandler))]
+    [RequireComponent(typeof(BuildingConstructionView))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
@@ -22,8 +27,14 @@ namespace CastleFight.Core.BuildingsSystem
         [SerializeField] private Portail _portail;
         [SerializeField, ReadOnly] private SelectorHandler _selectorHandler;
         [SerializeField, ReadOnly] private BuildingConstructHandler _constructHandler;
+        private NetworkVariable<bool> _isConstructed = new NetworkVariable<bool>(true);
+        private Subject<bool> _onStartConstruct = new();
 
-        public bool IsContructed { get; internal set; } = true;
+        public bool IsContructed
+        {
+            get => _isConstructed.Value;
+            internal set => _isConstructed.Value = value;
+        }
         public bool HasConstruction => _stats.BuildTime > 0;
 
         public IHealthComponent HealthComponent => _healthComponent;
@@ -35,12 +46,24 @@ namespace CastleFight.Core.BuildingsSystem
         public float SelectionScale => _stats.SelectionScale;
         public IBuildingConstructHandler ConstructHandler => _constructHandler;
 
+        public IObservable<bool> OnStartConstruct => _onStartConstruct;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             if (IsMy)
             {
                 _healthComponent.SetHealthData(_stats.MaxHealth);
+            }
+
+            _isConstructed.OnValueChanged += ConstructFlagChanged;
+        }
+
+        private void ConstructFlagChanged(bool previousValue, bool newValue)
+        {
+            if (!newValue)
+            {
+                _onStartConstruct.OnNext(true);
             }
         }
 
@@ -56,6 +79,7 @@ namespace CastleFight.Core.BuildingsSystem
                 IsContructed = false;
                 _healthComponent.TurnConstructHealth();
                 _constructHandler.TurnConstruct();
+                _onStartConstruct.OnNext(true);
             }
         }
 
