@@ -45,7 +45,7 @@ namespace Assets.Scripts.Core.Views
 
             _infoIncome.gameObject.SetActive(false);
 
-            if (target is IBuildingInstance building)
+            if (target is IBuildingInstance building && building.Stats.Income > 0)
             {
                 _infoIncome.gameObject.SetActive(true);
                 _textIncome.text = $"<color=yellow>Income</color>: {building.Stats.Income}";
