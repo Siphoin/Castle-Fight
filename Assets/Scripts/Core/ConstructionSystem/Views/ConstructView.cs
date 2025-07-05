@@ -9,12 +9,15 @@ using CastleFight.Core.Configs;
 using CastleFight.Core.BuildingsSystem;
 using Core.ConstructionSystem.Handlers;
 using UniRx;
+using CastleFight.Networking.Handlers;
 namespace CastleFight.Core.ConstructionSystem.Views
 {
     [RequireComponent(typeof(MeshRenderer))]
     public class ConstructView : MonoBehaviour, IConstructView
     {
         [Inject] private ConstructViewConfig _config;
+        [Inject] private MaterialOwnerHandlerConfig _ownerHandlerConfig;
+        [Inject] private INetworkHandler _network;
 
         private Texture2D _gridTexture;
         private Material _materialInstance;
@@ -213,8 +216,8 @@ namespace CastleFight.Core.ConstructionSystem.Views
             }
 
             Material tempMaterial = new Material(_config.TransparentMaterial);
-            Texture originalTexture = _targetBuildng.BuildingView.Material.mainTexture;
-            tempMaterial.mainTexture = originalTexture;
+            int indexTeamColor = _network.Players.LocalPlayer.Team;
+            tempMaterial.mainTexture = _ownerHandlerConfig.GetBuildingMaterial(indexTeamColor).mainTexture;
 
             _viewRenderer.material = tempMaterial;
             _viewFitler.mesh = _targetBuildng.BuildingView.Mesh;
