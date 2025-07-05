@@ -8,6 +8,8 @@ using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.BuildingsSystem.Factories;
 using CastleFight.Core.Components;
 using CastleFight.Core.Configs;
+using CastleFight.Core.GameCamer;
+using CastleFight.Core.GameCamera;
 using CastleFight.Core.Models;
 using CastleFight.Core.UnitsSystem;
 using CastleFight.Core.UnitsSystem.Factories;
@@ -44,7 +46,10 @@ namespace CastleFight.Core.Handlers
         [SerializeField] private MatchConfig _matchConfig;
         [Inject] private IBuildingFactory _buildingFactory;
         [Inject] private IUnitFactory _unitFactory;
+        private IPointCameraView _redTeamCameraPoint;
+        private IPointCameraView _blueTeamCameraPoint;
 
+        private RTSCinemachineCamera _gameCamera;
 
         public static bool IsSpawnedInstance { get; private set; }
 
@@ -68,6 +73,7 @@ namespace CastleFight.Core.Handlers
                 StartMatch();
                 TickTimeSession().Forget();
                 SpawnWorkers();
+                SetupCameraForTeams();
             }
 
             else
@@ -92,12 +98,35 @@ namespace CastleFight.Core.Handlers
 
                 }
             }
-        } 
+        }
         private void FindSpawnPointCastles()
         {
+            _gameCamera = FindAnyObjectByType<RTSCinemachineCamera>();
+
             IPointSpawnCastle[] points = FindObjectsByType<PointSpawnCastle>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             _leftCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Red);
             _rightCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Blue);
+
+            IPointCameraView[] cameraPoints = FindObjectsByType<PointCameraView>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            _redTeamCameraPoint = cameraPoints.FirstOrDefault(x => x.TeamType == CastleTeamType.Red);
+            _blueTeamCameraPoint = cameraPoints.FirstOrDefault(x => x.TeamType == CastleTeamType.Blue);
+        }
+
+        private void SetupCameraForTeams()
+        {
+            foreach (var player in _networkHandler.Players)
+            {
+                if (player.ClientId == 0 && _redTeamCameraPoint != null)
+                {
+                    _gameCamera.SetFollowTarget(null);
+                    _gameCamera.transform.SetPositionAndRotation(_redTeamCameraPoint.Position, _redTeamCameraPoint.Rotation);
+                }
+                else if (player.ClientId == 1 && _blueTeamCameraPoint != null)
+                {
+                    _gameCamera.SetFollowTarget(null);
+                    _gameCamera.transform.SetPositionAndRotation(_blueTeamCameraPoint.Position, _blueTeamCameraPoint.Rotation);
+                }
+            }
         }
 
         private IBuildingInstance SpawnCastle (IPointSpawnCastle point, ulong ownerId)
