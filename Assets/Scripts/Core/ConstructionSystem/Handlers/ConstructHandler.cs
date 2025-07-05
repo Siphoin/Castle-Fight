@@ -3,6 +3,7 @@ using System.Collections;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.BuildingsSystem.Factories;
 using CastleFight.Core.Configs;
+using CastleFight.Core.ConstructionSystem.Events;
 using CastleFight.Core.ConstructionSystem.Views;
 using CastleFight.Extensions;
 using UniRx;
@@ -15,7 +16,7 @@ namespace Core.ConstructionSystem.Handlers
     public class ConstructHandler : MonoBehaviour, IConstructHandler
     {
         private Subject<IBuildingInstance> _onSelectBuilding = new();
-        private Subject<Unit> _onEndBuild = new();
+        private Subject<NewBuildingConstructEvent> _onEndBuild = new();
         private IBuildingInstance _currentBuilding;
         private IConstructView _view;
         [Inject] private IBuildingFactory _buildingFactory;
@@ -25,7 +26,7 @@ namespace Core.ConstructionSystem.Handlers
 
         private static readonly Quaternion _defaultRotation = Quaternion.Euler(0, 90, 0);
 
-        public IObservable<Unit> OnEndBuild => _onEndBuild;
+        public IObservable<NewBuildingConstructEvent> OnEndBuild => _onEndBuild;
 
         private void Awake()
         {
@@ -49,7 +50,8 @@ namespace Core.ConstructionSystem.Handlers
                     BuildingInstance prefab = _currentBuilding as BuildingInstance;
                    var building =  _buildingFactory.Create(prefab, position, rotation);
                     building.TurnConstruct();
-                    _onEndBuild.OnNext(Unit.Default);
+                    var eventBuild = new NewBuildingConstructEvent(position, building);
+                    _onEndBuild.OnNext(eventBuild);
                     _currentBuilding = null;
                 }
             }

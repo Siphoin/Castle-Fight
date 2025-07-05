@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 6263272635287143762}
   - component: {fileID: 5396604479704383264}
   - component: {fileID: 4409928459191822276}
+  - component: {fileID: 9101130567985118647}
   m_Layer: 6
   m_Name: Worker
   m_TagString: Untagged
@@ -222,6 +223,8 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 2015280112129540291
   - rid: 2015280113513399054
+  - rid: 5666366276370957012
+  - rid: 5666366280018690224
   m_IsInitialised: 0
   m_IsStarted: 0
   NetcodeRunOnlyOnOwner: 1
@@ -244,6 +247,22 @@ MonoBehaviour:
           m_Value1: 17467003170514073600
         Name: Animator
         m_Value: {fileID: 9129359611456759575}
+    - rid: 5666366276370957012
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18375176210166327261
+          m_Value1: 5383505855066432688
+        Name: HitBox
+        m_Value: {fileID: 7502624798169456713}
+    - rid: 5666366280018690224
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 2979508720047437824
+          m_Value1: 17247488587680839368
+        Name: DistanceConstruct
+        m_Value: 0.1
 --- !u!114 &3466313874383007124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +419,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitInstance: {fileID: 5915806101338030891}
   _workerNavMesh: {fileID: 6000662545937197878}
+  _constructHandler: {fileID: 0}
+--- !u!114 &9101130567985118647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094483602118487158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619dbf77477759644b7e7e30cc6614bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7502624798169456713
 GameObject:
   m_ObjectHideFlags: 0

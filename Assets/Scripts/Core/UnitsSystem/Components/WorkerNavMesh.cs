@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using CastleFight.Core.AI;
+using CastleFight.Core.BuildingsSystem;
+using CastleFight.Core.ConstructionSystem.Events;
 using UnityEngine;
 
 namespace CastleFight.Core.UnitsSystem.Components
@@ -45,6 +47,32 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        public BuildingInstance TargetBuilding
+        {
+            get
+            {
+                return (BuildingInstance)AgentGraph.BlackboardReference.Blackboard.Variables[5].ObjectValue;
+            }
+
+            private set
+            {
+                AgentGraph.BlackboardReference.Blackboard.Variables[5].ObjectValue = value;
+            }
+        }
+
+        public override float SpeedAttack
+        {
+            get
+            {
+                return (float)AgentGraph.BlackboardReference.Blackboard.Variables[8].ObjectValue;
+            }
+
+            protected set
+            {
+                AgentGraph.BlackboardReference.Blackboard.Variables[8].ObjectValue = value;
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -60,6 +88,18 @@ namespace CastleFight.Core.UnitsSystem.Components
             CurrentStateWorker = WorkerUnitStateType.Idle;
             CurrentStateWorker = WorkerUnitStateType.MoveToPoint;
             MovePoint = point;
+        }
+
+        public void SetWaitSelectPointBuild ()
+        {
+            CurrentStateWorker = WorkerUnitStateType.WaitSelectPointBuild;
+        }
+
+        public void MoveToBuild (NewBuildingConstructEvent newBuildingConstructEvent)
+        {
+            TargetBuilding = newBuildingConstructEvent.Building as BuildingInstance;
+            MovePoint = TargetBuilding.SpawnPoint;
+            CurrentStateWorker = WorkerUnitStateType.MoveToBuild;
         }
     }
 }

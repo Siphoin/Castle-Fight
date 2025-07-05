@@ -66,7 +66,7 @@ namespace CastleFight.Core.UnitsSystem.Components
                 return (float)_agentGraph.BlackboardReference.Blackboard.Variables[7].ObjectValue;
             }
 
-            private set
+            protected set
             {
                 _agentGraph.BlackboardReference.Blackboard.Variables[7].ObjectValue = value;
             }

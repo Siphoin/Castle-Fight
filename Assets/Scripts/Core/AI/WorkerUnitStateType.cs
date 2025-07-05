@@ -9,5 +9,6 @@ namespace CastleFight.Core.AI
         MoveToPoint,
         Constructing,
         MoveToBuild,
+        WaitSelectPointBuild,
     }
 }

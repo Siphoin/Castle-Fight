@@ -23,6 +23,7 @@ namespace CastleFight.Core.BuildingsSystem
     [RequireComponent(typeof(BuildingConstructionView))]
     public class BuildingInstance : OwnedEntity, IBuildingInstance
     {
+        [SerializeField, ReadOnly] private BuildingSpawnHandler _spawnHandler;
         [SerializeField, ReadOnly] private HealthComponent _healthComponent;
         [SerializeField] private ScriptableBuuidingEntity _stats;
         [SerializeField] private Portail _portail;
@@ -53,6 +54,8 @@ namespace CastleFight.Core.BuildingsSystem
         public bool IsSelected => _selectorHandler.IsSelect;
 
         public IBuildingModelView BuildingView => _buildingView;
+
+        public Vector3 SpawnPoint => _spawnHandler.SpawnPoint; 
 
         public override void OnNetworkSpawn()
         {
@@ -95,6 +98,7 @@ namespace CastleFight.Core.BuildingsSystem
             if (!_selectorHandler) _selectorHandler = GetComponent<SelectorHandler>();
             if (!_constructHandler) _constructHandler = GetComponent<BuildingConstructHandler>();
             if (!_buildingView) _buildingView = GetComponentInChildren<BuildingModelView>();
+            if (!_spawnHandler) _spawnHandler = GetComponent<BuildingSpawnHandler>();
         }
     }
 }

@@ -14,6 +14,8 @@ namespace CastleFight.Core.BuildingsSystem.Components
         [Inject]  private IUnitFactory _unitFactory;
         private static readonly Quaternion DefaultRotation = Quaternion.Euler(0f, -190f, 0f);
 
+        public Vector3 SpawnPoint => _pointSpawn != null ? _pointSpawn.position : Vector3.negativeInfinity;
+
         private void Start()
         {
 

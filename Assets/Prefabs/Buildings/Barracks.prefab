@@ -242,6 +242,7 @@ MonoBehaviour:
       ColorType: 0
       IsReady: 0
       Team: 0
+  _spawnHandler: {fileID: 2982749575284756738}
   _healthComponent: {fileID: 3990793390751493803}
   _stats: {fileID: 11400000, guid: fdfd4c74a08c2854bbb71586c624d830, type: 2}
   _portail: {fileID: 8498064427652849222}
@@ -656,7 +657,7 @@ Transform:
   m_GameObject: {fileID: 7272633378774528655}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.47, y: 0, z: 0}
+  m_LocalPosition: {x: 3.65, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
