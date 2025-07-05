@@ -81,7 +81,6 @@ namespace CastleFight.Core.UnitsSystem.Components
         protected virtual void Start()
         {
             _agent.updateRotation = false;
-            enabled = _unitInstance.IsOwner;
 
             if (_unitInstance.IsOwner)
             {
