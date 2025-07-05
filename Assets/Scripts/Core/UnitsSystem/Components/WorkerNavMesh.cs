@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.ConstructionSystem.Events;
@@ -12,6 +13,7 @@ namespace CastleFight.Core.UnitsSystem.Components
     public class WorkerNavMesh : UnitNavMesh
     {
         [SerializeField, ReadOnly] private UnitInstance _unit;
+        private Subject<WorkerUnitStateType> _onStateChanged = new();
         public WorkerUnitStateType CurrentStateWorker
         {
             get
@@ -22,6 +24,7 @@ namespace CastleFight.Core.UnitsSystem.Components
             private set
             {
                 AgentGraph.BlackboardReference.Blackboard.Variables[3].ObjectValue = value;
+                _onStateChanged.OnNext(value);
             }
         }
 
@@ -77,6 +80,8 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        public IObservable<WorkerUnitStateType> OnStateChanged => _onStateChanged;
+
         private void LateUpdate()
         {
             AgentGraph.enabled = _unit.IsOwner;
@@ -106,6 +111,7 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         public void MoveToBuild (NewBuildingConstructEvent newBuildingConstructEvent)
         {
+
             TargetBuilding = newBuildingConstructEvent.Building as BuildingInstance;
             MovePoint = TargetBuilding.SpawnPoint;
             CurrentStateWorker = WorkerUnitStateType.MoveToBuild;

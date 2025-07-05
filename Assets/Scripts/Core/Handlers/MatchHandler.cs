@@ -219,7 +219,7 @@ namespace CastleFight.Core.Handlers
 
         private void RemoveAllUnits()
         {
-            var units = this.FindObjectsOfTypeOnRepository<UnitInstance>().ToArray();
+            var units = this.FindManyByConditionOnRepository<UnitInstance>(x => x.Isinvulnerable == false).ToArray();
             for (uint i = 0; i < units.Length; i++)
             {
                 _networkHandler.DestroyNetworkObject(units[i].gameObject);

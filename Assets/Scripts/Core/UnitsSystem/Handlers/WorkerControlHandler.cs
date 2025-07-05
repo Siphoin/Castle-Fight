@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.ConstructionSystem.Events;
 using CastleFight.Core.PhysicsSystem;
 using CastleFight.Core.UnitsSystem.Components;
 using CastleFight.Extensions;
 using Core.ConstructionSystem.Handlers;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -22,6 +23,12 @@ namespace CastleFight.Core.UnitsSystem.Handlers
 
         private NavMeshPath _path;
         private bool _hasValidPath;
+        private bool _isInBuildMode = false;
+        private bool _isProcessingClick = false;
+        private Queue<NewBuildingConstructEvent> _buildQueue = new Queue<NewBuildingConstructEvent>();
+        private CompositeDisposable _disposables = new CompositeDisposable();
+
+        public Queue<NewBuildingConstructEvent> BuildQueue => _buildQueue;
 
         private IConstructHandler ConstructHandler
         {
@@ -37,73 +44,83 @@ namespace CastleFight.Core.UnitsSystem.Handlers
 
         private void Start()
         {
-           
-            CompositeDisposable disposable = new();
-            _unitInstance.OnPlayerOwnerChanged.Subscribe(player =>
-            {
-                if (_unitInstance.IsOwner)
-                {
-                    ConstructHandler.OnSelectBuilding.Subscribe(building =>
-                    {
-                        _workerNavMesh.SetWaitSelectPointBuild();
-
-                    }).AddTo(this);
-
-                    ConstructHandler.OnEndBuild.Subscribe(ev =>
-                    {
-                        _workerNavMesh.MoveToBuild(ev);
-
-                    }).AddTo(_workerNavMesh);
-
-                    
-                }
-
-                else
-                {
-                    enabled = false;
-                }
-
-                    disposable.Clear();
-                disposable.Dispose();
-
-            }).AddTo(disposable);
             _path = new NavMeshPath();
+            if (_unitInstance.IsOwner)
+            {
+                ConstructHandler.OnSelectBuilding.Subscribe(building =>
+                {
+                    if (_workerNavMesh.CurrentStateWorker != AI.WorkerUnitStateType.Constructing)
+                    {
+                        _isInBuildMode = true;
+                        _workerNavMesh.SetWaitSelectPointBuild();
+                    }
+                }).AddTo(_disposables);
+
+                ConstructHandler.OnEndBuild.Subscribe(ev =>
+                {
+                    if (_workerNavMesh.CurrentStateWorker != AI.WorkerUnitStateType.Constructing)
+                    {
+                        _isInBuildMode = false;
+                        _workerNavMesh.MoveToBuild(ev);
+                    }
+                    else
+                    {
+                        _buildQueue.Enqueue(ev);
+                    }
+                }).AddTo(_disposables);
+            }
         }
 
-        private void LateUpdate()
+        private async void LateUpdate()
         {
             if (!_unitInstance.IsOwner)
             {
                 return;
             }
-            if (Input.GetMouseButtonDown(0))
+
+            if (Input.GetMouseButtonDown(0) && !_isProcessingClick)
             {
                 if (!EventSystem.current.IsBlockedByUI() && _unitInstance.IsSelected)
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
+                    _isProcessingClick = true;
 
-                    if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    try
                     {
-                        if (hit.collider.transform == transform || hit.collider.transform.IsChildOf(transform))
+                        await UniTask.DelayFrame(1, PlayerLoopTiming.Update);
+
+                        if (_workerNavMesh.CurrentStateWorker == AI.WorkerUnitStateType.WaitSelectPointBuild || _isInBuildMode)
                         {
                             return;
                         }
-                    }
 
-                    // Оригинальная логика для перемещения по местности
-                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Terrain")))
-                    {
-                        _hasValidPath = NavMesh.CalculatePath(transform.position, hit.point, NavMesh.AllAreas, _path);
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hit;
 
-                        if (_hasValidPath && _path.status == NavMeshPathStatus.PathComplete)
+                        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                         {
-                            _workerNavMesh.SetPointMove(hit.point);
+                            if (hit.collider.transform == transform || hit.collider.transform.IsChildOf(transform))
+                            {
+                                return;
+                            }
                         }
+
+                        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Terrain")))
+                        {
+                            _hasValidPath = NavMesh.CalculatePath(transform.position, hit.point, NavMesh.AllAreas, _path);
+
+                            if (_hasValidPath && _path.status == NavMeshPathStatus.PathComplete)
+                            {
+                                _buildQueue.Clear();
+                                _workerNavMesh.SetPointMove(hit.point);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        _isProcessingClick = false;
                     }
                 }
             }
-
             else if (Input.GetMouseButtonDown(1))
             {
                 if (!EventSystem.current.IsBlockedByUI() && _unitInstance.IsSelected)
@@ -119,8 +136,17 @@ namespace CastleFight.Core.UnitsSystem.Handlers
                             {
                                 if (hitBox.transform.parent.TryGetComponent(out IBuildingInstance building) && !building.IsContructed && building.IsMy)
                                 {
-                                    NewBuildingConstructEvent buildingConstructEvent = new NewBuildingConstructEvent(hit.point, building);
-                                    _workerNavMesh.MoveToBuild(buildingConstructEvent);
+                                    var point = NavMesh.SamplePosition(hit.point, out var hitNavMesh, 10, NavMesh.AllAreas);
+                                    NewBuildingConstructEvent buildingConstructEvent = new NewBuildingConstructEvent(hitNavMesh.position, building);
+
+                                    if (_workerNavMesh.CurrentStateWorker == AI.WorkerUnitStateType.Constructing)
+                                    {
+                                        _buildQueue.Enqueue(buildingConstructEvent);
+                                    }
+                                    else
+                                    {
+                                        _workerNavMesh.MoveToBuild(buildingConstructEvent);
+                                    }
                                 }
                             }
                         }
@@ -129,14 +155,37 @@ namespace CastleFight.Core.UnitsSystem.Handlers
             }
         }
 
+        private void OnDestroy()
+        {
+            _disposables.Dispose();
+        }
+
+
+        public bool HasTasksBuild()
+        {
+            return _buildQueue.Count > 0;
+        }
+
+        public void MoveToNextBuild()
+        {
+            if (_buildQueue.Count > 0)
+            {
+                var nextTask = _buildQueue.Dequeue();
+                _workerNavMesh.MoveToBuild(nextTask);
+
+
+            }
+
+        }
+
+        public void CancelAllBuildTasks()
+        {
+            _buildQueue.Clear();
+        }
         private void OnValidate()
         {
             if (!_workerNavMesh) _workerNavMesh = GetComponent<WorkerNavMesh>();
             if (!_unitInstance) _unitInstance = GetComponent<UnitInstance>();
         }
-
-        
-
-
     }
 }
