@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.ConstructionSystem.Events;
 using CastleFight.Core.PhysicsSystem;
@@ -42,9 +43,11 @@ namespace CastleFight.Core.UnitsSystem.Handlers
             }
         }
 
-        private void Start()
+        private async void Start()
         {
             _path = new NavMeshPath();
+
+            await UniTask.WaitUntil(() => ConstructHandler != null, cancellationToken: this.GetCancellationTokenOnDestroy());
             if (_unitInstance.IsOwner)
             {
                 ConstructHandler.OnSelectBuilding.Subscribe(building =>

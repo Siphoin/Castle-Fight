@@ -51,6 +51,26 @@ namespace CastleFight.Core.Handlers
 
         private RTSCinemachineCamera _gameCamera;
 
+        private RTSCinemachineCamera GameCamera
+        {
+            get
+            {
+                if (_gameCamera is null)
+                {
+                    _gameCamera = FindAnyObjectByType<RTSCinemachineCamera>();
+                }
+                return _gameCamera;
+            }
+        }
+
+        private IEnumerable<IPointCameraView> PointsCameraViews
+        {
+            get
+            {
+                return FindObjectsByType<PointCameraView>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            }
+        }
+
         public static bool IsSpawnedInstance { get; private set; }
 
         public DateTime CurrentTimeMatch => _currentTimeMatch.Value.DateTime;
@@ -73,7 +93,6 @@ namespace CastleFight.Core.Handlers
                 StartMatch();
                 TickTimeSession().Forget();
                 SpawnWorkers();
-                SetupCameraForTeams();
             }
 
             else
@@ -81,6 +100,12 @@ namespace CastleFight.Core.Handlers
                 _currentTimeMatch.OnValueChanged += TimeChanged;
                 _scoresTeams.OnValueChanged += TeamsScoreChanged;
             }
+        }
+
+        private async void Start()
+        {
+            await FindCameraViews();
+            await SetupCameraForTeams();
         }
         private void SpawnWorkers ()
         {
@@ -101,32 +126,27 @@ namespace CastleFight.Core.Handlers
         }
         private void FindSpawnPointCastles()
         {
-            _gameCamera = FindAnyObjectByType<RTSCinemachineCamera>();
-
             IPointSpawnCastle[] points = FindObjectsByType<PointSpawnCastle>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             _leftCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Red);
             _rightCastlePoint = points.FirstOrDefault(x => x.TypeTeam == CastleTeamType.Blue);
 
-            IPointCameraView[] cameraPoints = FindObjectsByType<PointCameraView>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            _redTeamCameraPoint = cameraPoints.FirstOrDefault(x => x.TeamType == CastleTeamType.Red);
-            _blueTeamCameraPoint = cameraPoints.FirstOrDefault(x => x.TeamType == CastleTeamType.Blue);
         }
 
-        private void SetupCameraForTeams()
+        private async UniTask FindCameraViews()
         {
-            foreach (var player in _networkHandler.Players)
-            {
-                if (player.ClientId == 0 && _redTeamCameraPoint != null)
-                {
-                    _gameCamera.SetFollowTarget(null);
-                    _gameCamera.transform.SetPositionAndRotation(_redTeamCameraPoint.Position, _redTeamCameraPoint.Rotation);
-                }
-                else if (player.ClientId == 1 && _blueTeamCameraPoint != null)
-                {
-                    _gameCamera.SetFollowTarget(null);
-                    _gameCamera.transform.SetPositionAndRotation(_blueTeamCameraPoint.Position, _blueTeamCameraPoint.Rotation);
-                }
-            }
+            await UniTask.WaitUntil(() => PointsCameraViews != null && PointsCameraViews.Count() > 0, cancellationToken: this.GetCancellationTokenOnDestroy());
+            _redTeamCameraPoint = PointsCameraViews.FirstOrDefault(x => x.TeamType == CastleTeamType.Red);
+            _blueTeamCameraPoint = PointsCameraViews.FirstOrDefault(x => x.TeamType == CastleTeamType.Blue);
+        }
+
+        private async UniTask SetupCameraForTeams()
+        {
+            await UniTask.WaitUntil(() => GameCamera != null, cancellationToken: this.GetCancellationTokenOnDestroy());
+            var player = _networkHandler.Players.LocalPlayer;
+            var point = player.Team == 0 ? _redTeamCameraPoint : _blueTeamCameraPoint;
+            _gameCamera.SetFollowTarget(null);
+            _gameCamera.transform.SetPositionAndRotation(point.Position, point.Rotation);
+
         }
 
         private IBuildingInstance SpawnCastle (IPointSpawnCastle point, ulong ownerId)
