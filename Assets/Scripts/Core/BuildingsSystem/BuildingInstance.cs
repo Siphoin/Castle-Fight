@@ -10,6 +10,7 @@ using CastleFight.Core.Views;
 using Unity.Netcode;
 using System;
 using UniRx;
+using CastleFight.Core.ConstructionSystem.Views;
 
 namespace CastleFight.Core.BuildingsSystem
 {
@@ -27,6 +28,7 @@ namespace CastleFight.Core.BuildingsSystem
         [SerializeField] private Portail _portail;
         [SerializeField, ReadOnly] private SelectorHandler _selectorHandler;
         [SerializeField, ReadOnly] private BuildingConstructHandler _constructHandler;
+        [SerializeField, ReadOnly] private BuildingModelView _buildingView;
         private NetworkVariable<bool> _isConstructed = new NetworkVariable<bool>(true);
         private Subject<bool> _onStartConstruct = new();
 
@@ -49,6 +51,8 @@ namespace CastleFight.Core.BuildingsSystem
         public IObservable<bool> OnStartConstruct => _onStartConstruct;
 
         public bool IsSelected => _selectorHandler.IsSelect;
+
+        public IBuildingModelView BuildingView => _buildingView;
 
         public override void OnNetworkSpawn()
         {
@@ -90,6 +94,7 @@ namespace CastleFight.Core.BuildingsSystem
             if (!_healthComponent) _healthComponent = GetComponent<HealthComponent>();
             if (!_selectorHandler) _selectorHandler = GetComponent<SelectorHandler>();
             if (!_constructHandler) _constructHandler = GetComponent<BuildingConstructHandler>();
+            if (!_buildingView) _buildingView = GetComponentInChildren<BuildingModelView>();
         }
     }
 }

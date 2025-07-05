@@ -247,6 +247,7 @@ MonoBehaviour:
   _portail: {fileID: 8498064427652849222}
   _selectorHandler: {fileID: 2819578704153392056}
   _constructHandler: {fileID: 4672831207104602354}
+  _buildingView: {fileID: 4627823652197124303}
 --- !u!114 &2982749575284756738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,6 +526,7 @@ GameObject:
   - component: {fileID: 1570581217342367927}
   - component: {fileID: 2889992520609103706}
   - component: {fileID: 4018085421188800490}
+  - component: {fileID: 4627823652197124303}
   m_Layer: 0
   m_Name: model
   m_TagString: Untagged
@@ -615,6 +617,20 @@ MonoBehaviour:
   _renderers:
   - {fileID: 1570581217342367927}
   _config: {fileID: 11400000, guid: 4b6a31dbc9871654aab8302133be2981, type: 2}
+--- !u!114 &4627823652197124303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6957751437795382987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a314e5a38bf19a24892d545e899fe57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshFilter: {fileID: 2889992520609103706}
+  _renderer: {fileID: 1570581217342367927}
 --- !u!1 &7272633378774528655
 GameObject:
   m_ObjectHideFlags: 0

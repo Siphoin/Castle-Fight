@@ -16,6 +16,9 @@ namespace CastleFight.Core.Configs
         [SerializeField] private Material _baseMaterial;
         [SerializeField] private List<string> _obstacleScriptNames = new();
 
+        [SerializeField] private Material _transparentMaterial;
+
+
         [Header("Colors and Opacity")]
         [SerializeField] private Color _greenColor = new Color(0f, 1f, 0f, 1f);
         [SerializeField] private Color _redColor = new Color(1f, 0f, 0f, 1f);
@@ -30,5 +33,7 @@ namespace CastleFight.Core.Configs
         public Color GreenColor => _greenColor;
         public Color RedColor => _redColor;
         public float Opacity => _opacity;
+
+        public Material TransparentMaterial => _transparentMaterial;
     }
 }

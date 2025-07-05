@@ -21,6 +21,8 @@ MonoBehaviour:
   - EnviromentObject
   - UnitInstance
   - BuildingInstance
+  - HitBox
+  _transparentMaterial: {fileID: 2100000, guid: 2b20304e4039b5f40927f25b18e4b28d, type: 2}
   _greenColor: {r: 0, g: 1, b: 0, a: 1}
   _redColor: {r: 1, g: 0, b: 0, a: 1}
-  _opacity: 0.5
+  _opacity: 1

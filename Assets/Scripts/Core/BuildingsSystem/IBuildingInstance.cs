@@ -1,5 +1,6 @@
 ﻿using System;
 using CastleFight.Core.BuildingsSystem.SO;
+using CastleFight.Core.ConstructionSystem.Views;
 using CastleFight.Core.SO;
 using CastleFight.Main.Factories;
 
@@ -9,5 +10,6 @@ namespace CastleFight.Core.BuildingsSystem
     {
         void TurnConstruct();
         IObservable<bool> OnStartConstruct { get; }
+        IBuildingModelView BuildingView { get; }
     }
 }
