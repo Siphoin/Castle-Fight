@@ -3,52 +3,60 @@ Shader "Custom/RTSSelectorDepthCorrect"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Color ("Color", Color) = (1,1,1,1)
+        _Color ("Color Tint", Color) = (1,1,1,1)
     }
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
-        Lighting Off
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" "LightMode"="UniversalForward" }
+        LOD 100
+
+        Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
         ZTest LEqual
-        Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
-
-        Offset -1, -1
 
         Pass
         {
-            CGPROGRAM
+            Name "Forward"
+            Tags { "LightMode"="UniversalForward" }
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            sampler2D _MainTex;
-            fixed4 _Color;
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            float4 _Color;
 
-            struct appdata_t {
-                float4 vertex : POSITION;
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f {
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
             };
 
-            v2f vert (appdata_t v) {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = v.uv;
-                return o;
+            Varyings vert (Attributes input)
+            {
+                Varyings output;
+                output.positionHCS = TransformObjectToHClip(input.positionOS);
+                output.uv = input.uv;
+                return output;
             }
 
-            fixed4 frag (v2f i) : SV_Target {
-                fixed4 col = tex2D(_MainTex, i.uv) * _Color;
-                clip(col.a - 0.01); // скрывать полностью прозрачные пиксели
+            half4 frag (Varyings input) : SV_Target
+            {
+                half4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+                half4 col = texColor * _Color;
+                clip(col.a - 0.01);
                 return col;
             }
-            ENDCG
+            ENDHLSL
         }
     }
 }
