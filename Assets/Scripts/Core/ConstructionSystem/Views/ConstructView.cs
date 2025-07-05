@@ -216,7 +216,7 @@ namespace CastleFight.Core.ConstructionSystem.Views
             }
 
             Material tempMaterial = new Material(_config.TransparentMaterial);
-            int indexTeamColor = _network.Players.LocalPlayer.Team;
+            int indexTeamColor = _network.Players.LocalPlayer.ColorType;
             tempMaterial.mainTexture = _ownerHandlerConfig.GetBuildingMaterial(indexTeamColor).mainTexture;
 
             _viewRenderer.material = tempMaterial;
