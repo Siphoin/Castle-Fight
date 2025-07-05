@@ -67,7 +67,7 @@ namespace CastleFight.Core.Handlers
                 SetupScore();
                 StartMatch();
                 TickTimeSession().Forget();
-                SpawnWorkers().Forget();
+                SpawnWorkers();
             }
 
             else
@@ -76,9 +76,8 @@ namespace CastleFight.Core.Handlers
                 _scoresTeams.OnValueChanged += TeamsScoreChanged;
             }
         }
-        private async UniTask SpawnWorkers ()
+        private void SpawnWorkers ()
         {
-            await UniTask.Delay(3000);
             var points = FindObjectsByType<PointSpawnWorker>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             foreach (var player in _networkHandler.Players)
             {
