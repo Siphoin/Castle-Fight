@@ -70,13 +70,21 @@ namespace CastleFight.Core.UnitsSystem.Handlers
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
 
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    {
+                        if (hit.collider.transform == transform || hit.collider.transform.IsChildOf(transform))
+                        {
+                            return;
+                        }
+                    }
+
+                    // Оригинальная логика для перемещения по местности
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Terrain")))
                     {
                         _hasValidPath = NavMesh.CalculatePath(transform.position, hit.point, NavMesh.AllAreas, _path);
 
                         if (_hasValidPath && _path.status == NavMeshPathStatus.PathComplete)
                         {
-
                             _workerNavMesh.SetPointMove(hit.point);
                         }
                     }
@@ -97,7 +105,7 @@ namespace CastleFight.Core.UnitsSystem.Handlers
                         {
                             if (hitBox.transform.parent != null)
                             {
-                                if (hitBox.transform.parent.TryGetComponent(out IBuildingInstance building) && !building.IsContructed)
+                                if (hitBox.transform.parent.TryGetComponent(out IBuildingInstance building) && !building.IsContructed && building.IsMy)
                                 {
                                     NewBuildingConstructEvent buildingConstructEvent = new NewBuildingConstructEvent(hit.point, building);
                                     _workerNavMesh.MoveToBuild(buildingConstructEvent);
