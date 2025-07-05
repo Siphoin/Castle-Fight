@@ -82,6 +82,31 @@ namespace CastleFight.Core.UnitsSystem.Handlers
                     }
                 }
             }
+
+            else if (Input.GetMouseButtonDown(1))
+            {
+                if (!EventSystem.current.IsBlockedByUI() && _unitInstance.IsSelected)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    {
+                        Debug.Log(hit.collider.name);
+                        if (hit.collider.TryGetComponent(out HitBox hitBox))
+                        {
+                            if (hitBox.transform.parent != null)
+                            {
+                                if (hitBox.transform.parent.TryGetComponent(out IBuildingInstance building) && !building.IsContructed)
+                                {
+                                    NewBuildingConstructEvent buildingConstructEvent = new NewBuildingConstructEvent(hit.point, building);
+                                    _workerNavMesh.MoveToBuild(buildingConstructEvent);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void OnValidate()
