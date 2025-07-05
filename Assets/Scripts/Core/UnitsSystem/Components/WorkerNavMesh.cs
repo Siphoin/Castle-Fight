@@ -2,6 +2,7 @@
 using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.ConstructionSystem.Events;
+using CastleFight.Core.UnitsSystem.Configs;
 using UnityEngine;
 
 namespace CastleFight.Core.UnitsSystem.Components
@@ -101,5 +102,8 @@ namespace CastleFight.Core.UnitsSystem.Components
             MovePoint = TargetBuilding.SpawnPoint;
             CurrentStateWorker = WorkerUnitStateType.MoveToBuild;
         }
+
+
+
     }
 }

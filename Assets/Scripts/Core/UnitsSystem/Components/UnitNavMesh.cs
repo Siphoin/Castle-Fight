@@ -74,6 +74,10 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         protected BehaviorGraphAgent AgentGraph => _agentGraph;
 
+        protected UnitGlobalConfig UnitGlobalConfig => _unitGlobalConfig;
+
+        protected NavMeshAgent Agent => _agent;
+
         protected virtual void Start()
         {
             _agent.updateRotation = false;
@@ -95,21 +99,37 @@ namespace CastleFight.Core.UnitsSystem.Components
 
         protected virtual void Update()
         {
-            if (CurrentTarget != null)
+            Vector3 currentPosition = transform.position;
+            Vector3 targetPosition = Agent.steeringTarget;
+
+            Vector3 moveDirection = targetPosition - currentPosition;
+            moveDirection.y = 0;
+
+            float distanceSqr = moveDirection.sqrMagnitude;
+            float stopThreshold = 0.01f;    // порог для "движения"
+            float closeThreshold = 0.1f;    // порог близости к цели
+
+            if (distanceSqr > stopThreshold)
             {
-                Vector3 direction = _agent.steeringTarget - transform.position;
-                direction.y = 0;
+                // Юнит движется - смотрит по движению
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 360 * Time.deltaTime);
+            }
+            else
+            {
+                // Юнит стоит или близко к цели — поворачиваем к цели
+                Vector3 directionToTarget = targetPosition - currentPosition;
+                directionToTarget.y = 0;
 
-                if (direction.sqrMagnitude > 0.001f)
+                if (directionToTarget.sqrMagnitude > 0.001f)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-                    transform.rotation = RotateTowardsLimited(transform.rotation, targetRotation, _unitGlobalConfig.RotationSpeed * Time.deltaTime);
+                    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget.normalized);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 360 * Time.deltaTime);
                 }
             }
         }
 
-        private Quaternion RotateTowardsLimited(Quaternion current, Quaternion target, float maxDegreesDelta)
+        protected Quaternion RotateTowardsLimited(Quaternion current, Quaternion target, float maxDegreesDelta)
         {
             return Quaternion.RotateTowards(current, target, maxDegreesDelta);
         }

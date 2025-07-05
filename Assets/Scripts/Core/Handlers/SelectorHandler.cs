@@ -11,17 +11,7 @@ namespace CastleFight.Core.Handlers
         [Inject] private IClickableViewFactory _factory;
         [Inject] private SelectorHandlerConfig _config;
         private IClickableObject _clickableObject;
-        public bool IsSelect
-        {
-            get
-            {
-                if (ActiveView != null)
-                {
-                    return ActiveView.IsActive;
-                }
-                return false;
-            }
-        }
+        public bool IsSelect => Current == this;
         private ClickableView ActiveView { get; set; }
         private static SelectorHandler Current { get; set; }
 

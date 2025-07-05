@@ -11,5 +11,6 @@ namespace CastleFight.Core.BuildingsSystem
         void TurnConstruct();
         IObservable<bool> OnStartConstruct { get; }
         IBuildingModelView BuildingView { get; }
+        bool IsContructed { get; }
     }
 }
