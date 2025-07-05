@@ -3,12 +3,15 @@ using CastleFight.Core.AI;
 using CastleFight.Core.BuildingsSystem;
 using CastleFight.Core.ConstructionSystem.Events;
 using CastleFight.Core.UnitsSystem.Configs;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 namespace CastleFight.Core.UnitsSystem.Components
 {
     public class WorkerNavMesh : UnitNavMesh
     {
+        [SerializeField, ReadOnly] private UnitInstance _unit;
         public WorkerUnitStateType CurrentStateWorker
         {
             get
@@ -74,6 +77,11 @@ namespace CastleFight.Core.UnitsSystem.Components
             }
         }
 
+        private void LateUpdate()
+        {
+            AgentGraph.enabled = _unit.IsOwner;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -101,6 +109,11 @@ namespace CastleFight.Core.UnitsSystem.Components
             TargetBuilding = newBuildingConstructEvent.Building as BuildingInstance;
             MovePoint = TargetBuilding.SpawnPoint;
             CurrentStateWorker = WorkerUnitStateType.MoveToBuild;
+        }
+
+        private void OnValidate()
+        {
+            if (!_unit) _unit = GetComponent<UnitInstance>();
         }
 
 

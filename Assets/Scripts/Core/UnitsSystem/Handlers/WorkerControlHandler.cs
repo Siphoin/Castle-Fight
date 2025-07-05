@@ -37,32 +37,45 @@ namespace CastleFight.Core.UnitsSystem.Handlers
 
         private void Start()
         {
-
-
-
-            enabled = _unitInstance.IsMy;
-
-            if (!enabled)
+           
+            CompositeDisposable disposable = new();
+            _unitInstance.OnPlayerOwnerChanged.Subscribe(player =>
             {
-                return;
-            }
+                if (_unitInstance.IsOwner)
+                {
+                    ConstructHandler.OnSelectBuilding.Subscribe(building =>
+                    {
+                        _workerNavMesh.SetWaitSelectPointBuild();
 
-            ConstructHandler.OnSelectBuilding.Subscribe(building =>
-            {
-                _workerNavMesh.SetWaitSelectPointBuild();
+                    }).AddTo(this);
 
-            }).AddTo(this);
+                    ConstructHandler.OnEndBuild.Subscribe(ev =>
+                    {
+                        _workerNavMesh.MoveToBuild(ev);
 
-            ConstructHandler.OnEndBuild.Subscribe(ev =>
-            {
-                _workerNavMesh.MoveToBuild(ev);
+                    }).AddTo(_workerNavMesh);
 
-            }).AddTo(_workerNavMesh);
+                    
+                }
+
+                else
+                {
+                    enabled = false;
+                }
+
+                    disposable.Clear();
+                disposable.Dispose();
+
+            }).AddTo(disposable);
             _path = new NavMeshPath();
         }
 
         private void LateUpdate()
         {
+            if (!_unitInstance.IsOwner)
+            {
+                return;
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 if (!EventSystem.current.IsBlockedByUI() && _unitInstance.IsSelected)
@@ -100,7 +113,6 @@ namespace CastleFight.Core.UnitsSystem.Handlers
 
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                     {
-                        Debug.Log(hit.collider.name);
                         if (hit.collider.TryGetComponent(out HitBox hitBox))
                         {
                             if (hitBox.transform.parent != null)

@@ -143,6 +143,7 @@ MonoBehaviour:
   _unitInstance: {fileID: 5915806101338030891}
   _agent: {fileID: 2718935390367795671}
   _agentGraph: {fileID: 3008300964552343170}
+  _unit: {fileID: 5915806101338030891}
 --- !u!114 &5915806101338030891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +228,7 @@ MonoBehaviour:
   - rid: 5666366280018690224
   m_IsInitialised: 0
   m_IsStarted: 0
-  NetcodeRunOnlyOnOwner: 1
+  NetcodeRunOnlyOnOwner: 0
   references:
     version: 2
     RefIds:

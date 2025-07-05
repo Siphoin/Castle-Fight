@@ -10,6 +10,7 @@ using CastleFight.Core.Components;
 using CastleFight.Core.Configs;
 using CastleFight.Core.Models;
 using CastleFight.Core.UnitsSystem;
+using CastleFight.Core.UnitsSystem.Factories;
 using CastleFight.Networking.Handlers;
 using CastleFight.Networking.Models;
 using Cysharp.Threading.Tasks;
@@ -42,6 +43,7 @@ namespace CastleFight.Core.Handlers
 
         [SerializeField] private MatchConfig _matchConfig;
         [Inject] private IBuildingFactory _buildingFactory;
+        [Inject] private IUnitFactory _unitFactory;
 
 
         public static bool IsSpawnedInstance { get; private set; }
@@ -65,7 +67,7 @@ namespace CastleFight.Core.Handlers
                 SetupScore();
                 StartMatch();
                 TickTimeSession().Forget();
-
+                SpawnWorkers().Forget();
             }
 
             else
@@ -74,7 +76,24 @@ namespace CastleFight.Core.Handlers
                 _scoresTeams.OnValueChanged += TeamsScoreChanged;
             }
         }
+        private async UniTask SpawnWorkers ()
+        {
+            await UniTask.Delay(3000);
+            var points = FindObjectsByType<PointSpawnWorker>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            foreach (var player in _networkHandler.Players)
+            {
+                var point = points.FirstOrDefault(x => x.IndexPlayer == (int)player.ClientId);
 
+                if (point != null)
+                {
+                    Vector3 position = point.Position;
+                    Quaternion rotation = point.Rotation;
+                   var worker =  _unitFactory.Create(_matchConfig.WorkerPrefab, position, rotation);
+                    worker.SetOwner(player);
+
+                }
+            }
+        } 
         private void FindSpawnPointCastles()
         {
             IPointSpawnCastle[] points = FindObjectsByType<PointSpawnCastle>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);

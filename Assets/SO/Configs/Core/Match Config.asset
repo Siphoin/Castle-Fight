@@ -15,3 +15,4 @@ MonoBehaviour:
   _guidObject: 57325e65-0bb5-4fe7-a063-847189626605
   _startGold: 500
   _castlePrefab: {fileID: 6058596132512980733, guid: ea22183ee18085240b84956b7252d9d3, type: 3}
+  _workerPrefab: {fileID: 5915806101338030891, guid: 0e0bca8c47b21814594fe852150a1d46, type: 3}
