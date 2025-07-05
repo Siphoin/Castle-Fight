@@ -13,6 +13,7 @@ namespace CastleFight.Core.Views
     {
         private IClickableObject _target;
         [SerializeField] private HealthView _healthView;
+        [SerializeField] private RectTransform _healthBar;
         [SerializeField] private TextMeshProUGUI _damageInfo;
         [SerializeField] private TextMeshProUGUI _nameInfo;
         [SerializeField] private PortailRenderer _portailRenderer;
@@ -34,16 +35,20 @@ namespace CastleFight.Core.Views
             _disposable?.Clear();
             _disposable = new();
             _portailRenderer.SetPortail(target);
-            _target.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
+            _healthView.gameObject.SetActive(_target.Isinvulnerable == false);
+            if (!_target.Isinvulnerable)
             {
-                if (health <= 0)
+                _target.HealthComponent.OnCurrentHealthChanged.Subscribe(health =>
                 {
-                    SetStateVisible(false);
-                }
+                    if (health <= 0)
+                    {
+                        SetStateVisible(false);
+                    }
 
-            }).AddTo(_disposable);
+                }).AddTo(_disposable);
 
-            _infoIncome.gameObject.SetActive(false);
+            }
+                _infoIncome.gameObject.SetActive(false);
 
             if (target is IBuildingInstance building && building.Stats.Income > 0)
             {

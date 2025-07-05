@@ -16,6 +16,7 @@ MonoBehaviour:
   _entityName: Worker
   _description: 
   _maxHealth: 1000
+  _isInvulnerable: 1
   _baseGoldBounty: 0
   _goldBountyVariance: 0
   _selectionScale: 0.19

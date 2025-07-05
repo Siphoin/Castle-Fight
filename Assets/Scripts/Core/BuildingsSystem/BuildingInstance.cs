@@ -55,7 +55,9 @@ namespace CastleFight.Core.BuildingsSystem
 
         public IBuildingModelView BuildingView => _buildingView;
 
-        public Vector3 SpawnPoint => _spawnHandler.SpawnPoint; 
+        public Vector3 SpawnPoint => _spawnHandler.SpawnPoint;
+
+        public bool Isinvulnerable => _stats.IsInvulnerable;
 
         public override void OnNetworkSpawn()
         {

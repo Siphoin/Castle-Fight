@@ -8076,6 +8076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthView: {fileID: 1192037965}
+  _healthBar: {fileID: 1192037962}
   _damageInfo: {fileID: 1088962789}
   _nameInfo: {fileID: 70276779}
   _portailRenderer: {fileID: 78914750}

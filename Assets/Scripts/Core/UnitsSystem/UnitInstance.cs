@@ -51,6 +51,8 @@ namespace CastleFight.Core.UnitsSystem
 
         public bool IsSelected => _selectorHandler.IsSelect;
 
+        public bool Isinvulnerable => _stats.IsInvulnerable;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

@@ -21,7 +21,7 @@ public partial class CheckingEnemiesInRadiusAction : Action
         {
             if (collider.TryGetComponent(out UnitInstance otherUnit))
             {
-                if (otherUnit.IsEnemy(Unit.Value) && otherUnit.HealthComponent != Unit.Value.NavMesh.CurrentTarget && !otherUnit.HealthComponent.IsDead)
+                if (otherUnit.IsEnemy(Unit.Value) && otherUnit.HealthComponent != Unit.Value.NavMesh.CurrentTarget && !otherUnit.HealthComponent.IsDead && !otherUnit.Stats.IsInvulnerable)
                 {
                     Unit.Value.NavMesh.SetTarget(otherUnit.HealthComponent as HealthComponent);
                     return Status.Success;
@@ -30,7 +30,7 @@ public partial class CheckingEnemiesInRadiusAction : Action
 
             if (collider.TryGetComponent(out BuildingInstance otherBuilding))
             {
-                if (otherBuilding.IsEnemy(Unit.Value) && otherBuilding.HealthComponent != Unit.Value.NavMesh.CurrentTarget && !otherBuilding.HealthComponent.IsDead)
+                if (otherBuilding.IsEnemy(Unit.Value) && otherBuilding.HealthComponent != Unit.Value.NavMesh.CurrentTarget && !otherBuilding.HealthComponent.IsDead && !otherBuilding.Stats.IsInvulnerable)
                 {
                     Unit.Value.NavMesh.SetTarget(otherUnit.HealthComponent as HealthComponent);
                     return Status.Success;

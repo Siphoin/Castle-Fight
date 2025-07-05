@@ -8,6 +8,7 @@ namespace CastleFight.Core
         string DamageInfo { get; }
         float SelectionScale { get; }
         bool IsSelected { get; }
+        bool Isinvulnerable { get; }
 
         void SetStateSelect(bool visible);
     }

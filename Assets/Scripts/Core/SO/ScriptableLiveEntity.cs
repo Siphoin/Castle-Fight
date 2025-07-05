@@ -21,6 +21,9 @@ namespace CastleFight.Core.SO
         [MinValue(1)]
         [SerializeField] private int _maxHealth = 100;
 
+        [Title("Health Settings")]
+        [SerializeField] private bool _isInvulnerable = false;
+
         [Title("Gold Bounty Settings")]
         [BoxGroup("Gold Bounty Settings")]
         [MinValue(0)]
@@ -45,6 +48,8 @@ namespace CastleFight.Core.SO
         public int MaxHealth => _maxHealth;
 
         public float SelectionScale => _selectionScale;
+
+        public bool IsInvulnerable => _isInvulnerable;
 
         public int GetRandomGoldBounty()
         {
